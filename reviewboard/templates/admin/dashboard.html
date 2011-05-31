@@ -1,5 +1,6 @@
 {% extends "admin/base_site.html" %}
 {% load adminmedia %}
+{% load rbadmintags %}
 {% load i18n %}
 {% load log %}
 
@@ -9,102 +10,344 @@
 
 {% block extrahead %}
 <script type="text/javascript" src="{{MEDIA_URL}}djblets/js/jquery-1.3.2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}rb/css/admin-dashboard.css?{{MEDIA_SERIAL}}" />
+<style>
+
+
+@media screen and (max-width: 1230px) {
+ .admin-extras-level-2{
+  width: 100%;
+  margin: 20px 0px 0px 20px;
+
+ }
+
+ .admin-extras-level-2 .widget-small {
+  float: left;
+  margin-right: 35px;
+ }
+
+ .admin-extras-level-2 .widget-last {
+  margin-right: 0px;
+ }
+}
+
+
+@media screen and (max-width: 979px) {
+.admin-extras{
+ width: 100%;
+ margin-right: 0px;
+}
+
+.admin-extras-level-2 {
+ margin-left: 0px;
+}
+
+.admin-extras .widget-small {
+ float: left;
+ margin-right: 35px;
+}
+
+.admin-extras .widget-last {
+ margin-right: 0px;
+}
+   }
+
+
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="colMS">
- <div id="content-main">
-  {# "Manage" section #}
-  <div class="module manage">
-   <table summary="{% trans "Common management operations." %}">
-    <caption>{% trans "Manage" %}</caption>
-    <tbody>
-     <tr>
-      <th scope="row"><a href="db/auth/user/">{% trans "Users" %}</a>
-        <span class="count">({{user_count}})</span></th>
-      <td><a class="addlink" href="db/auth/user/add/">{% trans "Add" %}</a></td>
-     </tr>
-     <tr>
-      <th scope="row"><a href="db/reviews/group/">{% trans "Review groups" %}</a>
-        <span class="count">({{reviewgroup_count}})</span></th>
-      <td><a class="addlink" href="db/reviews/group/add/">{% trans "Add" %}</a></td>
-     </tr>
-     <tr>
-      <th scope="row"><a href="db/reviews/defaultreviewer/">{% trans "Default reviewers" %}</a>
-        <span class="count">({{defaultreviewer_count}})</span></th>
-      <td><a class="addlink" href="db/reviews/defaultreviewer/add/">{% trans "Add" %}</a></td>
-     </tr>
-     <tr>
-      <th scope="row"><a href="db/scmtools/repository/">{% trans "Repositories" %}</a>
-        <span class="count">({{repository_count}})</span></th>
-      <td><a class="addlink" href="db/scmtools/repository/add/">{% trans "Add" %}</a></td>
-     </tr>
-    </tbody>
-   </table>
-  </div>
- </div> {# content-main #}
 
- <div id="content-related">
-  {# "Server Info" section #}
-  <div class="module serverinfo">
-   <table summary="{% trans "Server information." %}">
-    <caption>{% trans "Server Information" %}</caption>
-    <tbody>
-     <tr>
-      <th>{% trans "Review Board version" %}</th>
-      <td>{{version}}</td>
-     </tr>
-     <tr>
-      <th colspan="2"><a href="cache/">{% trans "Server Cache" %}</a></th>
-     </tr>
-{% if settings.LOGGING_ENABLED and settings.LOGGING_DIRECTORY %}
-     <tr>
-      <th colspan="2"><a href="{% url server-log %}">{% trans "Server Log" %}</a></th>
-     </tr>
-{% endif %}
-    </tbody>
-   </table>
-  </div>
- </div> {# content-related #}
-</div> {# colMS #}
 
-<br class="clear" />
-<div class="colM">
- {# "News" section #}
- <div class="module news">
-  <table summary="{% trans "Latest Review Board news updates." %}">
-   <caption>{% trans "News" %}
-	<span class="actions">
-     <a href="http://www.reviewboard.org/news/">View All News</a>
-	 |
-     <a href="." id="reload-news">{% trans "Reload" %}</a>
-     |
-     <a href="feed/news/rss/">
-      <img src="{{MEDIA_URL}}rb/images/rss.png?{{MEDIA_SERIAL}}" width="14" height="14" />
-      RSS
-     </a>
-    </span>
-   </caption>
-   <tbody>
-    <tr>
-     <td id="news-content">
-	  <img src="{{MEDIA_URL}}rb/images/spinner.gif?{{MEDIA_SERIAL}}"
-	       class="loading-indicator" width="16" height="16" border="0" alt="" />
-	  {% trans "Loading..." %}
-	 </td>
-    </tr>
-   </tbody>
-  </table>
+ <p>Viewport size is <span id="vpWidth"></span> x <span id="vpHeight"></span></p>
+    <script>
+	function getViewportSize () {
+		document.getElementById('vpWidth').innerHTML = window.innerWidth;
+		document.getElementById('vpHeight').innerHTML = window.innerHeight;
+	}
+	getViewportSize ();
+	window.onresize = function(){getViewportSize()};
+
+	</script> 
+<!-- New Stuff -->
+<div id="admin-dashboard" class="clear">
+
+ <div id="dashboard-nav">
+  <ul class="admin-menu">
+      <li class="nav-first"><a href="{% url reviewboard.admin.views.dashboard %}">{% trans "Dashboard" %}</a></li>
+      <li><a href="{% url reviewboard.admin.views.dashboard %}db/">{% trans "Database" %}</a></li>
+      <li><a href="{% url site-settings %}">{% trans "Settings" %}</a></li>
+  </ul>
+  <div class="admin-title">Review Board Admin
+   <img src="{{MEDIA_URL}}rb/images/admin/gears.png?{{MEDIA_SERIAL}}"
+     alt="Review Board Admin" />
+  </div>
+
  </div>
-</div>
-<script language="javascript">
+
+ <div class="dashboard-alert-wrap">
+  <div class="dashboard-alert">
+   <a href="#" class="close-alert"><img src="{{MEDIA_URL}}rb/images/delete.png?{{MEDIA_SERIAL}}"
+    alt="Close Alert" title="Close Alert" width="14" height="14" /></a>
+   <p><strong>Welcome to Review Board Administration!</strong></p>
+   <p>This is your first time using the admin panel.</p>
+   <p>Enjoy Review Board!</p>
+  </div>
+ </div>
+
+
+ <div id="dashboard-view">
+     <!-- Action Bar -->
+     <div id="admin-actions" class="clear">
+
+      <div class="admin-widget admin-sidebar">
+       <h1 class="widget-heading">{% trans "Manage" %}</h1>
+       <div class="widget-content admin-box action-box">
+        <table summary="{% trans "Common management operations." %}">
+         <tbody>
+          <tr>
+           <th scope="row"><a href="db/auth/user/">{% trans "Users" %}</a>
+            <span class="count">({{user_count}})</span></th>
+           <td><a class="addlink" href="db/auth/user/add/">{% trans "Add" %}</a></td>
+          </tr>
+          <tr>
+            <th scope="row"><a href="db/reviews/group/">{% trans "Review groups" %}</a>
+             <span class="count">({{reviewgroup_count}})</span></th>
+            <td><a class="addlink" href="db/reviews/group/add/">{% trans "Add" %}</a></td>
+          </tr>
+          <tr>
+            <th scope="row"><a href="db/reviews/defaultreviewer/">{% trans "Default reviewers" %}</a>
+             <span class="count">({{defaultreviewer_count}})</span></th>
+            <td><a class="addlink" href="db/reviews/defaultreviewer/add/">{% trans "Add" %}</a></td>
+          </tr>
+          <tr>
+             <th scope="row"><a href="db/scmtools/repository/">{% trans "Repositories" %}</a>
+              <span class="count">({{repository_count}})</span></th>
+             <td><a class="addlink" href="db/scmtools/repository/add/">{% trans "Add" %}</a></td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </div>
+
+
+
+      <!-- Single Widget - Small -->
+      <div class="admin-widget admin-sidebar">
+       <h1 class="widget-heading">{% trans "System Settings" %}</h1>
+       <div class="widget-content">
+           <ul>
+            {% admin_subnav "settings-general" _("General") "rb/images/reviewrequest.png" %}
+            {% admin_subnav "settings-authentication" _("Authentication") "rb/images/reviewrequest.png" %}
+            {% admin_subnav "settings-email" _("E-Mail") "rb/images/reviewrequest.png" %}
+            {% admin_subnav "settings-diffs" _("Diff Viewer") "rb/images/reviewrequest.png" %}
+            {% admin_subnav "settings-logging" _("Logging") "rb/images/reviewrequest.png" %}
+            {% admin_subnav "settings-ssh" _("SSH") "rb/images/reviewrequest.png"%}
+            {% admin_subnav "settings-storage" _("File Storage") "rb/images/reviewrequest.png" %}
+           </ul>
+       </div>
+      </div>
+      <!-- Single Widget Small -->
+
+
+
+
+      <div class="admin-widget admin-sidebar">
+       <h1 class="widget-heading">System Information</h1>
+       <div class="widget-content admin-box action-box">
+        <ul>
+         <li><a href="cache/">{% trans "Server Cache" %}</a></li>
+         <li>
+          {% if settings.LOGGING_ENABLED and settings.LOGGING_DIRECTORY %}
+           <a href="{% url server-log %}">{% trans "Server Log" %}</a>
+          {% endif %}
+         </li>
+         <li class="t-align-r">Version - {{version}}</li>
+        </ul>
+       </div>
+      </div>
+
+
+
+
+     </div>
+     <!-- Action Bar End -->
+     <!-- Widgets -->
+     <div id="admin-widgets">
+
+      <!-- Single Widget - Large -->
+      <div class="admin-widget widget-large">
+       <h1 class="widget-heading">Review Requests</h1>
+       <div class="widget-content"></div>
+       <div class="widget-actions">
+        <a href="">New Request</a>
+        <a href="">View All</a>
+        <a class="a-right" href="">View All Drafts</a>
+       </div>
+      </div>
+      <!-- Single Widget - Large End -->
+
+      <!-- Single Widget - Large -->
+      <div class="admin-widget widget-large">
+       <h1 class="widget-heading">Review Requests</h1>
+       <div class="widget-content">
+
+           <!-- Place Holder -->
+           <div style="width: 500px; height: 200px;"></div>
+
+       </div>
+       <div class="widget-actions">
+        <a href="">New Request</a>
+        <a href="">View All</a>
+        <a class="a-right" href="">View All Drafts</a>
+       </div>
+      </div>
+      <!-- Single Widget - Large End -->
+
+
+     </div>
+
+
+     <div class="admin-extras">
+
+
+
+      <div class="admin-widget widget-small">
+       <h1 class="widget-heading">Title Here</h1>
+       <div class="widget-content admin-box action-box">
+
+       </div>
+      </div>
+
+
+
+      <!-- Single Widget - Small -->
+      <div class="admin-widget widget-small">
+       <h1 class="widget-heading">Review Board News<a href="feed/news/rss/">
+       <img src="{{MEDIA_URL}}rb/images/rss.png?{{MEDIA_SERIAL}}" alt="RSS" width="14" height="14" /></a></h1>
+
+       <div class="widget-content" id="news-content-widget">
+        <img src="{{MEDIA_URL}}rb/images/spinner.gif?{{MEDIA_SERIAL}}"
+	     class="loading-indicator" width="16" height="16" border="0" alt="" />
+	    {% trans "Loading..." %}
+       </div>
+       <div class="widget-actions">
+        <a href="http://www.reviewboard.org/news/">More News</a>
+        <a href="" id="reload-news">{% trans "Reload" %}</a>
+       </div>
+      </div>
+      <!-- Single Widget Small -->
+
+
+      <!-- Single Widget - Small -->
+      <div class="admin-widget widget-small">
+       <h1 class="widget-heading">Simple Extension</h1>
+       <div class="widget-content"></div>
+       <div class="widget-actions">
+        <a href="">Simple Button</a>
+       </div>
+      </div>
+      <!-- Single Widget Small -->
+
+      <!-- Single Widget - Small -->
+      <div class="admin-widget widget-small widget-last">
+       <h1 class="widget-heading">Complex Extension</h1>
+       <div class="widget-content"></div>
+       <div class="widget-actions">
+        <a href="">Play</a>
+        <a href="">Pause</a>
+        <a href="">Rewind</a>
+    
+       </div>
+      </div>
+      <!-- Single Widget Small -->
+
+
+
+
+
+     </div><!-- Admin Extras End -->
+
+
+
+ <div class="admin-extras admin-extras-level-2">
+
+
+
+      <div class="admin-widget widget-small">
+       <h1 class="widget-heading">Title Here</h1>
+       <div class="widget-content admin-box action-box">
+
+       </div>
+      </div>
+
+
+     <!-- Single Widget - Small -->
+           <div class="admin-widget widget-small">
+            <h1 class="widget-heading">Review Board Info<a href="feed/news/rss/">
+            <img src="{{MEDIA_URL}}rb/images/rss.png?{{MEDIA_SERIAL}}" alt="RSS" width="14" height="14" /></a></h1>
+
+            <div class="widget-content" id="news-content-widget">
+              <p>Posse soluta adipisci ea nec, at est dicant convenire salutandi. Vel ei etiam vulputate. Commodo dolorem erroribus his id, mea cu clita repudiandae, mutat expetendis duo id. Ut cibo veritus corpora mea. Eros ferri movet sed et. Voluptua periculis dissentiet an duo, eos discere sapientem ea, te illud nemore mollis est. Eu pro alii solet, in mel enim audiam vivendum.</p>
+            </div>
+            <div class="widget-actions">
+             <a href="http://www.reviewboard.org/news/">More News</a>
+             <a href="" id="reload-news">{% trans "Reload" %}</a>
+            </div>
+           </div>
+           <!-- Single Widget Small -->
+
+
+
+
+      <!-- Single Widget - Small -->
+      <div class="admin-widget widget-small">
+       <h1 class="widget-heading">Simple Extension</h1>
+       <div class="widget-content"></div>
+       <div class="widget-actions">
+        <a href="">Simple Button</a>
+       </div>
+      </div>
+      <!-- Single Widget Small -->
+
+
+
+         <!-- Single Widget - Small -->
+         <div class="admin-widget widget-small  widget-last">
+          <h1 class="widget-heading">Review Board Info<a href="feed/news/rss/">
+          <img src="{{MEDIA_URL}}rb/images/rss.png?{{MEDIA_SERIAL}}" alt="RSS" width="14" height="14" /></a></h1>
+
+          <div class="widget-content" id="news-content-widget">
+            <p>Posse soluta adipisci ea nec, at est dicant convenire salutandi. Vel ei etiam vulputate. Commodo dolorem erroribus his id, mea cu clita repudiandae, mutat expetendis duo id. Ut cibo veritus corpora mea. Eros ferri movet sed et. Voluptua periculis dissentiet an duo, eos discere sapientem ea, te illud nemore mollis est. Eu pro alii solet, in mel enim audiam vivendum.</p>
+          </div>
+          <div class="widget-actions">
+           <a href="http://www.reviewboard.org/news/">More News</a>
+           <a href="" id="reload-news">{% trans "Reload" %}</a>
+          </div>
+         </div>
+         <!-- Single Widget Small -->
+
+
+
+
+     </div><!-- Admin Extras End -->
+
+
+     <!-- Widgets End -->
+    </div>
+ </div>
+    <script language="javascript">
     $(document).ready(function() {
+
         $("a#reload-news").click(function(evt){
-            $("#news-content").load("feed/news/?reload=1");
-            evt.preventDefault();
+         $("#news-content").load("feed/news/?reload=1");
+          evt.preventDefault();
         });
 
-        $("#news-content").load("feed/news/");
+        $("#news-content-widget").load("feed/news/");
     });
 </script>
+
+
+<br class="clear" />
 {% endblock %}
