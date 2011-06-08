@@ -42,9 +42,7 @@
  border: 1px solid #000;
 }
 
-.widget-content table {
- margin-left: 10px;
-}
+
 
 .widget-content p{
  padding: 10px 10px;
@@ -78,8 +76,15 @@
  margin-left: 10px;
 }
 
-.widget-large {
+.widget-large  {
  width: 470px;
+}
+
+.widget-large-table {
+ width: 100%;
+}
+.widget-large table a {
+ display: block;
 }
 
 .widget-small {
@@ -151,6 +156,7 @@
 }
 
 .widget-heading {
+ cursor: pointer;
  color: #000;
  font-size: 13px;
  font-weight: 400;
@@ -233,3 +239,19 @@
 }
 
 
+.widget-list {
+
+}
+
+#news-content-widget .entry {
+ margin: 5px 10px;
+}
+
+#news-content-widget .entry h3 {
+ font-weight: normal;
+ font-size: 10px;
+}
+
+#news-content-widget .entry a{
+ display: block;
+}
