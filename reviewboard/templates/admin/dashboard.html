@@ -10,6 +10,11 @@
 
 {% block extrahead %}
 <script type="text/javascript" src="{{MEDIA_URL}}djblets/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}rb/js/flot/jquery.flot.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}rb/js/flot/jquery.flot.pie.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}rb/js/admin.js"></script>
+
+
 <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}rb/css/admin-dashboard.css?{{MEDIA_SERIAL}}" />
 <style>
 
@@ -57,7 +62,7 @@
 {% endblock %}
 
 {% block content %}
-
+{% include "base/base_header.html" %}
 
  <p>Viewport size is <span id="vpWidth"></span> x <span id="vpHeight"></span></p>
     <script>
@@ -111,12 +116,12 @@
            <td><a class="addlink" href="db/auth/user/add/">{% trans "Add" %}</a></td>
           </tr>
           <tr>
-            <th scope="row"><a href="db/reviews/group/">{% trans "Review groups" %}</a>
+            <th scope="row"><a href="db/reviews/group/">{% trans "Review Groups" %}</a>
              <span class="count">({{reviewgroup_count}})</span></th>
             <td><a class="addlink" href="db/reviews/group/add/">{% trans "Add" %}</a></td>
           </tr>
           <tr>
-            <th scope="row"><a href="db/reviews/defaultreviewer/">{% trans "Default reviewers" %}</a>
+            <th scope="row"><a href="db/reviews/defaultreviewer/">{% trans "Default Reviewers" %}</a>
              <span class="count">({{defaultreviewer_count}})</span></th>
             <td><a class="addlink" href="db/reviews/defaultreviewer/add/">{% trans "Add" %}</a></td>
           </tr>
@@ -138,12 +143,12 @@
        <div class="widget-content">
            <ul>
             {% admin_subnav "settings-general" _("General") "rb/images/reviewrequest.png" %}
-            {% admin_subnav "settings-authentication" _("Authentication") "rb/images/reviewrequest.png" %}
-            {% admin_subnav "settings-email" _("E-Mail") "rb/images/reviewrequest.png" %}
-            {% admin_subnav "settings-diffs" _("Diff Viewer") "rb/images/reviewrequest.png" %}
-            {% admin_subnav "settings-logging" _("Logging") "rb/images/reviewrequest.png" %}
-            {% admin_subnav "settings-ssh" _("SSH") "rb/images/reviewrequest.png"%}
-            {% admin_subnav "settings-storage" _("File Storage") "rb/images/reviewrequest.png" %}
+            {% admin_subnav "settings-authentication" _("Authentication") "rb/images/admin/set-auth.png" %}
+            {% admin_subnav "settings-email" _("E-Mail") "rb/images/admin/set-email.png" %}
+            {% admin_subnav "settings-diffs" _("Diff Viewer") "rb/images/admin/set-diff.png" %}
+            {% admin_subnav "settings-logging" _("Logging") "rb/images/admin/set-log.png" %}
+            {% admin_subnav "settings-ssh" _("SSH") "rb/images/admin/set-ssh.png" %}
+            {% admin_subnav "settings-storage" _("File Storage") "rb/images/admin/set-storage.png" %}
            </ul>
        </div>
       </div>
@@ -159,7 +164,10 @@
          <li><a href="cache/">{% trans "Server Cache" %}</a></li>
          <li>
           {% if settings.LOGGING_ENABLED and settings.LOGGING_DIRECTORY %}
-           <a href="{% url server-log %}">{% trans "Server Log" %}</a>
+           <a href="{% url server-log %}">
+               <img alt="" src="{{MEDIA_URL}}rb/images/admin/set-log.png?{{MEDIA_SERIAL}}">
+               {% trans "Server Log" %}
+           </a>
           {% endif %}
          </li>
          <li class="t-align-r">Version - {{version}}</li>
@@ -178,31 +186,66 @@
       <!-- Single Widget - Large -->
       <div class="admin-widget widget-large">
        <h1 class="widget-heading">Review Requests</h1>
-       <div class="widget-content"></div>
+       <div class="widget-content">
+
+           <!-- Place Holder -->
+           <div id="placeholder" style="width: 450px; height: 200px;"></div>
+
+       </div>
        <div class="widget-actions">
-        <a href="">New Request</a>
-        <a href="">View All</a>
-        <a class="a-right" href="">View All Drafts</a>
+        <a class="a-right" href="">View All</a>
+        <a class="a-right" href="">View Drafts</a>
        </div>
       </div>
       <!-- Single Widget - Large End -->
 
       <!-- Single Widget - Large -->
       <div class="admin-widget widget-large">
-       <h1 class="widget-heading">Review Requests</h1>
+       <h1 class="widget-heading">Repositories</h1>
        <div class="widget-content">
-
-           <!-- Place Holder -->
-           <div style="width: 500px; height: 200px;"></div>
-
+        <table class="widget-large-table">
+        <thead>
+            <tr><th>Name</th><th>Tool</th><th>Visible</th></tr>
+        </thead>
+        {% if repositories %}
+           {% for repo in repositories %}
+            <tr>
+             <td><a href="">{{repo.name}}</a></td>
+             <td>{{repo.tool}}</td>
+             <td>{% if repo.visible %}
+              <img src="{{MEDIA_URL}}rb/images/shipit.png?{{MEDIA_SERIAL}}" alt="Visible" title="Visible" />{% endif %}
+             </td>
+            </tr>
+           {% endfor %}
+        {% endif %}
+        </table>
        </div>
        <div class="widget-actions">
-        <a href="">New Request</a>
-        <a href="">View All</a>
-        <a class="a-right" href="">View All Drafts</a>
+        <a href="db/scmtools/repository/add/">Add New</a>
+        <a class="a-right" href="db/scmtools/repository/">View All</a>
        </div>
       </div>
       <!-- Single Widget - Large End -->
+
+      <!-- Single Widget - Large -->
+      <div class="admin-widget widget-large">
+       <h1 class="widget-heading">Users</h1>
+       <div class="widget-content">
+        <div id="user-chart" style="width: 450px; height: 150px;"></div>
+
+         {% for user in users %}
+             {{user}}
+             last login: {{ user.last_login }}<br/>
+         {% endfor %}
+       </div>
+       <div class="widget-actions">
+        <a href="">Add New</a>
+        <a class="a-right" href="">Manage Users</a>
+       </div>
+      </div>
+      <!-- Single Widget - Large End -->
+
+
 
 
      </div>
@@ -210,15 +253,43 @@
 
      <div class="admin-extras">
 
-
-
       <div class="admin-widget widget-small">
-       <h1 class="widget-heading">Title Here</h1>
+       <h1 class="widget-heading">Server Cache
+        <a href=""><img src="{{MEDIA_URL}}rb/images/admin/set-storage.png?{{MEDIA_SERIAL}}"
+         alt="Groups" width="20" height="20" /></a></h1>
        <div class="widget-content admin-box action-box">
-
+        <div id="placeholder4" style="width: 180px; height: 200px;"></div>
        </div>
       </div>
 
+
+
+      <div class="admin-widget widget-small">
+       <h1 class="widget-heading">Recent Actions</h1>
+       <div class="widget-content admin-box action-box">
+        <div id="placeholder5" style="width: 180px; height: 200px;"></div>
+       </div>
+      </div>
+
+
+
+      <div class="admin-widget widget-small">
+       <h1 class="widget-heading">Groups
+        <a href=""><img src="{{MEDIA_URL}}rb/images/admin/set-auth.png?{{MEDIA_SERIAL}}"
+         alt="Groups" width="20" height="20" /></a></h1>
+       <div class="widget-content admin-box action-box">
+           <ul class="widget-list">
+               <li>Group Name :: <strong>0</strong></li>
+               <li>SampleGroup Name :: <strong>0</strong></li>
+               <li>Group Name :: <strong>0</strong></li>
+               <li>Administrators Group :: <strong>0</strong></li>
+           </ul>
+       </div>
+       <div class="widget-actions">
+        <a href="">Add New</a>
+        <a href="">{% trans "View All" %}</a>
+       </div>
+      </div>
 
 
       <!-- Single Widget - Small -->
@@ -238,116 +309,9 @@
       </div>
       <!-- Single Widget Small -->
 
-
-      <!-- Single Widget - Small -->
-      <div class="admin-widget widget-small">
-       <h1 class="widget-heading">Simple Extension</h1>
-       <div class="widget-content"></div>
-       <div class="widget-actions">
-        <a href="">Simple Button</a>
-       </div>
-      </div>
-      <!-- Single Widget Small -->
-
-      <!-- Single Widget - Small -->
-      <div class="admin-widget widget-small widget-last">
-       <h1 class="widget-heading">Complex Extension</h1>
-       <div class="widget-content"></div>
-       <div class="widget-actions">
-        <a href="">Play</a>
-        <a href="">Pause</a>
-        <a href="">Rewind</a>
-    
-       </div>
-      </div>
-      <!-- Single Widget Small -->
-
-
-
-
-
      </div><!-- Admin Extras End -->
-
-
-
- <div class="admin-extras admin-extras-level-2">
-
-
-
-      <div class="admin-widget widget-small">
-       <h1 class="widget-heading">Title Here</h1>
-       <div class="widget-content admin-box action-box">
-
-       </div>
-      </div>
-
-
-     <!-- Single Widget - Small -->
-           <div class="admin-widget widget-small">
-            <h1 class="widget-heading">Review Board Info<a href="feed/news/rss/">
-            <img src="{{MEDIA_URL}}rb/images/rss.png?{{MEDIA_SERIAL}}" alt="RSS" width="14" height="14" /></a></h1>
-
-            <div class="widget-content" id="news-content-widget">
-              <p>Posse soluta adipisci ea nec, at est dicant convenire salutandi. Vel ei etiam vulputate. Commodo dolorem erroribus his id, mea cu clita repudiandae, mutat expetendis duo id. Ut cibo veritus corpora mea. Eros ferri movet sed et. Voluptua periculis dissentiet an duo, eos discere sapientem ea, te illud nemore mollis est. Eu pro alii solet, in mel enim audiam vivendum.</p>
-            </div>
-            <div class="widget-actions">
-             <a href="http://www.reviewboard.org/news/">More News</a>
-             <a href="" id="reload-news">{% trans "Reload" %}</a>
-            </div>
-           </div>
-           <!-- Single Widget Small -->
-
-
-
-
-      <!-- Single Widget - Small -->
-      <div class="admin-widget widget-small">
-       <h1 class="widget-heading">Simple Extension</h1>
-       <div class="widget-content"></div>
-       <div class="widget-actions">
-        <a href="">Simple Button</a>
-       </div>
-      </div>
-      <!-- Single Widget Small -->
-
-
-
-         <!-- Single Widget - Small -->
-         <div class="admin-widget widget-small  widget-last">
-          <h1 class="widget-heading">Review Board Info<a href="feed/news/rss/">
-          <img src="{{MEDIA_URL}}rb/images/rss.png?{{MEDIA_SERIAL}}" alt="RSS" width="14" height="14" /></a></h1>
-
-          <div class="widget-content" id="news-content-widget">
-            <p>Posse soluta adipisci ea nec, at est dicant convenire salutandi. Vel ei etiam vulputate. Commodo dolorem erroribus his id, mea cu clita repudiandae, mutat expetendis duo id. Ut cibo veritus corpora mea. Eros ferri movet sed et. Voluptua periculis dissentiet an duo, eos discere sapientem ea, te illud nemore mollis est. Eu pro alii solet, in mel enim audiam vivendum.</p>
-          </div>
-          <div class="widget-actions">
-           <a href="http://www.reviewboard.org/news/">More News</a>
-           <a href="" id="reload-news">{% trans "Reload" %}</a>
-          </div>
-         </div>
-         <!-- Single Widget Small -->
-
-
-
-
-     </div><!-- Admin Extras End -->
-
-
      <!-- Widgets End -->
     </div>
  </div>
-    <script language="javascript">
-    $(document).ready(function() {
-
-        $("a#reload-news").click(function(evt){
-         $("#news-content").load("feed/news/?reload=1");
-          evt.preventDefault();
-        });
-
-        $("#news-content-widget").load("feed/news/");
-    });
-</script>
-
-
 <br class="clear" />
 {% endblock %}
