@@ -1,4 +1,5 @@
 import logging
+import pprint
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
@@ -25,11 +26,16 @@ def dashboard(request, template_name="admin/dashboard.html"):
     Displays the administration dashboard, containing news updates and
     useful administration tasks.
     """
+
+    print User.objects.all()[0].__dict__
+
     return render_to_response(template_name, RequestContext(request, {
         'user_count': User.objects.count(),
+        'users':User.objects.all(),
         'reviewgroup_count': Group.objects.count(),
         'defaultreviewer_count': DefaultReviewer.objects.count(),
         'repository_count': Repository.objects.accessible(request.user).count(),
+        'repositories': Repository.objects.accessible(request.user),
         'has_cache_stats': get_has_cache_stats(),
         'title': _("Dashboard"),
         'root_path': settings.SITE_ROOT + "admin/db/"
