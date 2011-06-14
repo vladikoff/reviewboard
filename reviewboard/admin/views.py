@@ -1,5 +1,5 @@
+from datetime import timedelta, date
 import logging
-import pprint
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
@@ -18,6 +18,7 @@ from reviewboard.admin.forms import SSHSettingsForm
 from reviewboard.reviews.models import Group, DefaultReviewer
 from reviewboard.scmtools.models import Repository
 from reviewboard.scmtools import sshutils
+from reviews.models import ReviewRequest
 
 
 @staff_member_required
@@ -27,14 +28,32 @@ def dashboard(request, template_name="admin/dashboard.html"):
     useful administration tasks.
     """
 
-    print User.objects.all()[0].__dict__
+    # User Activity Widget
+    now = date.today()
+    total_users = User.objects.all();
+    activity_list = {}
+    activity_list['now'] = User.objects.filter(last_login__lte=now).count()
+    activity_list['seven_days'] = User.objects.filter(last_login__lte=now - timedelta(days=7)).count()
+    activity_list['thirty_days'] =  User.objects.filter(last_login__lte=now - timedelta(days=30)).count()
+    activity_list['sixty_days'] = User.objects.filter(last_login__lte=now - timedelta(days=60)).count()
+    activity_list['ninety_days'] =  User.objects.filter(last_login__lte=now - timedelta(days=90)).count()
+
+    # Debug
+    print "now " + str(now)
+    print "now list" + str(activity_list)
+
+    #print User.objects.all()[0].__dict__
 
     return render_to_response(template_name, RequestContext(request, {
         'user_count': User.objects.count(),
-        'users':User.objects.all(),
+        'users': total_users,
+        'activity_list': activity_list,
         'reviewgroup_count': Group.objects.count(),
+        'reviewgroups': Group.objects.all(),
         'defaultreviewer_count': DefaultReviewer.objects.count(),
         'repository_count': Repository.objects.accessible(request.user).count(),
+        'review_requests':ReviewRequest.objects.all(),
+        'review_requests_count':ReviewRequest.objects.count(),
         'repositories': Repository.objects.accessible(request.user),
         'has_cache_stats': get_has_cache_stats(),
         'title': _("Dashboard"),
