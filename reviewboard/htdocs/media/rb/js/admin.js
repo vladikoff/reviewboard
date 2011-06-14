@@ -20,8 +20,9 @@ $(function () {
     });
 
     //Close Dashboard Alerts
-    $('.close-alert').click(function() {
+    $('.close-alert').click(function(evt) {
      $(this).parent().parent().slideUp();
+     evt.preventDefault();
     });
 
 
@@ -46,82 +47,4 @@ $(function () {
     var d6 = [];
     for (var i = 0; i < 14; i += 0.5 + Math.random())
         d6.push([i, Math.sqrt(2*i + Math.sin(i) + 5)]);
-
-    $.plot($("#placeholder"), [
-        {
-            data: d1,
-            lines: { show: true, fill: true }
-        },
-        {
-            data: d2,
-            bars: { show: true }
-        },
-        {
-            data: d3,
-            points: { show: true }
-        },
-        {
-            data: d4,
-            lines: { show: true }
-        },
-        {
-            data: d5,
-            lines: { show: true },
-            points: { show: true }
-        },
-        {
-            data: d6,
-            lines: { show: true, steps: true }
-        }
-    ]);
 });
-
-
-
-$(function () {
-	// data
-	/*var data = [
-		{ label: "Series1",  data: 10},
-		{ label: "Series2",  data: 30},
-		{ label: "Series3",  data: 90},
-		{ label: "Series4",  data: 70},
-		{ label: "Series5",  data: 80},
-		{ label: "Series6",  data: 110}
-	];*/
-	/*var data = [
-		{ label: "Series1",  data: [[1,10]]},
-		{ label: "Series2",  data: [[1,30]]},
-		{ label: "Series3",  data: [[1,90]]},
-		{ label: "Series4",  data: [[1,70]]},
-		{ label: "Series5",  data: [[1,80]]},
-		{ label: "Series6",  data: [[1,0]]}
-	];*/
-	var data = [];
-	var series = Math.floor(Math.random()*10)+1;
-	for( var i = 0; i<series; i++)
-	{
-		data[i] = { label: "Series"+(i+1), data: Math.floor(Math.random()*100)+1 }
-	}
-
-	// DEFAULT
-    $.plot($("#user-chart"), data,
-	{
-		series: {
-			pie: {
-				show: true,
-                label: {
-                    show: true,
-                    radius: 1,
-                    formatter: function(label, series){
-                        return '<div>' + Math.round(series.percent)+'%</div>';
-                    },
-                    background: { opacity: 0.8 }
-                }
-			}
-		}
-	});
-});
-
-
-
-
