@@ -1,10 +1,11 @@
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime, time
 import logging
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.core.cache import cache
+from django.db.models import Avg, Max, Min, Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
@@ -18,7 +19,7 @@ from reviewboard.admin.forms import SSHSettingsForm
 from reviewboard.reviews.models import Group, DefaultReviewer
 from reviewboard.scmtools.models import Repository
 from reviewboard.scmtools import sshutils
-from reviews.models import ReviewRequest
+from reviews.models import ReviewRequest, ReviewRequestDraft
 
 
 @staff_member_required
@@ -30,21 +31,54 @@ def dashboard(request, template_name="admin/dashboard.html"):
 
     # User Activity Widget
     now = date.today()
-    total_users = User.objects.all();
+    total_users = User.objects.all()
+    users = User.objects
     activity_list = {}
-    activity_list['now'] = User.objects.filter(last_login__lte=now).count()
-    activity_list['seven_days'] = User.objects.filter(last_login__lte=now - timedelta(days=7)).count()
-    activity_list['thirty_days'] =  User.objects.filter(last_login__lte=now - timedelta(days=30)).count()
-    activity_list['sixty_days'] = User.objects.filter(last_login__lte=now - timedelta(days=60)).count()
-    activity_list['ninety_days'] =  User.objects.filter(last_login__lte=now - timedelta(days=90)).count()
+    activity_list['now'] = users.filter(last_login__lte=now).count()
+    activity_list['seven_days'] = users.filter(last_login__lte=now - timedelta(days=7)).count()
+    activity_list['thirty_days'] =  users.filter(last_login__lte=now - timedelta(days=30)).count()
+    activity_list['sixty_days'] = users.filter(last_login__lte=now - timedelta(days=60)).count()
+    activity_list['ninety_days'] =  users.filter(last_login__lte=now - timedelta(days=90)).count()
 
+    # Request Percentage
+    request_objects = ReviewRequest.objects
+    review_requests = request_objects.all()
+    req_percentage_list = {}
+    req_percentage_list['pending'] = request_objects.filter(status="P").count()
+    req_percentage_list['draft'] = request_objects.filter(status="D").count()
+    req_percentage_list['submit'] = request_objects.filter(status="S").count()
+
+
+    # Request By Creation
+    oldest_request = request_objects.aggregate(lowest=Min('time_added'))
+    start_date = oldest_request['lowest']
+    daysS = 0
+    daysSoFar = (datetime.today() - start_date).days
+    datesInDays  = []
+    req_array = []
+    while daysS < daysSoFar:
+        counterDate = start_date + timedelta(days=daysS)
+        datesInDays.append(counterDate)
+
+        req_array.append([])
+        req_array[daysS].append(request_objects.filter(time_added__lte=counterDate).count())
+        req_array[daysS].append(counterDate)
+        daysS = daysS + 1
+
+
+
+    #for request in review_requests:
+
+
+    
     # Debug
-    print "now " + str(now)
-    print "now list" + str(activity_list)
+    print "Days fo far  " + str(req_array)
+
 
     #print User.objects.all()[0].__dict__
 
     return render_to_response(template_name, RequestContext(request, {
+        'req_array': req_array,
         'user_count': User.objects.count(),
         'users': total_users,
         'activity_list': activity_list,
@@ -52,7 +86,9 @@ def dashboard(request, template_name="admin/dashboard.html"):
         'reviewgroups': Group.objects.all(),
         'defaultreviewer_count': DefaultReviewer.objects.count(),
         'repository_count': Repository.objects.accessible(request.user).count(),
-        'review_requests':ReviewRequest.objects.all(),
+        'review_requests': review_requests,
+        'req_percentage_list':req_percentage_list,
+        'review_draft_requests': ReviewRequestDraft.objects.all(),
         'review_requests_count':ReviewRequest.objects.count(),
         'repositories': Repository.objects.accessible(request.user),
         'has_cache_stats': get_has_cache_stats(),

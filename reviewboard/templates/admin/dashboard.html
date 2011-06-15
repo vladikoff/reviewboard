@@ -19,12 +19,10 @@
 <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}rb/css/admin-dashboard.css?{{MEDIA_SERIAL}}" />
 <style>
 
-
 @media screen and (max-width: 1230px) {
  .admin-extras-level-2{
   width: 100%;
   margin: 20px 0px 0px 20px;
-
  }
 
  .admin-extras-level-2 .widget-small {
@@ -182,18 +180,24 @@
        <h1 class="widget-heading">Review Requests</h1>
        <div class="widget-content">
 
-
            <!-- Place Holder -->
            <div id="placeholder" style="width: 450px; height: 200px;"></div>
            <div id="overview" style="margin-left:50px;margin-top:20px;width:400px;height:50px"></div>
 
            <script id="source">
 $(function () {
+    /*
     var d = [
      {% for request in review_requests %}
            [{{ request.time_added|date:"U"  }}000, 35],
-           {% endfor %}
+     {% endfor %}
+    ];
+    */
 
+  var d = [
+     {% for req in req_array %}
+           [{{ req.1|date:"U"  }}000, {{req.0}}],
+     {% endfor %}
     ];
 
     // first correct the timestamps - they are recorded as the daily
@@ -304,7 +308,7 @@ $(function () {
 
       <!-- Single Widget - Large -->
       <div class="admin-widget widget-large">
-       <h1 class="widget-heading">Users Activity</h1>
+       <h1 class="widget-heading">User Activity</h1>
        <div class="widget-content">
 
        <script type="text/javascript">
@@ -312,14 +316,12 @@ $(function () {
             $(function () {
                 // data
                 var data = [
-                    { label: "Active",  data: {{  activity_list.now }}},
-                    { label: "Last Login 7 days ago",  data: {{  activity_list.seven_days }}},
-                    { label: "Last Login 30 days ago",  data: {{  activity_list.thirty_days }}},
-                    { label: "Last Login 60 days ago",  data: {{  activity_list.sixty_days }}},
-                    { label: "Last Login 90 days ago",  data: {{  activity_list.ninety_days }}}
+                    { label: "Active  ({{  activity_list.now }})",  data: {{  activity_list.now }}},
+                    { label: "7 days ago ({{  activity_list.seven_days }})",  data: {{  activity_list.seven_days }}},
+                    { label: "30 days ago ({{  activity_list.thirty_days }})",  data: {{  activity_list.thirty_days }}},
+                    { label: "60 days ago ({{  activity_list.sixty_days }})",  data: {{  activity_list.sixty_days }}},
+                    { label: "90 days ago ({{  activity_list.ninety_days }})",  data: {{  activity_list.ninety_days }}}
                 ];
-
-
                 // DEFAULT
                 $.plot($("#user-chart"), data,
                 {
@@ -340,8 +342,10 @@ $(function () {
             });
        </script>
            
-        <div id="user-chart" style="width: 450px; height: 150px;"></div>
-
+        <div id="user-chart" style="width: 450px; height: 160px;"></div>
+         <div id="user-count">
+          Total Users: <strong>{{ user_count }}</strong>
+         </div>
        </div>
        <div class="widget-actions">
         <a href="">Add New</a>
@@ -349,30 +353,47 @@ $(function () {
        </div>
       </div>
       <!-- Single Widget - Large End -->
-
-
-
-
      </div>
 
 
      <div class="admin-extras">
-        {% if cache_hosts %}
-      <div class="admin-widget widget-small">
-       <h1 class="widget-heading">Server Cache
-        <a href=""><img src="{{MEDIA_URL}}rb/images/admin/set-storage.png?{{MEDIA_SERIAL}}"
-         alt="Groups" width="20" height="20" /></a></h1>
-       <div class="widget-content admin-box action-box">
-        <div id="placeholder4" style="width: 180px; height: 200px;"></div>
-       </div>
-      </div>
-        {% endif %}
-
 
       <div class="admin-widget widget-small">
-       <h1 class="widget-heading">Recent Actions</h1>
+       <h1 class="widget-heading"> Request Statuses</h1>
        <div class="widget-content admin-box action-box">
-        <div id="placeholder5" style="width: 180px; height: 200px;"></div>
+        <div id="requests-percentages" style="width: 190px; height: 165px;"></div>
+            <script type="text/javascript">
+
+            $(function () {
+                // data
+                var data = [
+                    { label: "Pending",  data: {{  req_percentage_list.pending }}},
+                    { label: "Draft",  data: {{  req_percentage_list.draft }}},
+                    { label: "Submit",  data: {{  req_percentage_list.submit }}}
+                ];
+                // DEFAULT
+                $.plot($("#requests-percentages"), data,
+                {
+                           series: {
+                                pie: {
+                                    show: true,
+                                    radius: 1,
+                                    label: {
+                                        show: true,
+                                        radius: 1,
+                                        formatter: function(label, series){
+                                            return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+                                        },
+                                        background: { opacity: 0.8 }
+                                    }
+                                }
+                            },
+                            legend: {
+                                show: false
+                            }
+                });
+            });
+       </script>
        </div>
       </div>
 
@@ -392,6 +413,27 @@ $(function () {
        <div class="widget-actions">
         <a href="db/reviews/group/add/">Add New</a>
         <a href="db/reviews/group/">{% trans "View All" %}</a>
+       </div>
+      </div>
+
+
+
+       {% if cache_hosts %}
+      <div class="admin-widget widget-small">
+       <h1 class="widget-heading">Server Cache
+        <a href=""><img src="{{MEDIA_URL}}rb/images/admin/set-storage.png?{{MEDIA_SERIAL}}"
+         alt="Groups" width="20" height="20" /></a></h1>
+       <div class="widget-content admin-box action-box">
+        <div id="placeholder4" style="width: 180px; height: 200px;"></div>
+       </div>
+      </div>
+        {% endif %}
+
+
+      <div class="admin-widget widget-small">
+       <h1 class="widget-heading">Recent Actions</h1>
+       <div class="widget-content admin-box action-box">
+        <div id="placeholder5" style="width: 180px; height: 200px;"></div>
        </div>
       </div>
 
