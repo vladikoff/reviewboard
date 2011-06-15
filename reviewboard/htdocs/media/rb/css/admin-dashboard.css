@@ -33,13 +33,13 @@
 
 .admin-extras .widget-actions a {
  border-right: none;
- border-left: 1px solid #000;
+ border-left: 1px solid #CCC;
  float: right;
 }
 
 .admin-widget {
  margin: 0px 0px 20px 0px;
- border: 1px solid #000;
+ border: 1px solid #CCC;
 }
 
 
@@ -193,7 +193,7 @@
  height: 20px;
  float: left;
  padding: 6px 5px 0px 5px;
- border-right: 1px solid #000;
+ border-right: 1px solid #CCC;
 }
 
 .widget-actions a:hover {
@@ -205,7 +205,7 @@
 .widget-actions a.a-right {
  float: right;
  border-right: none;
- border-left: 1px solid #000;
+ border-left: 1px solid #CCC;
 }
 
 
@@ -239,8 +239,20 @@
 }
 
 
-.widget-list {
+.widget-content {
+    position: relative;
+}
 
+#user-count {
+    border-top: 1px solid #ccc;
+    bottom: 10px;
+    color: #545454;
+    padding-left: 30px;
+    padding-top: 5px;
+    position: absolute;
+    right: 20px;
+    text-align: left;
+    width: 99px;
 }
 
 #news-content-widget .entry {
