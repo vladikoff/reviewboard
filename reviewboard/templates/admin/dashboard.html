@@ -15,7 +15,7 @@
 <script type="text/javascript" src="{{MEDIA_URL}}rb/js/flot/jquery.flot.selection.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}rb/js/admin.js"></script>
 
-
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}rb/css/common.css?{{MEDIA_SERIAL}}" />
 <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}rb/css/admin-dashboard.css?{{MEDIA_SERIAL}}" />
 <style>
 
@@ -104,6 +104,26 @@
      <!-- Action Bar -->
      <div id="admin-actions" class="clear">
 
+
+     <!-- Single Widget - Small -->
+      <div class="admin-widget admin-sidebar">
+       <h1 class="widget-heading">{% trans "System Settings" %}</h1>
+       <div class="widget-content">
+           <ul>
+            {% admin_subnav "settings-general" _("General") "rb/images/reviewrequest.png" %}
+            {% admin_subnav "settings-authentication" _("Authentication") "rb/images/admin/set-auth.png" %}
+            {% admin_subnav "settings-email" _("E-Mail") "rb/images/admin/set-email.png" %}
+            {% admin_subnav "settings-diffs" _("Diff Viewer") "rb/images/admin/set-diff.png" %}
+            {% admin_subnav "settings-logging" _("Logging") "rb/images/admin/set-log.png" %}
+            {% admin_subnav "settings-ssh" _("SSH") "rb/images/admin/set-ssh.png" %}
+            {% admin_subnav "settings-storage" _("File Storage") "rb/images/admin/set-storage.png" %}
+           </ul>
+       </div>
+      </div>
+      <!-- Single Widget Small -->
+
+
+
       <div class="admin-widget admin-sidebar">
        <h1 class="widget-heading">{% trans "Manage" %}</h1>
        <div class="widget-content admin-box action-box">
@@ -136,22 +156,7 @@
 
 
 
-      <!-- Single Widget - Small -->
-      <div class="admin-widget admin-sidebar">
-       <h1 class="widget-heading">{% trans "System Settings" %}</h1>
-       <div class="widget-content">
-           <ul>
-            {% admin_subnav "settings-general" _("General") "rb/images/reviewrequest.png" %}
-            {% admin_subnav "settings-authentication" _("Authentication") "rb/images/admin/set-auth.png" %}
-            {% admin_subnav "settings-email" _("E-Mail") "rb/images/admin/set-email.png" %}
-            {% admin_subnav "settings-diffs" _("Diff Viewer") "rb/images/admin/set-diff.png" %}
-            {% admin_subnav "settings-logging" _("Logging") "rb/images/admin/set-log.png" %}
-            {% admin_subnav "settings-ssh" _("SSH") "rb/images/admin/set-ssh.png" %}
-            {% admin_subnav "settings-storage" _("File Storage") "rb/images/admin/set-storage.png" %}
-           </ul>
-       </div>
-      </div>
-      <!-- Single Widget Small -->
+
 
       <div class="admin-widget admin-sidebar">
        <h1 class="widget-heading">System Information</h1>
@@ -165,6 +170,13 @@
            </a>
           {% endif %}
          </li>
+         <li>Public Read-only access -  <span class="disabled">{% if site_configs.read_only %}Enabled{% else %}Disabled{% endif %}</span></li>
+         <li>Syntax Highlighting -  <span class="disabled">{% if site_configs.syntax_highlighting %}Enabled{% else %}Disabled{% endif %}</span></li>
+         <li>Logging -  <span class="disabled">{% if site_configs.syntax_highlighting %}Enabled{% else %}Disabled{% endif %}</span> </li>
+         <li>Log Profiling <span class="disabled">{% if site_configs.logging_allow_profiling %}Enabled{% else %}Disabled{% endif %}</span></li>
+         <li>Review Emails - <span class="disabled">{% if site_configs.mail_send_review_mail %}Enabled{% else %}Disabled{% endif %}</span> </li>
+         <li>Email TLS Authentication - <span class="disabled">{% if site_configs.mail_use_tls %}Enabled{% else %}Disabled{% endif %}</span></li>
+         <li>Search Functionality - <span class="disabled">{% if site_configs.read_only %}Enabled{% else %}Disabled{% endif %}</span></li>
          <li class="t-align-r">Version - {{version}}</li>
         </ul>
        </div>
@@ -200,6 +212,29 @@ $(function () {
      {% endfor %}
     ];
 
+
+// Pending
+  var d2 = [
+     {% for req in req_array %}
+           [{{ req.1|date:"U"  }}000, 2],
+     {% endfor %}
+    ];
+
+
+// Submitted
+  var d3 = [
+     {% for req in req_array %}
+           [{{ req.1|date:"U"  }}000, 3],
+     {% endfor %}
+    ];
+
+// Draft
+  var d4 = [
+     {% for req in req_array %}
+           [{{ req.1|date:"U"  }}000, 5],
+     {% endfor %}
+    ];
+
     // first correct the timestamps - they are recorded as the daily
     // midnights in UTC+0100, but Flot always displays dates in UTC
     // so we have to add one hour to hit the midnights in the plot
@@ -227,9 +262,11 @@ $(function () {
     }
 
     var options = {
-        xaxis: { mode: "time", tickLength: 5 },
+        xaxis: { mode: "time", tickLength: 5},
+        yaxis : { min: 0 , tickDecimals: 0},
         selection: { mode: "x" },
         grid: { markings: weekendAreas },
+
         series: { points: { show: true, radius: 3 },   lines: { show: true }}
     };
 
@@ -263,12 +300,6 @@ $(function () {
     });
 });
 </script>
-
-              <script type="text/javascript">
-
-
-       </script>
-
 
        </div>
        <div class="widget-actions">
@@ -424,18 +455,47 @@ $(function () {
         <a href=""><img src="{{MEDIA_URL}}rb/images/admin/set-storage.png?{{MEDIA_SERIAL}}"
          alt="Groups" width="20" height="20" /></a></h1>
        <div class="widget-content admin-box action-box">
-        <div id="placeholder4" style="width: 180px; height: 200px;"></div>
+        {%  for hostname,stats in cache_hosts %}
+         <table>
+          <colgroup>
+           <col width="40%" />
+           <col width="60%" />
+          </colgroup>
+          <tr>
+           <th scope="row">{% trans "Memory usage:" %}</th>
+           <td>{{stats.bytes|filesizeformat}}</td>
+          </tr>
+          <tr>
+           <th scope="row">{% trans "Keys in cache:" %}</th>
+           <td>{{stats.curr_items}} of {{stats.total_items}}</td>
+          </tr>
+          <tr>
+           <th scope="row">{% trans "Cache hits:" %}</th>
+           <td>{{stats.get_hits}} of {{stats.cmd_get}}: {{stats.hit_rate}}%</td>
+          </tr>
+          <tr>
+           <th scope="row">{% trans "Cache misses:" %}</th>
+           <td>{{stats.get_misses}} of {{stats.cmd_get}}: {{stats.miss_rate}}%</td>
+          </tr>
+          <tr>
+           <th scope="row">{% trans "Cache evictions:" %}</th>
+           <td>{{stats.evictions}}</td>
+          </tr>
+          <tr>
+           <th scope="row">{% trans "Cache traffic:" %}</th>
+           <td>{{stats.bytes_read|filesizeformat}} in,
+               {{stats.bytes_written|filesizeformat}} out</td>
+          </tr>
+          <tr>
+           <th scope="row">{% trans "Uptime:" %}</th>
+           <td>{{stats.uptime}} seconds</td>
+          </tr>
+         </table>
+       {% endfor %}
        </div>
       </div>
         {% endif %}
 
-
-      <div class="admin-widget widget-small">
-       <h1 class="widget-heading">Recent Actions</h1>
-       <div class="widget-content admin-box action-box">
-        <div id="placeholder5" style="width: 180px; height: 200px;"></div>
-       </div>
-      </div>
 
 
       <!-- Single Widget - Small -->
@@ -454,6 +514,8 @@ $(function () {
        </div>
       </div>
       <!-- Single Widget Small -->
+
+
 
      </div><!-- Admin Extras End -->
      <!-- Widgets End -->

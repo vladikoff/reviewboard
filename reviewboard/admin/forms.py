@@ -95,6 +95,7 @@ class GeneralSettingsForm(SiteSettingsForm):
         required=False,
         widget=forms.TextInput(attrs={'size': '50'}))
 
+
     def load(self):
         # First set some sane defaults.
         domain_method = self.siteconfig.get("site_domain_method")
