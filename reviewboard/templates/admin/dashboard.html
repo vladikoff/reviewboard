@@ -172,11 +172,11 @@
          </li>
          <li>Public Read-only access -  <span class="disabled">{% if site_configs.read_only %}Enabled{% else %}Disabled{% endif %}</span></li>
          <li>Syntax Highlighting -  <span class="disabled">{% if site_configs.syntax_highlighting %}Enabled{% else %}Disabled{% endif %}</span></li>
-         <li>Logging -  <span class="disabled">{% if site_configs.syntax_highlighting %}Enabled{% else %}Disabled{% endif %}</span> </li>
+         <li>Logging -  <span class="disabled">{% if settings.LOGGING_ENABLED %}Enabled{% else %}Disabled{% endif %}</span> </li>
          <li>Log Profiling <span class="disabled">{% if site_configs.logging_allow_profiling %}Enabled{% else %}Disabled{% endif %}</span></li>
          <li>Review Emails - <span class="disabled">{% if site_configs.mail_send_review_mail %}Enabled{% else %}Disabled{% endif %}</span> </li>
          <li>Email TLS Authentication - <span class="disabled">{% if site_configs.mail_use_tls %}Enabled{% else %}Disabled{% endif %}</span></li>
-         <li>Search Functionality - <span class="disabled">{% if site_configs.read_only %}Enabled{% else %}Disabled{% endif %}</span></li>
+         <li>Indexed Search - <span class="disabled">{% if site_configs.read_only %}Enabled{% else %}Disabled{% endif %}</span></li>
          <li class="t-align-r">Version - {{version}}</li>
         </ul>
        </div>
@@ -515,7 +515,21 @@ $(function () {
       </div>
       <!-- Single Widget Small -->
 
+      <!-- Single Widget Small -->
+      <div class="admin-widget widget-small">
+       <h1 class="widget-heading">Server Log</h1>
+       <div class="widget-content admin-box action-box">
+           <ul class="widget-list">
+             {% for group in reviewgroups %}
 
+             {% endfor %}
+           </ul>
+       </div>
+       <div class="widget-actions">
+        <a href="db/reviews/group/">{% trans "View Log" %}</a>
+       </div>
+      </div>
+      <!-- Single Widget Small -->
 
      </div><!-- Admin Extras End -->
      <!-- Widgets End -->

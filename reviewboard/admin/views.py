@@ -22,6 +22,7 @@ from reviewboard.scmtools import sshutils
 from reviews.models import ReviewRequest, ReviewRequestDraft
 
 from djblets.siteconfig.models import SiteConfiguration
+from django.contrib.admin.models import LogEntry
 
 @staff_member_required
 def dashboard(request, template_name="admin/dashboard.html"):
@@ -29,6 +30,11 @@ def dashboard(request, template_name="admin/dashboard.html"):
     Displays the administration dashboard, containing news updates and
     useful administration tasks.
     """
+
+    #Server Logging
+    total_logs = LogEntry.objects.count()
+
+    print "Total Logs: " + str(total_logs)
 
     #Cache Stats
     cache_stats = get_cache_stats()
