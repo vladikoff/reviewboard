@@ -21,6 +21,7 @@ from reviewboard.scmtools.models import Repository
 from reviewboard.scmtools import sshutils
 from reviews.models import ReviewRequest, ReviewRequestDraft
 
+from djblets.siteconfig.models import SiteConfiguration
 
 @staff_member_required
 def dashboard(request, template_name="admin/dashboard.html"):
@@ -28,6 +29,22 @@ def dashboard(request, template_name="admin/dashboard.html"):
     Displays the administration dashboard, containing news updates and
     useful administration tasks.
     """
+
+    #Cache Stats
+    cache_stats = get_cache_stats()
+
+    #Site Configuration
+    siteconfig = SiteConfiguration.objects.get_current()
+
+    site_configs = {}
+    site_configs['read_only'] = siteconfig.get('auth_anonymous_access')
+    site_configs['syntax_highlighting'] = siteconfig.get('diffviewer_syntax_highlighting')
+    site_configs['logging_enabled'] = siteconfig.get('logging_enabled')
+    site_configs['logging_allow_profiling'] = siteconfig.get('logging_allow_profiling')
+
+    site_configs['mail_use_tls'] = siteconfig.get('mail_use_tls')
+    site_configs['mail_send_review_mail'] = siteconfig.get('mail_send_review_mail')
+    site_configs['search_enable'] = siteconfig.get('search_enable')
 
     # User Activity Widget
     now = date.today()
@@ -48,7 +65,6 @@ def dashboard(request, template_name="admin/dashboard.html"):
     req_percentage_list['draft'] = request_objects.filter(status="D").count()
     req_percentage_list['submit'] = request_objects.filter(status="S").count()
 
-
     # Request By Creation
     oldest_request = request_objects.aggregate(lowest=Min('time_added'))
     start_date = oldest_request['lowest']
@@ -68,11 +84,11 @@ def dashboard(request, template_name="admin/dashboard.html"):
 
 
     #for request in review_requests:
+    print "Site:  " + str(siteconfig.get('auth_anonymous_access'))
 
 
-    
     # Debug
-    print "Days fo far  " + str(req_array)
+    #print "Days fo far  " + str(req_array)
 
 
     #print User.objects.all()[0].__dict__
@@ -92,6 +108,8 @@ def dashboard(request, template_name="admin/dashboard.html"):
         'review_requests_count':ReviewRequest.objects.count(),
         'repositories': Repository.objects.accessible(request.user),
         'has_cache_stats': get_has_cache_stats(),
+        'cache_hosts': cache_stats,
+        'site_configs':site_configs,
         'title': _("Dashboard"),
         'root_path': settings.SITE_ROOT + "admin/db/"
     }))
