@@ -51,7 +51,7 @@ def getUserActivityWidget():
 
     activity_list = {}
     activity_list['now'] = \
-        users.filter(last_login__range=(now - timedelta(days=7), now)).count()
+        users.filter(last_login__range=(now - timedelta(days=7), now + timedelta(days=1))).count()
     activity_list['seven_days'] = \
         users.filter(last_login__range=(now - timedelta(days=30), now-timedelta(days=7))).count()
     activity_list['thirty_days'] =  \
