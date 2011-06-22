@@ -170,13 +170,13 @@
            </a>
           {% endif %}
          </li>
-         <li>Public Read-only access -  <span class="disabled">{% if site_configs.read_only %}Enabled{% else %}Disabled{% endif %}</span></li>
-         <li>Syntax Highlighting -  <span class="disabled">{% if site_configs.syntax_highlighting %}Enabled{% else %}Disabled{% endif %}</span></li>
-         <li>Logging -  <span class="disabled">{% if settings.LOGGING_ENABLED %}Enabled{% else %}Disabled{% endif %}</span> </li>
-         <li>Log Profiling <span class="disabled">{% if site_configs.logging_allow_profiling %}Enabled{% else %}Disabled{% endif %}</span></li>
-         <li>Review Emails - <span class="disabled">{% if site_configs.mail_send_review_mail %}Enabled{% else %}Disabled{% endif %}</span> </li>
-         <li>Email TLS Authentication - <span class="disabled">{% if site_configs.mail_use_tls %}Enabled{% else %}Disabled{% endif %}</span></li>
-         <li>Indexed Search - <span class="disabled">{% if site_configs.read_only %}Enabled{% else %}Disabled{% endif %}</span></li>
+         <li>Public Read-only access -  <span class="disabled">{% if site_configs.read_only %}<img src="{{MEDIA_URL}}rb/images/shipit.png?{{MEDIA_SERIAL}}" alt="Visible" title="Visible" />{% else %}Disabled{% endif %}</span></li>
+         <li>Syntax Highlighting -  <span class="disabled">{% if site_configs.syntax_highlighting %}<img src="{{MEDIA_URL}}rb/images/shipit.png?{{MEDIA_SERIAL}}" alt="Visible" title="Visible" />{% else %}Disabled{% endif %}</span></li>
+         <li>Logging -  <span class="disabled">{% if settings.LOGGING_ENABLED %}<img src="{{MEDIA_URL}}rb/images/shipit.png?{{MEDIA_SERIAL}}" alt="Visible" title="Visible" />{% else %}Disabled{% endif %}</span> </li>
+         <li>Log Profiling <span class="disabled">{% if site_configs.logging_allow_profiling %}<img src="{{MEDIA_URL}}rb/images/shipit.png?{{MEDIA_SERIAL}}" alt="Visible" title="Visible" />{% else %}Disabled{% endif %}</span></li>
+         <li>Review Emails - <span class="disabled">{% if site_configs.mail_send_review_mail %}<img src="{{MEDIA_URL}}rb/images/shipit.png?{{MEDIA_SERIAL}}" alt="Visible" title="Visible" />{% else %}Disabled{% endif %}</span> </li>
+         <li>Email TLS Authentication - <span class="disabled">{% if site_configs.mail_use_tls %}<img src="{{MEDIA_URL}}rb/images/shipit.png?{{MEDIA_SERIAL}}" alt="Visible" title="Visible" />{% else %}Disabled{% endif %}</span></li>
+         <li>Indexed Search - <span class="disabled">{% if site_configs.read_only %}<img src="{{MEDIA_URL}}rb/images/shipit.png?{{MEDIA_SERIAL}}" alt="Visible" title="Visible" />{% else %}Disabled{% endif %}</span></li>
          <li class="t-align-r">Version - {{version}}</li>
         </ul>
        </div>
@@ -186,6 +186,9 @@
      <!-- Action Bar End -->
      <!-- Widgets -->
      <div id="admin-widgets">
+
+
+
 
       <!-- Single Widget - Large -->
       <div class="admin-widget widget-large">
@@ -337,53 +340,12 @@ $(function () {
       </div>
       <!-- Single Widget - Large End -->
 
-      <!-- Single Widget - Large -->
-      <div class="admin-widget widget-large">
-       <h1 class="widget-heading">User Activity</h1>
-       <div class="widget-content">
 
-       <script type="text/javascript">
+     {% admin_widget "user-activity" _("User Activity") %}
+     
 
-            $(function () {
-                // data
-                var data = [
-                    { label: "Active  ({{  activity_list.now }})",  data: {{  activity_list.now }}},
-                    { label: "7 days ago ({{  activity_list.seven_days }})",  data: {{  activity_list.seven_days }}},
-                    { label: "30 days ago ({{  activity_list.thirty_days }})",  data: {{  activity_list.thirty_days }}},
-                    { label: "60 days ago ({{  activity_list.sixty_days }})",  data: {{  activity_list.sixty_days }}},
-                    { label: "90 days ago ({{  activity_list.ninety_days }})",  data: {{  activity_list.ninety_days }}}
-                ];
-                // DEFAULT
-                $.plot($("#user-chart"), data,
-                {
-                    series: {
-                        pie: {
-                            show: true,
-                            label: {
-                                show: true,
-                                radius: 1,
-                                formatter: function(label, series){
-                                    return '<div>' + Math.round(series.percent)+'%</div>';
-                                },
-                                background: { opacity: 0.8 }
-                            }
-                        }
-                    }
-                });
-            });
-       </script>
-           
-        <div id="user-chart" style="width: 450px; height: 160px;"></div>
-         <div id="user-count">
-          Total Users: <strong>{{ user_count }}</strong>
-         </div>
-       </div>
-       <div class="widget-actions">
-        <a href="">Add New</a>
-        <a class="a-right" href="">Manage Users</a>
-       </div>
-      </div>
-      <!-- Single Widget - Large End -->
+
+    
      </div>
 
 

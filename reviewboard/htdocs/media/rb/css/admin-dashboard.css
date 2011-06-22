@@ -202,7 +202,7 @@
 }
 
 
-.widget-actions a.a-right {
+.widget-actions a.btn-right {
  float: right;
  border-right: none;
  border-left: 1px solid #CCC;

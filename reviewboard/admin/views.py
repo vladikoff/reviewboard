@@ -52,16 +52,7 @@ def dashboard(request, template_name="admin/dashboard.html"):
     site_configs['mail_send_review_mail'] = siteconfig.get('mail_send_review_mail')
     site_configs['search_enable'] = siteconfig.get('search_enable')
 
-    # User Activity Widget
-    now = date.today()
     total_users = User.objects.all()
-    users = User.objects
-    activity_list = {}
-    activity_list['now'] = users.filter(last_login__lte=now).count()
-    activity_list['seven_days'] = users.filter(last_login__lte=now - timedelta(days=7)).count()
-    activity_list['thirty_days'] =  users.filter(last_login__lte=now - timedelta(days=30)).count()
-    activity_list['sixty_days'] = users.filter(last_login__lte=now - timedelta(days=60)).count()
-    activity_list['ninety_days'] =  users.filter(last_login__lte=now - timedelta(days=90)).count()
 
     # Request Percentage
     request_objects = ReviewRequest.objects
@@ -103,7 +94,7 @@ def dashboard(request, template_name="admin/dashboard.html"):
         'req_array': req_array,
         'user_count': User.objects.count(),
         'users': total_users,
-        'activity_list': activity_list,
+   
         'reviewgroup_count': Group.objects.count(),
         'reviewgroups': Group.objects.all(),
         'defaultreviewer_count': DefaultReviewer.objects.count(),
