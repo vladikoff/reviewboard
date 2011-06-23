@@ -1,0 +1,11 @@
+<div class="admin-widget {{ widget_size }}" id="{{ widget_name }}">
+    <h1 class="widget-heading">{{ widget_title }}</h1>
+    <div class="widget-content">
+         {% include widget_content %}
+    </div>
+    <div class="widget-actions">
+     {%  for action in widget_actions %}
+         <a href="{{ action.0 }}" class="{{ action.2 }}">{{ action.1 }}</a>
+     {%  endfor %}
+    </div>
+</div>
