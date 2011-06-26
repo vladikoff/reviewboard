@@ -103,7 +103,7 @@ def getGroups(request):
     widget_data = {}
     widget_data['size'] = "widget-small"
     widget_data['template'] = "admin/widgets/w-groups.html"
-    widget_data['actions'] = [['db/reviews/group/add/',_("Add New")],['db/reviews/group/',_("View All")]]
+    widget_data['actions'] = [['db/reviews/group/add/',_("Add")],['db/reviews/group/',_("View All")]]
     widget_data['data'] = review_groups
 
     return widget_data
@@ -126,7 +126,7 @@ def getNews(request):
     widget_data = {}
     widget_data['size'] = "widget-small"
     widget_data['template'] = "admin/widgets/w-news.html"
-    widget_data['actions'] = [['http://www.reviewboard.org/news/',_("More News")],['#',_("Reload"), 'reload-news']]
+    widget_data['actions'] = [['http://www.reviewboard.org/news/',_("More")],['#',_("Reload"), 'reload-news']]
     widget_data['data'] = ""
 
     return widget_data
@@ -138,6 +138,6 @@ def getServerLog(request):
     widget_data['size'] = "widget-small"
     widget_data['template'] = "admin/widgets/w-server-log.html"
     widget_data['data'] = ""
-    widget_data['actions'] = [['#',_("View Log")]]
+    widget_data['actions'] = [['#',_("Full Log")]]
 
     return widget_data

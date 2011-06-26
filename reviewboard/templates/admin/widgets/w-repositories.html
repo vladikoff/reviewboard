@@ -4,7 +4,7 @@
     <tr>
         <th>{% trans "Name" %}</th>
         <th>{% trans "Tool" %}</th>
-        <th>{% trans "Visible" %}</th>
+        <th style="width:45px;" class="td-center">{% trans "Visible" %}</th>
     </tr>
     </thead>
     {% if widget_data %}
@@ -12,9 +12,12 @@
             <tr>
                 <td><a href="">{{ repository.name }}</a></td>
                 <td>{{ repository.tool }}</td>
-                <td>{% if repository.visible %}
+                <td class="td-center">{% if repository.visible %}
                     <img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="Visible"
-                         title="Visible"/>{% endif %}
+                         title="Visible"/>{% else %}
+                    <img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="Invisible"
+                         title="Invisible" />
+                         {% endif %}
                 </td>
             </tr>
         {% endfor %}

@@ -69,7 +69,6 @@ def admin_actions(context):
     current_site_config = SiteConfiguration.objects.get_current()
     request = context.get('request')
 
-
     site_configs = {}
     site_configs['read_only'] = current_site_config.get('auth_anonymous_access')
     site_configs['syntax_highlighting'] = current_site_config.get('diffviewer_syntax_highlighting')
@@ -79,6 +78,8 @@ def admin_actions(context):
     site_configs['mail_use_tls'] = current_site_config.get('mail_use_tls')
     site_configs['mail_send_review_mail'] = current_site_config.get('mail_send_review_mail')
     site_configs['search_enable'] = current_site_config.get('search_enable')
+
+    print "Logging: " + str(site_configs['logging_enabled'])
 
     return {
         'request': request,
