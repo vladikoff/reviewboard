@@ -1,0 +1,107 @@
+           <div id="placeholder" style="width: 450px; height: 200px;"></div>
+           <div id="overview" style="margin-left:50px;margin-top:20px;width:400px;height:50px"></div>
+
+           <script id="source">
+$(function () {
+    /*
+    var d = [
+     {% for request in review_requests %}
+           [{{ request.time_added|date:"U"  }}000, 35],
+     {% endfor %}
+    ];
+    */
+
+  var d = [
+     {% for req in widget_data.requests_by_day %}
+           [{{ req.1|date:"U"  }}000, {{req.0}}],
+     {% endfor %}
+    ];
+
+
+// Pending
+  var d2 = [
+     {% for req in req_array %}
+           [{{ req.1|date:"U"  }}000, 2],
+     {% endfor %}
+    ];
+
+
+// Submitted
+  var d3 = [
+     {% for req in req_array %}
+           [{{ req.1|date:"U"  }}000, 3],
+     {% endfor %}
+    ];
+
+// Draft
+  var d4 = [
+     {% for req in req_array %}
+           [{{ req.1|date:"U"  }}000, 5],
+     {% endfor %}
+    ];
+
+    // first correct the timestamps - they are recorded as the daily
+    // midnights in UTC+0100, but Flot always displays dates in UTC
+    // so we have to add one hour to hit the midnights in the plot
+    for (var i = 0; i < d.length; ++i)
+      d[i][0] += 60 * 60 * 1000;
+
+    // helper for returning the weekends in a period
+    function weekendAreas(axes) {
+        var markings = [];
+        var d = new Date(axes.xaxis.min);
+        // go to the first Saturday
+        d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 1) % 7))
+        d.setUTCSeconds(0);
+        d.setUTCMinutes(0);
+        d.setUTCHours(0);
+        var i = d.getTime();
+        do {
+            // when we don't set yaxis, the rectangle automatically
+            // extends to infinity upwards and downwards
+            markings.push({ xaxis: { from: i, to: i + 2 * 24 * 60 * 60 * 1000 } });
+            i += 7 * 24 * 60 * 60 * 1000;
+        } while (i < axes.xaxis.max);
+
+        return markings;
+    }
+
+    var options = {
+        xaxis: { mode: "time", tickLength: 5},
+        yaxis : { min: 0 , tickDecimals: 0},
+        selection: { mode: "x" },
+        grid: { markings: weekendAreas },
+
+        series: { points: { show: true, radius: 3 },   lines: { show: true }}
+    };
+
+    var plot = $.plot($("#placeholder"), [d], options);
+
+    var overview = $.plot($("#overview"), [d], {
+        series: {
+            lines: { show: true, lineWidth: 1 },
+            shadowSize: 0
+        },
+        xaxis: { ticks: [], mode: "time" },
+        yaxis: { ticks: [], min: 0, autoscaleMargin: 0.1 },
+        selection: { mode: "x" }
+    });
+
+    // now connect the two
+
+    $("#placeholder").bind("plotselected", function (event, ranges) {
+        // do the zooming
+        plot = $.plot($("#placeholder"), [d],
+                      $.extend(true, {}, options, {
+                          xaxis: { min: ranges.xaxis.from, max: ranges.xaxis.to }
+                      }));
+
+        // don't fire event on the overview to prevent eternal loop
+        overview.setSelection(ranges, true);
+    });
+
+    $("#overview").bind("plotselected", function (event, ranges) {
+        plot.setSelection(ranges);
+    });
+});
+</script>

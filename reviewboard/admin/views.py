@@ -5,7 +5,6 @@ from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.core.cache import cache
-from django.db.models import Avg, Max, Min, Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
@@ -36,8 +35,6 @@ def dashboard(request, template_name="admin/dashboard.html"):
 
     print "Total Logs: " + str(total_logs)
 
-    #Cache Stats
-    cache_stats = get_cache_stats()
 
     #Site Configuration
     siteconfig = SiteConfiguration.objects.get_current()
@@ -54,58 +51,30 @@ def dashboard(request, template_name="admin/dashboard.html"):
 
     total_users = User.objects.all()
 
-    # Request Percentage
     request_objects = ReviewRequest.objects
     review_requests = request_objects.all()
-    req_percentage_list = {}
-    req_percentage_list['pending'] = request_objects.filter(status="P").count()
-    req_percentage_list['draft'] = request_objects.filter(status="D").count()
-    req_percentage_list['submit'] = request_objects.filter(status="S").count()
 
-    # Request By Creation
-    oldest_request = request_objects.aggregate(lowest=Min('time_added'))
-    start_date = oldest_request['lowest']
-    daysS = 0
-    daysSoFar = (datetime.today() - start_date).days
-    datesInDays  = []
-    req_array = []
-    while daysS < daysSoFar:
-        counterDate = start_date + timedelta(days=daysS)
-        datesInDays.append(counterDate)
 
-        req_array.append([])
-        req_array[daysS].append(request_objects.filter(time_added__lte=counterDate).count())
-        req_array[daysS].append(counterDate)
-        daysS = daysS + 1
+
 
 
 
     #for request in review_requests:
-    print "Site:  " + str(siteconfig.get('auth_anonymous_access'))
-
-
+    #print "Site:  " + str(siteconfig.get('auth_anonymous_access'))
     # Debug
     #print "Days fo far  " + str(req_array)
-
-
     #print User.objects.all()[0].__dict__
 
     return render_to_response(template_name, RequestContext(request, {
-        'req_array': req_array,
         'user_count': User.objects.count(),
         'users': total_users,
-   
         'reviewgroup_count': Group.objects.count(),
-        'reviewgroups': Group.objects.all(),
         'defaultreviewer_count': DefaultReviewer.objects.count(),
         'repository_count': Repository.objects.accessible(request.user).count(),
         'review_requests': review_requests,
-        'req_percentage_list':req_percentage_list,
         'review_draft_requests': ReviewRequestDraft.objects.all(),
         'review_requests_count':ReviewRequest.objects.count(),
-        'repositories': Repository.objects.accessible(request.user),
         'has_cache_stats': get_has_cache_stats(),
-        'cache_hosts': cache_stats,
         'site_configs':site_configs,
         'title': _("Dashboard"),
         'root_path': settings.SITE_ROOT + "admin/db/"

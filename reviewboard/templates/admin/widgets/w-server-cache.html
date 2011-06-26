@@ -1,0 +1,38 @@
+{% load i18n %}
+{%  for hostname,stats in widget_data %}
+         <table>
+          <colgroup>
+           <col width="40%" />
+           <col width="60%" />
+          </colgroup>
+          <tr>
+           <th scope="row">{% trans "Memory usage:" %}</th>
+           <td>{{stats.bytes|filesizeformat}}</td>
+          </tr>
+          <tr>
+           <th scope="row">{% trans "Keys in cache:" %}</th>
+           <td>{{stats.curr_items}} of {{stats.total_items}}</td>
+          </tr>
+          <tr>
+           <th scope="row">{% trans "Cache hits:" %}</th>
+           <td>{{stats.get_hits}} of {{stats.cmd_get}}: {{stats.hit_rate}}%</td>
+          </tr>
+          <tr>
+           <th scope="row">{% trans "Cache misses:" %}</th>
+           <td>{{stats.get_misses}} of {{stats.cmd_get}}: {{stats.miss_rate}}%</td>
+          </tr>
+          <tr>
+           <th scope="row">{% trans "Cache evictions:" %}</th>
+           <td>{{stats.evictions}}</td>
+          </tr>
+          <tr>
+           <th scope="row">{% trans "Cache traffic:" %}</th>
+           <td>{{stats.bytes_read|filesizeformat}} in,
+               {{stats.bytes_written|filesizeformat}} out</td>
+          </tr>
+          <tr>
+           <th scope="row">{% trans "Uptime:" %}</th>
+           <td>{{stats.uptime}} seconds</td>
+          </tr>
+         </table>
+{% endfor %}

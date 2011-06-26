@@ -1,0 +1,5 @@
+<ul class="widget-list">
+    {% for group in widget_data %}
+        <li> {{ group.display_name }} :: <strong>{{ group.users.count }}</strong></li>
+    {% endfor %}
+</ul>

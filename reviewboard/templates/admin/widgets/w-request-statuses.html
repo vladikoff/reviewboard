@@ -1,0 +1,33 @@
+<div id="requests-percentages" style="width: 190px; height: 165px;"></div>
+<script type="text/javascript">
+
+    $(function () {
+        // data
+        var data = [
+            { label: "Pending",  data: {{widget_data.pending}}},
+            { label: "Draft",  data: {{widget_data.draft}}},
+            { label: "Submit",  data: {{widget_data.submit}}}
+        ];
+        // DEFAULT
+        $.plot($("#requests-percentages"), data,
+                {
+                    series: {
+                        pie: {
+                            show: true,
+                            radius: 1,
+                            label: {
+                                show: true,
+                                radius: 1,
+                                formatter: function(label, series) {
+                                    return '<div class="request-percentage-label">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
+                                },
+                                background: { opacity: 0.8 }
+                            }
+                        }
+                    },
+                    legend: {
+                        show: false
+                    }
+                });
+    });
+</script>
