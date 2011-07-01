@@ -29,22 +29,22 @@
  <tbody>
   <tr>
    <th scope="row"><a href="db/auth/user/">{% trans "Users" %}</a></th>
-   <td>({{count_users}})</td>
-   <td class="td-right"><a class="addlink" href="db/auth/user/add/">{% trans "Add" %}</a></td>
+   <td class="td-count">{{count_users}}</td>
+   <td width="40" class="td-right"><a class="addlink" href="db/auth/user/add/">{% trans "Add" %}</a></td>
   </tr>
   <tr>
     <th scope="row"><a href="db/reviews/group/">{% trans "Review Groups" %}</a></th>
-    <td>({{count_review_groups}})</td>
+    <td class="td-count">{{count_review_groups}}</td>
     <td class="td-right"><a class="addlink" href="db/reviews/group/add/">{% trans "Add" %}</a></td>
   </tr>
   <tr>
     <th scope="row"><a href="db/reviews/defaultreviewer/">{% trans "Default Reviewers" %}</a></th>
-    <td>({{count_default_reviewers}})</td>
+    <td class="td-count">{{count_default_reviewers}}</td>
     <td class="td-right"><a class="addlink" href="db/reviews/defaultreviewer/add/">{% trans "Add" %}</a></td>
   </tr>
   <tr>
      <th scope="row"><a href="db/scmtools/repository/">{% trans "Repositories" %}</a></th>
-     <td>({{count_repository}})</td>
+     <td class="td-count">{{count_repository}}</td>
      <td class="td-right"><a class="addlink" href="db/scmtools/repository/add/">{% trans "Add" %}</a></td>
   </tr>
  </tbody>

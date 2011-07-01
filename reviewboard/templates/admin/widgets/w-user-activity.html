@@ -20,7 +20,7 @@
                         show: true,
                         radius: 1,
                         formatter: function(label, series){
-                            return '<div>'+Math.round(series.percent)+'%</div>';
+                            return '<div>' + Math.round(series.percent) + '%</div>';
                         },
                         background: { opacity: 0.8 }
                     }
@@ -32,5 +32,5 @@
 
 <div id="user-chart" style="width: 450px; height: 160px;"></div>
  <div id="user-count">
-  {% trans "Total Users" %}: <strong>{{ widget_data.total }}</strong>
+{% trans "Total Users" %}: <strong>{{widget_data.total}}</strong>
  </div>

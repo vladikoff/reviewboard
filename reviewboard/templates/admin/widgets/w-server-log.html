@@ -1,0 +1,11 @@
+{% for timestamp, level, message in widget_data %}
+{%  ifchanged timestamp.day %}
+   <tr>
+    <th colspan="3">{{timestamp|date}}</th>
+   </tr>
+{%  endifchanged %}
+   <tr class="level-{{level|lower}} {% cycle row1,row2 %}">
+    <td>{{timestamp|time:"H:i:s"}}</td>
+    <td>{{level}}</td>
+   </tr>
+{% endfor %}

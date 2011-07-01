@@ -1,7 +1,10 @@
            <div id="placeholder" style="width: 450px; height: 200px;"></div>
            <div id="overview" style="margin-left:50px;margin-top:20px;width:400px;height:50px"></div>
-
+{% for desc in widget_data.change_descriptions %}
+    {{ desc|length }} {{desc  }}
+  {%  endfor %}
            <script id="source">
+
 $(function () {
     /*
     var d = [
@@ -20,24 +23,10 @@ $(function () {
 
 // Pending
   var d2 = [
-     {% for req in req_array %}
-           [{{ req.1|date:"U"  }}000, 2],
+     {% for description in  widget_data.change_descriptions %}
+           [{{ description.timestamp|date:"U"  }}000, 1],
      {% endfor %}
-    ];
-
-
-// Submitted
-  var d3 = [
-     {% for req in req_array %}
-           [{{ req.1|date:"U"  }}000, 3],
-     {% endfor %}
-    ];
-
-// Draft
-  var d4 = [
-     {% for req in req_array %}
-           [{{ req.1|date:"U"  }}000, 5],
-     {% endfor %}
+[1307863225000, 2]
     ];
 
     // first correct the timestamps - they are recorded as the daily
@@ -71,11 +60,14 @@ $(function () {
         yaxis : { min: 0 , tickDecimals: 0},
         selection: { mode: "x" },
         grid: { markings: weekendAreas },
-
-        series: { points: { show: true, radius: 3 },   lines: { show: true }}
+        series: { points: { show: true, radius: 3 },   lines: { show: true }},
+          legend: { position: 'nw' }
     };
 
-    var plot = $.plot($("#placeholder"), [d], options);
+    var plot = $.plot($("#placeholder"),[
+        { label: "Review Requests",  data: d  },
+        { label: "Change Descriptions",  data: d2,  bars: { show: true }, lines: {show: false}}
+    ], options);
 
     var overview = $.plot($("#overview"), [d], {
         series: {
