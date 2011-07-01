@@ -2,6 +2,7 @@ from datetime import date, timedelta, datetime
 
 from django.contrib.auth.models import User
 from django.db.models import Min
+from django.db.models.aggregates import Count
 from django.utils.translation import ugettext as _
 
 from djblets.log.views import iter_log_lines
@@ -26,28 +27,32 @@ def getReviewRequests(request):
     # Request By Creation
     oldest_request = request_objects.aggregate(lowest=Min('time_added'))
     start_date = oldest_request['lowest']
-    daysS = 0
-    daysSoFar = (datetime.today() - start_date).days
-    datesInDays  = []
+    day_counter = 0
+    day_total = (datetime.today() - start_date).days
+    dates_in_days  = []
     req_array = []
-    while daysS < daysSoFar:
-        counterDate = start_date + timedelta(days=daysS)
-        datesInDays.append(counterDate)
+    while day_counter < day_total:
+        counter_date = start_date + timedelta(days=day_counter)
+        dates_in_days.append(counter_date)
 
         req_array.append([])
-        req_array[daysS].append(request_objects.filter(time_added__lte=counterDate).count())
-        req_array[daysS].append(counterDate)
-        daysS += 1
+        req_array[day_counter].append(request_objects.filter(time_added__lte=counter_date).count())
+        req_array[day_counter].append(counter_date)
+        day_counter += 1
 
     #Change Descriptions
     change_desc = ChangeDescription.objects
-    all_change_desc = change_desc.all()
-    all_change_desc = ChangeDescription.objects.dates('timestamp', 'day')
+    change_desc_unique = change_desc.extra({'timestamp' : "date(timestamp)"}).values('timestamp').annotate(created_count=Count('id'))
 
+    # need a test for this strptime for Python < 2.5 more at http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
+    for unique_desc  in change_desc_unique:
+        unique_desc['timestamp'] = datetime.strptime(unique_desc['timestamp'], "%Y-%m-%d")
+
+    # getting all widget_data together
     requests = {}
     requests['all_requests'] = review_requests
     requests['requests_by_day'] = req_array
-    requests['change_descriptions'] = all_change_desc
+    requests['change_descriptions'] = change_desc_unique
 
     widget_data = {}
     widget_data['size'] = "widget-large"
@@ -168,24 +173,5 @@ def getNews(request):
             ['#',_("Reload"), 'reload-news']
         ]
     widget_data['data'] = ""
-
-    return widget_data
-
-def getServerLog(request):
-    # Server Log
-    # Shows a list of most recent server log entries
-    
-    requested_levels = []
-    today = date.today()
-    to_timestamp = today
-    from_timestamp = today - timedelta(days=7)
-
-    log_lines = iter_log_lines(from_timestamp, to_timestamp, requested_levels)
-
-    widget_data = {}
-    widget_data['size'] = "widget-small"
-    widget_data['template'] = "admin/widgets/w-server-log.html"
-    widget_data['data'] = log_lines
-    widget_data['actions'] = [['#',_("Full Log")]]
 
     return widget_data

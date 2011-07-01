@@ -1,10 +1,6 @@
            <div id="placeholder" style="width: 450px; height: 200px;"></div>
            <div id="overview" style="margin-left:50px;margin-top:20px;width:400px;height:50px"></div>
-{% for desc in widget_data.change_descriptions %}
-    {{ desc|length }} {{desc  }}
-  {%  endfor %}
            <script id="source">
-
 $(function () {
     /*
     var d = [
@@ -24,9 +20,8 @@ $(function () {
 // Pending
   var d2 = [
      {% for description in  widget_data.change_descriptions %}
-           [{{ description.timestamp|date:"U"  }}000, 1],
+           [{{description.timestamp|date:"U"}}000, {{description.created_count}}],
      {% endfor %}
-[1307863225000, 2]
     ];
 
     // first correct the timestamps - they are recorded as the daily

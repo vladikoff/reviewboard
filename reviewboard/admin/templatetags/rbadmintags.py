@@ -49,8 +49,7 @@ def admin_widget(context, widget_name, widget_title, widget_icon=""):
         'repositories': widgets.getRepositories,
         'review-groups': widgets.getGroups,
         'server-cache': widgets.getServerCache,
-        'news': widgets.getNews,
-        'server-log': widgets.getServerLog
+        'news': widgets.getNews
     }
 
     widget_data = widget_list.get(widget_name)(request)
