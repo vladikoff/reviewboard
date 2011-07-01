@@ -76,7 +76,7 @@
 }
 
 .widget-large {
-    width: 470px;
+    width: 460px;
 }
 
 .widget-large-table {
@@ -104,6 +104,7 @@
     background-image: url("../images/db-add.png");
     background-position: 27px 0px;
     display: block;
+    width: 23px;
     padding: 0px 21px 5px 0px;
 }
 
@@ -269,7 +270,6 @@
 
 .news-content-widget .entry {
     padding: 5px;
-
 }
 
 .news-content-widget .entry h3 {
@@ -280,6 +280,10 @@
 
 .news-content-widget .entry a {
     display: block;
+}
+
+.entry-title {
+    margin-top: 0px;
 }
 #server-cache th, #review-groups th, .td-count {
     color: #4b4b4b;
@@ -312,3 +316,35 @@
     padding: 2px;
     color: white;
 }
+
+
+/* Flexible Layout Classes */
+
+.vpgt981 .admin-extras {
+     float: left;
+ }
+.vpgt1229 .admin-extras .widget-small {
+     margin-left: 20px;
+     float: left;
+ }
+
+.vplt1673 .admin-widget-3
+{
+    clear: left;
+}
+
+
+.vplt1451 .admin-widget-2
+{
+    clear: left;
+}
+
+.vplt1229 .admin-widget-1
+{
+    clear: left;
+}
+.vplt980 .admin-extras {
+    width: 100%;
+}
+.vplt980 .admin-extras .admin-widget {float: left; clear: none; margin-right: 40px;}
+.vplt980 .admin-extras .admin-widget-0 {margin-left: 0px;}

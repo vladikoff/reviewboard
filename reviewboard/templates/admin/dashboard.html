@@ -17,77 +17,10 @@
 
 <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}rb/css/common.css?{{MEDIA_SERIAL}}" />
 <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}rb/css/admin-dashboard.css?{{MEDIA_SERIAL}}" />
-<style>
-
-@media screen and (max-width: 1230px) {
- .admin-extras-level-2{
-  width: 100%;
-  margin: 20px 0px 0px 20px;
- }
-
- .admin-extras-level-2 .widget-small {
-  float: left;
-  margin-right: 35px;
- }
-
- .admin-extras-level-2 .widget-last {
-  margin-right: 0px;
- }
-
-
-}
-
-
- .admin-extras {
-     float: left;
- }
- .admin-extras .widget-small {
-     margin-left: 20px;
-     float: left;
- }
-
-
-@media screen and (max-width: 979px) {
-.admin-extras{
- width: 100%;
- margin-right: 0px;
-}
-
-.admin-extras-level-2 {
- margin-left: 0px;
-}
-
-.admin-extras .widget-small {
- float: left;
- margin-right: 35px;
-}
-
-.admin-extras .widget-last {
- margin-right: 0px;
-}
-   }
-
-
-</style>
 {% endblock %}
 
 {% block content %}
-{% include "base/base_header.html" %}
-
- <p>Viewport size is <span id="vpWidth"></span> x <span id="vpHeight"></span></p>
-    <script>
-	function getViewportSize () {
-		document.getElementById('vpWidth').innerHTML = window.innerWidth;
-		document.getElementById('vpHeight').innerHTML = window.innerHeight;
-	}
-	getViewportSize ();
-	window.onresize = function(){getViewportSize()};
-
-	</script>
-    <!-- New Stuff -->
-<div id="admin-dashboard" class="clear">
-
- <div id="dashboard-nav">
+<div id="dashboard-nav">
   <ul class="admin-menu">
       <li class="nav-first"><a href="{% url reviewboard.admin.views.dashboard %}">{% trans "Dashboard" %}</a></li>
       <li><a href="{% url reviewboard.admin.views.dashboard %}db/">{% trans "Database" %}</a></li>
@@ -97,9 +30,9 @@
    <img src="{{MEDIA_URL}}rb/images/admin/gears.png?{{MEDIA_SERIAL}}"
      alt="Review Board Admin" />
   </div>
-
  </div>
 
+<div id="admin-dashboard" class="clear">
  <div class="dashboard-alert-wrap">
   <div class="dashboard-alert">
    <a href="#" class="close-alert"><img src="{{MEDIA_URL}}rb/images/delete.png?{{MEDIA_SERIAL}}"
@@ -132,7 +65,9 @@
              {% admin_widget "server-cache" _("Server Cache") "rb/images/admin/set-storage.png" %}
          {% endif %}
          {% admin_widget "news" _("Review Board News") "rb/images/rss.png" %}
+
      </div><!-- Admin Extras End -->
+
      <!-- Widgets End -->
     </div>
  </div>
