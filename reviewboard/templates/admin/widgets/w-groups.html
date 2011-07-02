@@ -1,8 +1,8 @@
 <table style="width: 100%;">
       {% for group in widget_data %}
         <tr>
-            <th> {{ group.display_name }}</th>
-            <td>{{ group.users.count }}</td>
+            <th><a href="db/auth/group/{{group.id}}">{{group.display_name}}</a></th>
+            <td>{{group.users.count}}</td>
         </tr>
        {% endfor %}
 </table>

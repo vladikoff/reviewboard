@@ -10,7 +10,7 @@
     {% if widget_data %}
         {% for repository in widget_data %}
             <tr>
-                <td><a href="">{{ repository.name }}</a></td>
+                <td><a href="db/scmtools/repository/{{repository.id}}">{{ repository.name }}</a></td>
                 <td>{{ repository.tool }}</td>
                 <td class="td-center">{% if repository.visible %}
                     <img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="Visible"

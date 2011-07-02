@@ -124,7 +124,7 @@ def getRequestStatuses(request):
     return widget_data
 
 def getRepositories(request):
-    repositories = Repository.objects.accessible(request.user)
+    repositories = Repository.objects.accessible(request.user).order_by('-id')[:5]
 
     widget_data = {}
     widget_data['size'] = "widget-large"
@@ -141,7 +141,7 @@ def getGroups(request):
     # Review Group Listing
     # Shows a list of recently created groups
 
-    review_groups = Group.objects.all()
+    review_groups = Group.objects.all().order_by('-id')[:5]
 
     widget_data = {}
     widget_data['size'] = "widget-small"
