@@ -5,7 +5,7 @@ $(function () {
 // Review Request Chart Data
   var d = [
      {% for req in widget_data.requests_by_day %}
-           [{{ req.1|date:"U"  }}000, {{req.0}}],
+           [{{req.1|date:"U"}}000, {{req.0}}],
      {% endfor %}
     ];
 
@@ -35,7 +35,7 @@ $(function () {
         do {
             // when we don't set yaxis, the rectangle automatically
             // extends to infinity upwards and downwards
-            markings.push({ xaxis: { from: i, to: i + 2 * 24 * 60 * 60 * 1000 } });
+            markings.push({ xaxis: {from: i, to: i + 2 * 24 * 60 * 60 * 1000}});
             i += 7 * 24 * 60 * 60 * 1000;
         } while (i < axes.xaxis.max);
 
@@ -66,7 +66,7 @@ $(function () {
         selection: { mode: "x" }
     });
 
-    // now connect the two charts 
+    // now connect the two charts
     $("#placeholder").bind("plotselected", function (event, ranges) {
         // do the zooming
         plot = $.plot($("#placeholder"), [d],

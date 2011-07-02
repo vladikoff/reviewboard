@@ -54,36 +54,36 @@
     <div class="widget-content admin-box widget-system-info action-box">
     <ul>
      <li><a href="cache/">{% trans "Server Cache" %}
-     {% if has_cache_stats %}<img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="{% trans "Enabled" %}" title="{% trans "Enabled" %}" />
-         {% else %}<img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="{% trans "Disabled" %}" title="{% trans "Disabled" %}" />{% endif %}
+     {% if has_cache_stats %}<img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="{% trans 'Enabled' %}" title="{% trans 'Enabled' %}" />
+         {% else %}<img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="{% trans 'Disabled' %}" title="{% trans 'Disabled' %}" />{% endif %}
      </a></li>
      <li><a href="admin/settings/authentication/">{% trans "Public Read-only Access" %}
-         {% if site_configs.read_only %}<img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="{% trans "Enabled" %}" title="{% trans "Enabled" %}" />
-         {% else %}<img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="{% trans "Disabled" %}" title="{% trans "Disabled" %}" /></a>{% endif %}</li>
+         {% if site_configs.read_only %}<img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="{% trans 'Enabled' %}" title="{% trans 'Enabled' %}" />
+         {% else %}<img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="{% trans 'Disabled' %}" title="{% trans 'Disabled' %}" /></a>{% endif %}</li>
 
      <li><a href="admin/settings/diffs/">{% trans "Syntax Highlighting" %}
-         {% if site_configs.syntax_highlighting %}<img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="{% trans "Enabled" %}" title="{% trans "Enabled" %}" />
-         {% else %}<img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="{% trans "Disabled" %}" title="{% trans "Disabled" %}" />{% endif %}</a></li>
+         {% if site_configs.syntax_highlighting %}<img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="{% trans 'Enabled' %}" title="{% trans 'Enabled' %}" />
+         {% else %}<img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="{% trans 'Disabled' %}" title="{% trans 'Disabled' %}" />{% endif %}</a></li>
 
      <li><a href="{% url server-log %}">{% trans "Server Log" %}
-         {% if site_configs.logging_enabled and site_configs.logging_directory %}<img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="{% trans "Enabled" %}" title="{% trans "Enabled" %}" />
-         {% else %}<img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="{% trans "Disabled" %}" title="{% trans "Disabled" %}" />{% endif %}</a></li>
+         {% if site_configs.logging_enabled and site_configs.logging_directory %}<img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="{% trans 'Enabled' %}" title="{% trans 'Enabled' %}" />
+         {% else %}<img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="{% trans 'Disabled' %}" title="{% trans 'Disabled' %}" />{% endif %}</a></li>
 
      <li><a href="admin/settings/logging/">{% trans "Log Profiling" %}
-         {% if site_configs.logging_allow_profiling %}<img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="{% trans "Enabled" %}" title="{% trans "Enabled" %}" />
-         {% else %}<img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="{% trans "Disabled" %}" title="{% trans "Disabled" %}" />{% endif %}</a></li>
+         {% if site_configs.logging_allow_profiling %}<img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="{% trans 'Enabled' %}" title="{% trans 'Enabled' %}" />
+         {% else %}<img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="{% trans 'Disabled' %}" title="{% trans 'Disabled' %}" />{% endif %}</a></li>
 
      <li><a href="admin/settings/email/">{% trans "Review Emails" %}
-         {% if site_configs.mail_send_review_mail %}<img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="{% trans "Enabled" %}" title="{% trans "Enabled" %}" />
-         {% else %}<img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="{% trans "Disabled" %}" title="{% trans "Disabled" %}" />{% endif %}</a></li>
+         {% if site_configs.mail_send_review_mail %}<img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="{% trans 'Enabled' %}" title="{% trans 'Enabled' %}" />
+         {% else %}<img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="{% trans 'Disabled' %}" title="{% trans 'Disabled' %}" />{% endif %}</a></li>
 
      <li><a href="admin/settings/email/">{% trans "Email TLS Authentication" %}
-         {% if site_configs.mail_use_tls %}<img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="{% trans "Enabled" %}" title="{% trans "Enabled" %}" />
-         {% else %}<img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="{% trans "Disabled" %}" title="{% trans "Disabled" %}" />{% endif %}</a></li>
-    
+         {% if site_configs.mail_use_tls %}<img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="{% trans 'Enabled' %}" title="{% trans 'Enabled' %}" />
+         {% else %}<img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="{% trans 'Disabled' %}" title="{% trans 'Disabled' %}" />{% endif %}</a></li>
+
      <li><a href="admin/settings/general/">{% trans "Indexed Search" %}
-         {% if site_configs.search_enable %}<img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="{% trans "Enabled" %}" title="{% trans "Enabled" %}" />
-         {% else %}<img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="{% trans "Disabled" %}" title="{% trans "Disabled" %}" />{% endif %}</a></li>
+         {% if site_configs.search_enable %}<img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="{% trans 'Enabled' %}" title="{% trans 'Enabled' %}" />
+         {% else %}<img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="{% trans 'Disabled' %}" title="{% trans 'Disabled' %}" />{% endif %}</a></li>
      <li class="admin-version">{% trans "Version" %} - {{version}}</li>
     </ul>
     </div>

@@ -1,9 +1,7 @@
-from datetime import timedelta, date, datetime, time
 import logging
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -15,13 +13,9 @@ from djblets.siteconfig.views import site_settings as djblets_site_settings
 from reviewboard.admin.checks import check_updates_required
 from reviewboard.admin.cache_stats import get_cache_stats, get_has_cache_stats
 from reviewboard.admin.forms import SSHSettingsForm
-from reviewboard.reviews.models import Group, DefaultReviewer
-from reviewboard.scmtools.models import Repository
+
 from reviewboard.scmtools import sshutils
-from reviews.models import ReviewRequest, ReviewRequestDraft
 
-
-from django.contrib.admin.models import LogEntry
 
 @staff_member_required
 def dashboard(request, template_name="admin/dashboard.html"):

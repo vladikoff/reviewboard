@@ -19,7 +19,7 @@ def getReviewRequests(request):
 
     request_objects = ReviewRequest.objects
     review_requests = request_objects.all()
-    
+
     # Request By Creation
     oldest_request = request_objects.aggregate(lowest=Min('time_added'))
     start_date = oldest_request['lowest']
@@ -63,7 +63,7 @@ def getReviewRequests(request):
             ['admin/db/reviews/reviewrequest',_("View All"),'btn-right']
     ]
     widget_data['data'] = requests
-    
+
     return widget_data
 
 def getUserActivityWidget(request):
@@ -134,7 +134,7 @@ def getRepositories(request):
             ['db/scmtools/repository/',_("View All"),'btn-right']
     ]
     widget_data['data'] = repositories
-    
+
     return widget_data
 
 def getGroups(request):
@@ -157,7 +157,7 @@ def getGroups(request):
 def getServerCache(request):
     # Cache Statistic Widget
     # A list of memcached statistic if available to the application
-    
+
     cache_stats = get_cache_stats()
 
     widget_data = {}
@@ -171,7 +171,7 @@ def getServerCache(request):
 def getNews(request):
     # News
     # Latest Review Board news via RSS
-    
+
     widget_data = {}
     widget_data['size'] = "widget-small"
     widget_data['template'] = "admin/widgets/w-news.html"
