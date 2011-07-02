@@ -7,7 +7,7 @@ from djblets.siteconfig.models import SiteConfiguration
 
 from admin.cache_stats import get_has_cache_stats
 
-from reviews.models import ReviewRequest, ReviewRequestDraft, DefaultReviewer, Group
+from reviews.models import DefaultReviewer, Group
 
 from reviewboard.admin import widgets
 import reviewboard
@@ -74,13 +74,20 @@ def admin_actions(context):
     request = context.get('request')
 
     site_configs = {}
-    site_configs['read_only'] = current_site_config.get('auth_anonymous_access')
-    site_configs['syntax_highlighting'] = current_site_config.get('diffviewer_syntax_highlighting')
-    site_configs['logging_enabled'] = current_site_config.get('logging_enabled')
-    site_configs['logging_directory'] = current_site_config.get('logging_directory')
-    site_configs['logging_allow_profiling'] = current_site_config.get('logging_allow_profiling')
-    site_configs['mail_use_tls'] = current_site_config.get('mail_use_tls')
-    site_configs['mail_send_review_mail'] = current_site_config.get('mail_send_review_mail')
+    site_configs['read_only'] = \
+        current_site_config.get('auth_anonymous_access')
+    site_configs['syntax_highlighting'] = \
+        current_site_config.get('diffviewer_syntax_highlighting')
+    site_configs['logging_enabled'] = \
+        current_site_config.get('logging_enabled')
+    site_configs['logging_directory'] = \
+        current_site_config.get('logging_directory')
+    site_configs['logging_allow_profiling'] = \
+        current_site_config.get('logging_allow_profiling')
+    site_configs['mail_use_tls'] = \
+        current_site_config.get('mail_use_tls')
+    site_configs['mail_send_review_mail'] = \
+        current_site_config.get('mail_send_review_mail')
     site_configs['search_enable'] = current_site_config.get('search_enable')
 
     return {

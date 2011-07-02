@@ -1,14 +1,13 @@
 <div id="requests-percentages" style="width: 190px; height: 165px;"></div>
 <script type="text/javascript">
-
     $(function () {
-        // data
+        // Review Request percentage by status data
         var data = [
             { label: "Pending",  data: {{widget_data.pending}}},
             { label: "Draft",  data: {{widget_data.draft}}},
             { label: "Submit",  data: {{widget_data.submit}}}
         ];
-        // DEFAULT
+        // Pie chart plotting function
         $.plot($("#requests-percentages"), data,
                 {
                     series: {

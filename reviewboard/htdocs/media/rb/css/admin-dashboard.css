@@ -2,10 +2,6 @@
     clear: both;
 }
 
-.admin-version {
-    text-align: right;
-}
-
 #admin-dashboard {
     width: 100%;
     overflow: hidden;
@@ -13,19 +9,15 @@
 
 #admin-actions {
     width: 200px;
-    margin: 0px 10px 0px 0px;
-    padding: 0px 20px 0px 0px;
     float: left;
     border-right: 2px solid #E8E7E4;
+    margin: 0 10px 0 0;
+    padding: 0 20px 0 0;
 }
 
 #admin-widgets {
-    margin: 0px 20px 0px 10px;
     float: left;
-}
-
-.admin-extras {
-    float: left;
+    margin: 0 20px 0 10px;
 }
 
 .admin-extras-level-2 {
@@ -39,35 +31,31 @@
 }
 
 .admin-widget {
-    margin: 0px 0px 20px 0px;
     border: 1px solid #CCC;
+    margin: 0 0 20px;
 }
 
 .widget-content p {
-    padding: 10px 10px;
+    padding: 10px;
 }
 
 .widget-content th {
     font-size: 11px;
-    font-weight: normal;
-}
-
-.widget-content li a {
-    display: block;
+    font-weight: 400;
 }
 
 .widget-sys-settings li a img {
-    margin: 0px 4px -3px 0px;
+    margin: 0 4px -3px 0;
 }
 
 .widget-content ul {
-    margin: 5px 5px 10px 5px;
-    padding: 0px;
+    margin: 5px 5px 10px;
+    padding: 0;
 }
 
 .widget-content li {
     list-style-type: none;
-    padding: 5px 0px;
+    padding: 5px 0;
 }
 
 .widget-content caption {
@@ -79,14 +67,6 @@
     width: 460px;
 }
 
-.widget-large-table {
-    width: 100%;
-}
-
-.widget-large table a {
-    display: block;
-}
-
 .widget-small {
     width: 200px;
 }
@@ -96,34 +76,34 @@
     width: 100%;
 }
 
-.widget-manage td, .widget-manage th{
+.widget-manage td, .widget-manage th {
     padding-top: 5px;
 }
 
 .widget-manage .addlink {
     background-image: url("../images/db-add.png");
-    background-position: 27px 0px;
+    background-position: 27px 0;
     display: block;
     width: 23px;
-    padding: 0px 21px 5px 0px;
+    padding: 0 21px 5px 0;
 }
 
 #dashboard-nav, .dashboard-alert-wrap {
     color: #0003B2;
     overflow: hidden;
-    margin: 0px 0px 20px 0px;
     background: #C3DFF2;
     border: 1px solid #89867F;
+    margin: 0 0 20px;
 }
 
 #dashboard-nav ul {
-    padding: 0px;
-    margin: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 #dashboard-nav ul.admin-menu {
     float: left;
-    margin: 5px 0px 0px 20px;
+    margin: 5px 0 0 20px;
 }
 
 #dashboard-nav li {
@@ -133,12 +113,12 @@
 #dashboard-nav li, #dashboard-nav li a {
     float: left;
     font-size: 16px;
-    margin: 2px 10px 2px 10px
+    margin: 2px 10px;
 }
 
 #dashboard-nav li.nav-first, #dashboard-nav li.nav-first a {
-    margin-left: 0px;
-    padding-left: 0px;
+    margin-left: 0;
+    padding-left: 0;
 }
 
 .dashboard-alert-wrap {
@@ -157,7 +137,7 @@
 }
 
 .dashboard-alert p {
-    margin: 0px;
+    margin: 0;
     padding: 5px 20px;
 }
 
@@ -175,9 +155,9 @@
     font-weight: 400;
     background: #A2BEDC;
     border-bottom: 1px solid #728EAC;
+    background-image: url("../images/title_box_top_bg.png");
     margin: 0;
     padding: 5px 10px 5px 5px;
-    background-image: url("../images/title_box_top_bg.png");
 }
 
 .widget-heading img {
@@ -189,26 +169,26 @@
 .widget-actions {
     overflow: hidden;
     background: url("../images/admin/header_bg.png") repeat-x scroll left bottom transparent;
-    border-bottom: 1px solid #999999;
-    border-right: 1px solid #CCCCCC;
-    border-top: 1px solid #999999;
-    color: black;
-    font-weight: bold;
+    border-bottom: 1px solid #999;
+    border-right: 1px solid #CCC;
+    border-top: 1px solid #999;
+    color: #000;
+    font-weight: 700;
     text-align: left;
     white-space: nowrap;
-    padding: 0px;
+    padding: 0;
 }
 
 .widget-actions a {
     color: #000;
     font-size: 12px;
-    font-weight: normal;
+    font-weight: 400;
     text-decoration: none;
     display: block;
     height: 20px;
     float: left;
-    padding: 6px 5px 0px 5px;
     border-right: 1px solid #CCC;
+    padding: 6px 5px 0;
 }
 
 .widget-actions a:hover {
@@ -223,11 +203,10 @@
 }
 
 .admin-title {
-    padding: 9px 30px 0px 10px;
     width: 160px;
     height: 21px;
     color: #3B3B3B;
-    font-weight: bold;
+    font-weight: 700;
     float: right;
     position: relative;
     text-align: left;
@@ -236,6 +215,7 @@
     background-repeat: repeat-x;
     overflow: hidden;
     border-left: 1px solid #89867F;
+    padding: 9px 30px 0 10px;
 }
 
 .admin-title img {
@@ -273,18 +253,15 @@
 }
 
 .news-content-widget .entry h3 {
-    font-weight: normal;
-    padding: 0px;
+    font-weight: 400;
     font-size: 10px;
-}
-
-.news-content-widget .entry a {
-    display: block;
+    padding: 0;
 }
 
 .entry-title {
-    margin-top: 0px;
+    margin-top: 0;
 }
+
 #server-cache th, #review-groups th, .td-count {
     color: #4b4b4b;
 }
@@ -293,12 +270,11 @@
     font-size: 10px;
 }
 
-.widget-system-info li, #server-cache tr, .news-content-widget .entry,
-#review-groups tr, .widget-manage tr, #repositories tr{
+.widget-system-info li, #server-cache tr, .news-content-widget .entry, #review-groups tr, .widget-manage tr, #repositories tr {
     border-bottom: 1px solid #F5F5F5;
 }
 
-.widget-system-info img{
+.widget-system-info img {
     float: right;
 }
 
@@ -306,45 +282,46 @@
     text-align: center;
 }
 
-.td-right {
-    text-align: right;
-}
-
 .request-percentage-label {
     font-size: 8pt;
     text-align: center;
+    color: #FFF;
     padding: 2px;
-    color: white;
 }
 
 
-/* Flexible Layout Classes */
+.admin-version, .td-right {
+    text-align: right;
+}
 
-.vpgt981 .admin-extras {
-     float: left;
- }
+.widget-content li a, .widget-large table a, .news-content-widget .entry a {
+    display: block;
+}
+
+/* Dynamic Screen Size */
+.admin-extras, .vpgt981 .admin-extras {
+    float: left;
+}
+
 .vpgt1229 .admin-extras .widget-small {
-     margin-left: 20px;
-     float: left;
- }
+    margin-left: 20px;
+    float: left;
+}
 
-.vplt1673 .admin-widget-3
-{
+.vplt1673 .admin-widget-3, .vplt1451 .admin-widget-2, .vplt1229 .admin-widget-1 {
     clear: left;
 }
 
-
-.vplt1451 .admin-widget-2
-{
-    clear: left;
+.vplt980 .admin-extras .admin-widget {
+    float: left;
+    clear: none;
+    margin-right: 40px;
 }
 
-.vplt1229 .admin-widget-1
-{
-    clear: left;
+.vplt980 .admin-extras .admin-widget-0 {
+    margin-left: 0;
 }
-.vplt980 .admin-extras {
+
+.widget-large-table, .vplt980 .admin-extras {
     width: 100%;
 }
-.vplt980 .admin-extras .admin-widget {float: left; clear: none; margin-right: 40px;}
-.vplt980 .admin-extras .admin-widget-0 {margin-left: 0px;}

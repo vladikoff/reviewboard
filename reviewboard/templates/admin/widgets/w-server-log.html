@@ -1,8 +1,0 @@
-{{ widget_data.0.0 }}
-{% for timestamp, level, message in widget_data %}
-
-   <tr class="level-{{level|lower}} {% cycle row1,row2 %}">
-    <td>{{timestamp|time:"H:i:s"}}</td>
-    <td>{{level}}</td>
-   </tr>
-{% endfor %}

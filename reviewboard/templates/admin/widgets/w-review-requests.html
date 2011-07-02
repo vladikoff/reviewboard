@@ -2,22 +2,14 @@
            <div id="overview" style="margin-left:50px;margin-top:20px;width:400px;height:50px"></div>
            <script id="source">
 $(function () {
-    /*
-    var d = [
-     {% for request in review_requests %}
-           [{{ request.time_added|date:"U"  }}000, 35],
-     {% endfor %}
-    ];
-    */
-
+// Review Request Chart Data
   var d = [
      {% for req in widget_data.requests_by_day %}
            [{{ req.1|date:"U"  }}000, {{req.0}}],
      {% endfor %}
     ];
 
-
-// Pending
+// Change Descriptions - chart data
   var d2 = [
      {% for description in  widget_data.change_descriptions %}
            [{{description.timestamp|date:"U"}}000, {{description.created_count}}],
@@ -74,8 +66,7 @@ $(function () {
         selection: { mode: "x" }
     });
 
-    // now connect the two
-
+    // now connect the two charts 
     $("#placeholder").bind("plotselected", function (event, ranges) {
         // do the zooming
         plot = $.plot($("#placeholder"), [d],

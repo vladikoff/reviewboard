@@ -5,16 +5,12 @@ from django.db.models import Min
 from django.db.models.aggregates import Count
 from django.utils.translation import ugettext as _
 
-from djblets.log.views import iter_log_lines
-
 from reviewboard.admin.cache_stats import get_cache_stats
 from reviewboard.changedescs.models import ChangeDescription
 
 from reviews.models import ReviewRequest, Group
 
 from scmtools.models import Repository
-
-from djblets.log.views import iter_log_lines
 
 
 def getReviewRequests(request):
@@ -36,17 +32,23 @@ def getReviewRequests(request):
         dates_in_days.append(counter_date)
 
         req_array.append([])
-        req_array[day_counter].append(request_objects.filter(time_added__lte=counter_date).count())
-        req_array[day_counter].append(counter_date)
+        req_array[day_counter]\
+            .append(request_objects.filter(time_added__lte=counter_date).count())
+        req_array[day_counter]\
+            .append(counter_date)
         day_counter += 1
 
     #Change Descriptions
     change_desc = ChangeDescription.objects
-    change_desc_unique = change_desc.extra({'timestamp' : "date(timestamp)"}).values('timestamp').annotate(created_count=Count('id'))
+    change_desc_unique = \
+        change_desc.extra({'timestamp' : "date(timestamp)"})\
+        .values('timestamp').annotate(created_count=Count('id'))
 
-    # need a test for this strptime for Python < 2.5 more at http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
+    # need a test for this strptime for Python < 2.5 more at
+    # http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
     for unique_desc  in change_desc_unique:
-        unique_desc['timestamp'] = datetime.strptime(unique_desc['timestamp'], "%Y-%m-%d")
+        unique_desc['timestamp'] = datetime.\
+        strptime(unique_desc['timestamp'], "%Y-%m-%d")
 
     # getting all widget_data together
     requests = {}
@@ -57,7 +59,9 @@ def getReviewRequests(request):
     widget_data = {}
     widget_data['size'] = "widget-large"
     widget_data['template'] = "admin/widgets/w-review-requests.html"
-    widget_data['actions'] = [['#',_("View All"),'btn-right'],['#',_("View Drafts"),'btn-right']]
+    widget_data['actions'] = [
+            ['admin/db/reviews/reviewrequest',_("View All"),'btn-right']
+    ]
     widget_data['data'] = requests
     
     return widget_data
@@ -87,7 +91,10 @@ def getUserActivityWidget(request):
         now - timedelta(days=90)).count()
     activity_list['total'] = users.count()
 
-    widget_actions = [['#',_("Add New")],['#',_("Manage Users"),'btn-right']]
+    widget_actions = [
+            ['admin/db/auth/user/add',_("Add New")],
+            ['admin/db/auth/user',_("Manage Users"),'btn-right']
+    ]
 
     widget_data = {}
     widget_data['size'] = "widget-large"
@@ -125,7 +132,7 @@ def getRepositories(request):
     widget_data['actions'] = [
             ['db/scmtools/repository/add/',_("Add New")],
             ['db/scmtools/repository/',_("View All"),'btn-right']
-        ]
+    ]
     widget_data['data'] = repositories
     
     return widget_data
@@ -171,7 +178,7 @@ def getNews(request):
     widget_data['actions'] = [
             ['http://www.reviewboard.org/news/',_("More")],
             ['#',_("Reload"), 'reload-news']
-        ]
+    ]
     widget_data['data'] = ""
 
     return widget_data
