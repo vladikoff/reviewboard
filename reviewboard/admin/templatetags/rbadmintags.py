@@ -1,3 +1,5 @@
+import re
+
 from django import template
 from django.core.urlresolvers import reverse
 
@@ -18,3 +20,9 @@ def admin_subnav(context, url_name, name):
         'name': name,
         'current': url == request.path,
      }
+
+@register.simple_tag
+def url_active(request, pattern):
+    if re.search(pattern, request.path):
+        return 'active'
+    return ''
