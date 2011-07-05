@@ -28,17 +28,46 @@ ul.actionlist li {
 }
 
 #logo {
-  padding: 0.5em;
+  padding: 0em;
   position: relative;
   display: inline;
   vertical-align: middle;
 }
 
+#branding {
+  font-family: Verdana,Arial,Helvetica,Sans-Serif;
+  margin: 40px 0px 14px 9px;
+}
+
 #branding h1 {
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
+  padding: 0.4em 0.7em 0.5em 0em;
   display: inline;
   vertical-align: middle;
+}
+
+#branding h1 a, #branding a:link, #branding a:visited  {
+  color: #000000;
+  font-size: 24pt;
+  text-decoration: none;
+}
+
+#user-tools {
+  width: 100%;
+  color: #000000;
+  border-bottom: 1px solid #DDDDDD;
+  margin: 0;
+  padding: 0.5em;
+}
+
+#header #user-tools a {
+    color: #0000EE;
+}
+
+#title .version {
+    color: #808080;
+    font-size: 12pt;
+    font-weight: normal;
+    padding-left: 5px;
 }
 
 #admin-nav, #admin-subnav {
@@ -242,7 +271,7 @@ thead th a:link, thead th a:visited {
 }
 
 #header {
-  background-color: #2f5183;
+  background-color: #FFFFFF;
 }
 
 #log-entries pre {
@@ -313,6 +342,8 @@ thead th a:link, thead th a:visited {
 td, th {
   border-bottom: 0;
 }
+
+
 
 /* Override the way links and wrapping work in modules. */
 .module.news table td {
