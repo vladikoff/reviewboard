@@ -4,13 +4,13 @@ from django.contrib.auth.models import User
 from django.db.models import Min
 from django.db.models.aggregates import Count
 from django.utils.translation import ugettext as _
+from attachments.models import FileAttachment
+from diffviewer.models import DiffSet
 
 from reviewboard.admin.cache_stats import get_cache_stats
 from reviewboard.changedescs.models import ChangeDescription
-
-from reviews.models import ReviewRequest, Group
-
-from scmtools.models import Repository
+from reviewboard.scmtools.models import Repository
+from reviewboard.reviews.models import ReviewRequest, Group, Comment, Review, Screenshot, ReviewRequestDraft
 
 
 def getReviewRequests(request):
@@ -45,24 +45,26 @@ def getReviewRequests(request):
         .values('timestamp').annotate(created_count=Count('id'))
 
     # need a test for this strptime for Python < 2.5 more at
-    # http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
+    # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
     for unique_desc  in change_desc_unique:
         unique_desc['timestamp'] = datetime.\
         strptime(unique_desc['timestamp'], "%Y-%m-%d")
 
     # getting all widget_data together
-    requests = {}
-    requests['all_requests'] = review_requests
-    requests['requests_by_day'] = req_array
-    requests['change_descriptions'] = change_desc_unique
-
-    widget_data = {}
-    widget_data['size'] = "widget-large"
-    widget_data['template'] = "admin/widgets/w-review-requests.html"
-    widget_data['actions'] = [
-            ['admin/db/reviews/reviewrequest',_("View All"),'btn-right']
-    ]
-    widget_data['data'] = requests
+    requests = {
+        'all_requests': review_requests,
+        'requests_by_day': req_array,
+        'change_descriptions': change_desc_unique
+    }
+    
+    widget_data = {
+        'size': 'widget-large',
+        'template': 'admin/widgets/w-review-requests.html',
+        'actions': [
+            ['admin/db/reviews/reviewrequest/', _("View All"), 'btn-right']
+        ],
+        'data': requests
+    }
 
     return widget_data
 
@@ -73,35 +75,31 @@ def getUserActivityWidget(request):
     now = date.today()
     users = User.objects
 
-    activity_list = {}
-    activity_list['now'] = \
-        users.filter(last_login__range= \
-        (now - timedelta(days=7), now + timedelta(days=1))).count()
-    activity_list['seven_days'] = \
-        users.filter(last_login__range= \
-        (now - timedelta(days=30), now-timedelta(days=7))).count()
-    activity_list['thirty_days'] =  \
-        users.filter(last_login__range= \
-        (now - timedelta(days=60), now-timedelta(days=30))).count()
-    activity_list['sixty_days'] = \
-        users.filter(last_login__range= \
-        (now - timedelta(days=90), now-timedelta(days=60))).count()
-    activity_list['ninety_days'] = \
-        users.filter(last_login__lte= \
-        now - timedelta(days=90)).count()
-    activity_list['total'] = users.count()
-
+    activity_list = {
+        'now': users.filter(last_login__range=\
+        (now - timedelta(days=7), now + timedelta(days=1))).count(),
+        'seven_days': users.filter(last_login__range=\
+        (now - timedelta(days=30), now - timedelta(days=7))).count(),
+        'thirty_days': users.filter(last_login__range=\
+        (now - timedelta(days=60), now - timedelta(days=30))).count(),
+        'sixty_days': users.filter(last_login__range=\
+        (now - timedelta(days=90), now - timedelta(days=60))).count(),
+        'ninety_days': users.filter(last_login__lte=\
+        now - timedelta(days=90)).count(),
+        'total': users.count()
+    }
     widget_actions = [
-            ['admin/db/auth/user/add',_("Add New")],
-            ['admin/db/auth/user',_("Manage Users"),'btn-right']
+            ['admin/db/auth/user/add/',_("Add New")],
+            ['admin/db/auth/user/',_("Manage Users"),'btn-right']
     ]
 
-    widget_data = {}
-    widget_data['size'] = "widget-large"
-    widget_data['template'] = "admin/widgets/w-user-activity.html"
-    widget_data['data'] = activity_list
-    widget_data['actions'] = widget_actions
-
+    widget_data = {
+        'size': 'widget-large',
+        'template': 'admin/widgets/w-user-activity.html',
+        'data': activity_list,
+        'actions': widget_actions
+    }
+    
     return widget_data
 
 def getRequestStatuses(request):
@@ -110,31 +108,33 @@ def getRequestStatuses(request):
 
     request_objects = ReviewRequest.objects
 
-    request_count = {}
-    request_count['pending'] = request_objects.filter(status="P").count()
-    request_count['draft'] = request_objects.filter(status="D").count()
-    request_count['submit'] = request_objects.filter(status="S").count()
+    request_count = {
+        'pending': request_objects.filter(status="P").count(),
+        'draft': request_objects.filter(status="D").count(),
+        'submit': request_objects.filter(status="S").count()
+    }
 
-    widget_data = {}
-    widget_data['size'] = "widget-small"
-    widget_data['template'] = "admin/widgets/w-request-statuses.html"
-    widget_data['actions'] = ""
-    widget_data['data'] = request_count
-
+    widget_data = {
+        'size': 'widget-small',
+        'template': 'admin/widgets/w-request-statuses.html',
+        'actions': '',
+        'data': request_count
+    }
     return widget_data
 
 def getRepositories(request):
     repositories = Repository.objects.accessible(request.user).order_by('-id')[:5]
 
-    widget_data = {}
-    widget_data['size'] = "widget-large"
-    widget_data['template'] = "admin/widgets/w-repositories.html"
-    widget_data['actions'] = [
-            ['db/scmtools/repository/add/',_("Add New")],
-            ['db/scmtools/repository/',_("View All"),'btn-right']
-    ]
-    widget_data['data'] = repositories
-
+    widget_data = {
+        'size': 'widget-large',
+        'template': 'admin/widgets/w-repositories.html',
+        'actions': [
+                ['db/scmtools/repository/add/', _("Add New")],
+                ['db/scmtools/repository/', _("View All"), 'btn-right']
+        ],
+        'data': repositories
+    }
+    
     return widget_data
 
 def getGroups(request):
@@ -143,15 +143,15 @@ def getGroups(request):
 
     review_groups = Group.objects.all().order_by('-id')[:5]
 
-    widget_data = {}
-    widget_data['size'] = "widget-small"
-    widget_data['template'] = "admin/widgets/w-groups.html"
-    widget_data['actions'] = [
+    widget_data = {
+        'size': 'widget-small',
+        'template': 'admin/widgets/w-groups.html',
+        'actions': [
             ['db/reviews/group/add/',_("Add")],
             ['db/reviews/group/',_("View All")]
-        ]
-    widget_data['data'] = review_groups
-
+        ],
+        'data': review_groups
+    }
     return widget_data
 
 def getServerCache(request):
@@ -160,25 +160,62 @@ def getServerCache(request):
 
     cache_stats = get_cache_stats()
 
-    widget_data = {}
-    widget_data['size'] = "widget-small"
-    widget_data['template'] = "admin/widgets/w-server-cache.html"
-    widget_data['actions'] = ""
-    widget_data['data'] = cache_stats
-
+    widget_data = {
+        'size': 'widget-small',
+        'template': 'admin/widgets/w-server-cache.html',
+        'actions': '',
+        'data': cache_stats
+    }
     return widget_data
 
 def getNews(request):
     # News
     # Latest Review Board news via RSS
 
-    widget_data = {}
-    widget_data['size'] = "widget-small"
-    widget_data['template'] = "admin/widgets/w-news.html"
-    widget_data['actions'] = [
-            ['http://www.reviewboard.org/news/',_("More")],
-            ['#',_("Reload"), 'reload-news']
-    ]
-    widget_data['data'] = ""
+    widget_data = {
+    'size': 'widget-small',
+    'template': 'admin/widgets/w-news.html',
+    'actions': [
+            ['http://www.reviewboard.org/news/',_('More')],
+            ['#',_('Reload'), 'reload-news']
+        ],
+        'data': ''
+    }
+    return widget_data
 
+
+def getStats(request):
+    # Stats
+    #
+
+    stats_data = {
+
+    }
+
+    widget_data = {
+        'size': 'widget-small',
+        'template': 'admin/widgets/w-stats.html',
+        'actions': '',
+        'count_comments': Comment.objects.all().count(),
+        'count_reviews': Review.objects.all().count(),
+        'count_attachments': FileAttachment.objects.all().count(),
+        'count_reviewdrafts': ReviewRequestDraft.objects.all().count(),
+        'count_screenshots': Screenshot.objects.all().count(),
+        'count_diffsets': DiffSet.objects.all().count(),
+        'data': stats_data
+    }
+    return widget_data
+
+def getLargeStats(request):
+    # Stats Large
+    #
+
+    stats_data = {}
+
+    widget_data = {
+        'size': 'widget-large',
+        'template': 'admin/widgets/w-stats-large.html',
+        'actions': '',
+        'data': stats_data
+    }
     return widget_data

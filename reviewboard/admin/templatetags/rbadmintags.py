@@ -2,12 +2,11 @@ from django import template
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-
 from djblets.siteconfig.models import SiteConfiguration
 
 from admin.cache_stats import get_has_cache_stats
 
-from reviews.models import DefaultReviewer, Group
+from reviewboard.reviews.models import DefaultReviewer, Group
 
 from reviewboard.admin import widgets
 import reviewboard
@@ -49,7 +48,9 @@ def admin_widget(context, widget_name, widget_title, widget_icon=""):
         'repositories': widgets.getRepositories,
         'review-groups': widgets.getGroups,
         'server-cache': widgets.getServerCache,
-        'news': widgets.getNews
+        'news': widgets.getNews,
+        'stats': widgets.getStats,
+        'stats-large': widgets.getLargeStats
     }
 
     widget_data = widget_list.get(widget_name)(request)
@@ -62,8 +63,8 @@ def admin_widget(context, widget_name, widget_title, widget_icon=""):
        'widget_data': widget_data['data'],
        'widget_content': widget_data['template'],
        'widget_actions': widget_data['actions'],
-        'media_url': settings.MEDIA_URL,
-        'media_serial': settings.MEDIA_SERIAL,
+       'media_url': settings.MEDIA_URL,
+       'media_serial': settings.MEDIA_SERIAL,
      }
 
 

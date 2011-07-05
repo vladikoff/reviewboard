@@ -13,7 +13,6 @@ from djblets.siteconfig.views import site_settings as djblets_site_settings
 from reviewboard.admin.checks import check_updates_required
 from reviewboard.admin.cache_stats import get_cache_stats, get_has_cache_stats
 from reviewboard.admin.forms import SSHSettingsForm
-
 from reviewboard.scmtools import sshutils
 
 
@@ -23,7 +22,6 @@ def dashboard(request, template_name="admin/dashboard.html"):
     Displays the administration dashboard, containing news updates and
     useful administration tasks.
     """
-
     return render_to_response(template_name, RequestContext(request, {
         'title': _("Dashboard"),
         'has_cache_stats': get_has_cache_stats(),

@@ -1,5 +1,5 @@
 $(function () {
-    //Heading Toggle
+    // Heading Toggle
     $(".widget-heading").click(function() {
         var widgetBox = $(this).parent();
         widgetBox.find(".widget-content").slideToggle();
@@ -10,18 +10,16 @@ $(function () {
         }
     });
 
-    //Close Dashboard Alerts
+    // Close Dashboard Alerts
     $('.close-alert').click(function(evt) {
         $(this).parent().parent().slideUp();
         evt.preventDefault();
     });
 
-
     $('.admin-extras .admin-widget').each(function(index) {
         $(this).addClass("admin-widget-" + index);
     });
 });
-
 
 // Live cross-browser viewport detection
 (function (win, documentElement) {
