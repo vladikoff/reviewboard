@@ -27,138 +27,6 @@ ul.actionlist li {
     list-style-type: none;
 }
 
-#logo {
-  padding: 0em;
-  position: relative;
-  display: inline;
-  vertical-align: middle;
-}
-
-#branding {
-  font-family: Verdana,Arial,Helvetica,Sans-Serif;
-  margin: 40px 0px 10px 0px;
-}
-
-#branding h1 {
-  padding: 0.4em 0.7em 0.5em 0em;
-  display: inline;
-  vertical-align: middle;
-}
-
-#branding h1 a, #branding a:link, #branding a:visited  {
-  color: #000000;
-  font-size: 24pt;
-  text-decoration: none;
-}
-
-#user-tools {
-  width: 100%;
-  color: #000000;
-  border-bottom: 1px solid #DDDDDD;
-  margin: 0;
-  padding:  5px 15px 5px 0px;
-}
-
-#navbar-outer {
-  margin: 0px 9px;
-  width: auto;
-}
-
-#navbar ul, #navbar {
-  overflow: hidden;
-  padding: 0px;
-}
-
-#navbar ul {
-    float: left;
-    margin: 0px;
-    padding: 0px;
-}
-
-#navbar li {
-  display: inline;
-  height: auto;
-  margin: 0px;
-}
-
-#navbar ul a {
-  display: block;
-  float: left;
-  padding: 9px;
-  margin: 0px 10px 0px 9px;
-}
-
-#navbar a.nav-first {
-  margin-left: 0px;
-}
-
-#header #navbar a.nav-active:visited, #header #navbar a.nav-active:link {
- background: #5988BB;
- color: #FFF;
-}
-
-#header #user-tools a {
-    color: #0000EE;
-}
-
-
-#header #navbar a:link, #header #navbar a:visited {
-    color: #0000AA;
-}
-
-#title .version {
-    color: #808080;
-    font-size: 12pt;
-    font-weight: normal;
-    padding-left: 5px;
-}
-
-#admin-nav li,
-#admin-subnav li {
-  display: block;
-  float: left;
-  line-height: normal;
-  margin: 0 10px 0 0;
-  padding: 0;
-}
-
-#admin-nav li a,
-#admin-subnav li a {
-  display: block;
-  float: left;
-  font-size: 110%;
-  padding: 4px 8px;
-}
-
-#admin-subnav li a {
-  border-top: 3px solid #5988BB;
-}
-
-#admin-nav li a:hover,
-#admin-subnav li a:hover {
-  background-color: #2f5183;
-  text-decoration: none;
-}
-
-#admin-nav li a.active,
-#admin-subnav li a.active {
-  color: black;
-  background: #FFF;
-}
-
-div.breadcrumbs {
-  background: none;
-  border: none;
-  padding-left: 20px;
-}
-
-#admin-subnav {
-  background-color: #5988BB;
-  margin: -2px 10px 0px 10px;
-  padding: 0px 5px;
-  overflow: hidden;
-}
-
 .module.manage .count {
   color: #A0A0A0;
   font-size: x-small;
@@ -291,9 +159,142 @@ thead th a:link, thead th a:visited {
   color: black;
 }
 
+#logo {
+  padding: 0;
+  position: relative;
+  display: inline;
+  vertical-align: middle;
+}
+
+#branding {
+  font-family: Verdana,Arial,Helvetica,Sans-Serif;
+  margin: 40px 0 10px 0;
+}
+
+#branding h1 {
+  padding: 0.4em 0.7em 0.5em 0;
+  display: inline;
+  vertical-align: middle;
+}
+
+#branding h1 a, #branding a:link, #branding a:visited  {
+  color: #000000;
+  font-size: 24pt;
+  text-decoration: none;
+}
+
+#user-tools {
+  width: 100%;
+  color: #000000;
+  border-bottom: 1px solid #DDDDDD;
+  margin: 0;
+  padding:  5px 15px 5px 0;
+}
+
+#navbar-outer {
+  margin: 0 9px;
+  width: auto;
+}
+
+#navbar ul, #navbar {
+  overflow: hidden;
+  padding: 0;
+}
+
+#navbar ul {
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+#navbar li {
+  display: inline;
+  height: auto;
+  margin: 0;
+}
+
+#navbar ul a {
+  display: block;
+  float: left;
+  padding: 9px;
+  margin: 0 10px 0 9px;
+}
+
+#navbar a.nav-first {
+  margin-left: 0;
+}
+
+#navbar a:link,
+#navbar a:visited {
+  color: #0000AA;
+}
+
+#navbar a.nav-active:visited,
+#navbar a.nav-active:link {
+  background: #5988BB;
+  color: #FFF;
+}
+
+#header #user-tools a {
+  color: #0000EE;
+}
+
+#title .version {
+  color: #808080;
+  font-size: 12pt;
+  font-weight: normal;
+  padding-left: 5px;
+}
+
+#admin-nav li,
+#admin-subnav li {
+  display: block;
+  float: left;
+  line-height: normal;
+  margin: 0 10px 0 0;
+  padding: 0;
+}
+
+#admin-nav li a,
+#admin-subnav li a {
+  display: block;
+  float: left;
+  font-size: 110%;
+  padding: 4px 8px;
+}
+
+#admin-subnav li a {
+  border-top: 3px solid #5988BB;
+}
+
+#admin-nav li a:hover,
+#admin-subnav li a:hover {
+  background-color: #2f5183;
+  text-decoration: none;
+}
+
+#admin-nav li a.active,
+#admin-subnav li a.active {
+  color: black;
+  background: #FFF;
+}
+
+div.breadcrumbs {
+  background: none;
+  border: none;
+  padding-left: 20px;
+}
+
+#admin-subnav {
+  background-color: #5988BB;
+  margin: -2px 10px 0 10px;
+  padding: 0 5px;
+  overflow: hidden;
+}
+
 #searchbar  {
   position: relative;
-  margin: 0px;
+  margin: 0;
 }
 
 #header {
@@ -324,28 +325,27 @@ thead th a:link, thead th a:visited {
 .dashboard #content-related {
   margin-right: -24.5em;
   width: 23em;
-}dddasd
+}
 
 #content-related .module h2 {
   background: #5988bb;
-  color: white;
+  color: #FFF;
 }
 
-.admin-title {
-    width: 190px;
-    height: 22px;
-    font-weight: 700;
-    float: right;
-    text-align: center;
-    background-color: #F9F2C9;
-    background-image: url("../images/yellow_bg_small.png");
-    background-repeat: repeat-x;
-    border-left: 1px solid #89867F;
-    padding: 10px 10px 0 10px;
+#back-to-rb {
+  width: 190px;
+  height: 22px;
+  float: right;
+  text-align: center;
+  background: #F9F2C9 url("../images/yellow_bg_small.png") repeat-x;
+  border-left: 1px solid #89867F;
+  padding: 10px 10px 0 10px;
 }
-#header #navbar .admin-title a{
-    color: #3B3B3B;
-    display: block;
+
+#back-to-rb a:visited,
+#back-to-rb a:link {
+  color: #3B3B3B;
+  display: block;
 }
 
 #log-entries pre {
@@ -403,7 +403,7 @@ thead th a:link, thead th a:visited {
 }
 
 .module {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .module h2, .module caption, #content-related .module h2{

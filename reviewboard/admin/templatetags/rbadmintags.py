@@ -22,7 +22,7 @@ def admin_subnav(context, url_name, name):
      }
 
 @register.simple_tag
-def url_active(request, pattern):
+def nav_active(request, pattern):
     if re.search(pattern, request.path):
-        return 'active'
+        return 'nav-active'
     return ''
