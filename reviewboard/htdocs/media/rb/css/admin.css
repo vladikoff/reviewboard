@@ -423,6 +423,9 @@ td, th {
   border-bottom: 0;
 }
 
+.login #container {
+  width: 30em!important;
+}
 
 
 /* Override the way links and wrapping work in modules. */
