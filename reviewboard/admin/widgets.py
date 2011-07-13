@@ -14,8 +14,8 @@ from reviewboard.reviews.models import ReviewRequest, Group, Comment, Review, Sc
 
 
 def getReviewRequests(request):
-    # Review Requests Widget
-    # Shows a date-based chart of review requests and change descriptions
+    """ Review Requests Widget
+    Shows a date-based chart of review requests and change descriptions """
 
     request_objects = ReviewRequest.objects
     review_requests = request_objects.all()
@@ -69,9 +69,9 @@ def getReviewRequests(request):
     return widget_data
 
 def getUserActivityWidget(request):
-    # User Activity Widget
-    # A pie chart of active application users based on their last login date
-
+    """ User Activity Widget
+    A pie chart of active application users based on their last login date
+    """
     now = date.today()
     users = User.objects
 
@@ -103,8 +103,8 @@ def getUserActivityWidget(request):
     return widget_data
 
 def getRequestStatuses(request):
-    # Request Statuses by Percentage Widget
-    # A pie chart showing review request by status
+    """ Request Statuses by Percentage Widget
+    A pie chart showing review request by status """
 
     request_objects = ReviewRequest.objects
 
@@ -138,8 +138,8 @@ def getRepositories(request):
     return widget_data
 
 def getGroups(request):
-    # Review Group Listing
-    # Shows a list of recently created groups
+    """ Review Group Listing
+    Shows a list of recently created groups """
 
     review_groups = Group.objects.all().order_by('-id')[:5]
 
@@ -155,8 +155,8 @@ def getGroups(request):
     return widget_data
 
 def getServerCache(request):
-    # Cache Statistic Widget
-    # A list of memcached statistic if available to the application
+    """ Cache Statistic Widget
+    A list of memcached statistic if available to the application """
 
     cache_stats = get_cache_stats()
 
@@ -169,8 +169,8 @@ def getServerCache(request):
     return widget_data
 
 def getNews(request):
-    # News
-    # Latest Review Board news via RSS
+    """ News
+    Latest Review Board news via RSS """
 
     widget_data = {
     'size': 'widget-small',
@@ -185,8 +185,7 @@ def getNews(request):
 
 
 def getStats(request):
-    # Stats
-    #
+    """ Stats """
 
     stats_data = {
 
@@ -207,9 +206,8 @@ def getStats(request):
     return widget_data
 
 def getLargeStats(request):
-    # Stats Large
-    #
-
+    """ Stats Large """
+    
     stats_data = {}
 
     widget_data = {

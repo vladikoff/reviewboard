@@ -2,6 +2,7 @@ from django import template
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.template.context import RequestContext
 from djblets.siteconfig.models import SiteConfiguration
 
 from admin.cache_stats import get_has_cache_stats
@@ -55,22 +56,20 @@ def admin_widget(context, widget_name, widget_title, widget_icon=""):
 
     widget_data = widget_list.get(widget_name)(request)
 
-    return {
+    return RequestContext(context['request'], {
        'widget_title': widget_title,
        'widget_name': widget_name,
        'widget_icon': widget_icon,
        'widget_size': widget_data['size'],
        'widget_data': widget_data['data'],
        'widget_content': widget_data['template'],
-       'widget_actions': widget_data['actions'],
-       'media_url': settings.MEDIA_URL,
-       'media_serial': settings.MEDIA_SERIAL,
-     }
+       'widget_actions': widget_data['actions']
+     })
 
 
 @register.inclusion_tag('admin/widgets/w-actions.html', takes_context=True)
 def admin_actions(context):
-    #Site Configuration
+    """ Site Configuration """
     current_site_config = SiteConfiguration.objects.get_current()
     request = context.get('request')
 
