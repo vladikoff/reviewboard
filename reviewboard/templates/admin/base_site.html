@@ -1,6 +1,6 @@
 {% extends "admin/base.html" %}
-{% load i18n  %}
-{% load rbadmintags  %}
+{% load i18n %}
+{% load rbadmintags %}
 {% block title %}{{title}} | {% trans "Review Board administration" %}{% endblock %}
 
 {% block extrastyle %}
@@ -19,16 +19,16 @@
 {% block nav-global %}
 {%  if user.is_authenticated %}
 <div id="navbar-outer">
-    <div id="navbar">
-    <ul>
-     <li><a href="{% url reviewboard.admin.views.dashboard %}" class="nav-first">{% trans "Dashboard" %}</a></li>
-     <li><a href="{% url reviewboard.admin.views.dashboard %}db/">{% trans "Database" %}</a></li>
-     <li><a href="{% url site-settings %}" class="{% nav_active request "^/admin/settings/" %}">{% trans "Settings" %}</a></li>
-    </ul>
-    <div id="back-to-rb">
-     <a href="{% url root %}">{% trans "Back to Review Board" %}</a>
-    </div>
-    </div>
+ <div id="navbar">
+  <ul>
+   <li><a href="{% url reviewboard.admin.views.dashboard %}" class="nav-first">{% trans "Dashboard" %}</a></li>
+   <li><a href="{% url reviewboard.admin.views.dashboard %}db/">{% trans "Database" %}</a></li>
+   <li>{% url site-settings as settingsurl %}<a href="{{settingsurl}}" class="{% nav_active request settingsurl %}">{% trans "Settings" %}</a></li>
+  </ul>
+  <div id="back-to-rb">
+   <a href="{% url root %}">{% trans "Back to Review Board" %}</a>
+  </div>
+ </div>
 </div>
 {%   block subnavbar %}{% endblock %}
 {%  endif %}
