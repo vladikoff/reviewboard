@@ -23,5 +23,5 @@ def admin_subnav(context, url_name, name):
 def nav_active(request, pattern):
     if pattern in request.path:
         return 'nav-active'
-    
+
     return ''
