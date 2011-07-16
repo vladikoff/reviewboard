@@ -26,14 +26,12 @@ def admin_subnav(context, url_name, name, icon=""):
     request = context.get('request')
     url = reverse(url_name)
 
-    return {
+    return RequestContext(context['request'], {
         'url': url,
         'name': name,
         'current': url == request.path,
-        'icon': icon,
-        'media_url': settings.MEDIA_URL,
-        'media_serial': settings.MEDIA_SERIAL,
-     }
+        'icon': icon
+     })
 
 @register.inclusion_tag('admin/admin_widget.html', takes_context=True)
 def admin_widget(context, widget_name, widget_title, widget_icon=""):
@@ -50,8 +48,8 @@ def admin_widget(context, widget_name, widget_title, widget_icon=""):
         'review-groups': widgets.getGroups,
         'server-cache': widgets.getServerCache,
         'news': widgets.getNews,
-        'stats': widgets.getStats,
-        'stats-large': widgets.getLargeStats
+        'stats': widgets.getStats, # TODO Rename this one.
+        'stats-large': widgets.getLargeStats # TODO Rename this one.
     }
 
     widget_data = widget_list.get(widget_name)(request)

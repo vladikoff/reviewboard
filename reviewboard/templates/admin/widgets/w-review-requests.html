@@ -1,15 +1,19 @@
 {% load i18n %}
 {% if widget_data.requests_by_day %}
-
-           <div id="placeholder" style="width: 450px; height: 200px;"></div>
-           <div id="overview" style="margin-left:50px;margin-top:20px;width:400px;height:50px"></div>
-           <script id="source">
+ <div id="placeholder" style="width: 450px; height: 200px;"></div>
+ <div id="overview" style="margin-left:50px;margin-top:20px;width:400px;height:50px"></div>
+ <script id="source">
 $(function () {
-// Review Request Chart Data
+   // Review Request Chart Data
   var d = [
+     {% for key,req in widget_data.requests_by_day.items %}
+           [{{req.req_date|date:"U"}}000, {{req.req_count}}],
+     {% endfor %}
+    ];
 
-     {% for req in widget_data.requests_by_day %}
-           [{{req.1|date:"U"}}000, {{req.0}}],
+  var d2 = [
+     {% for r_req in widget_data.r_requests_per_day %}
+           [{{r_req.time_added|date:"U"}}000, {{r_req.created_count}}],
      {% endfor %}
     ];
 
@@ -50,7 +54,8 @@ $(function () {
     };
 
     var plot = $.plot($("#placeholder"),[
-        { label: "Review Requests",  data: d  }
+        { label: "Review Requests",  data: d  },
+        { label: "By Day",  data: d2,  bars: { show: true }, lines: {show: false}}
     ], options);
 
     var overview = $.plot($("#overview"), [d], {

@@ -10,42 +10,44 @@ from diffviewer.models import DiffSet
 from reviewboard.admin.cache_stats import get_cache_stats
 from reviewboard.changedescs.models import ChangeDescription
 from reviewboard.scmtools.models import Repository
-from reviewboard.reviews.models import ReviewRequest, Group, Comment, Review, Screenshot, ReviewRequestDraft
+from reviewboard.reviews.models import ReviewRequest, Group, \
+    Comment, Review, Screenshot, ReviewRequestDraft
 
 
 def getReviewRequests(request):
     """ Review Requests Widget
     Shows a date-based chart of review requests and change descriptions """
 
+    # TODO still need to clean this code below
     request_objects = ReviewRequest.objects
     review_requests = request_objects.all()
     requests = {}
-    
+
     if review_requests:
         # Request By Creation
-        oldest_request = request_objects.aggregate(lowest=Min('time_added'))
-        start_date = oldest_request['lowest']
+        oldest_req = request_objects.aggregate(lowest=Min('time_added'))
+        start_date = oldest_req['lowest']
         day_total = (datetime.today() - start_date).days
-        dates_in_days  = []
-        req_array = []
+        req_data = {}
         for i in range(day_total):
             counter_date = start_date + timedelta(days=i)
-            dates_in_days.append(counter_date)
-            req_array.append([
-                    request_objects.filter(time_added__lte=counter_date).count()])
-            req_array[i].append(counter_date)
+            req_data[i] = {}
+            req_data[i]['req_count'] =\
+                    request_objects.filter(time_added__lte=counter_date).count()
+            req_data[i]['req_date'] = counter_date
+
 
         # getting all widget_data together
         requests = {
             'all_requests': review_requests,
-            'requests_by_day': req_array
+            'requests_by_day': req_data
         }
 
     widget_data = {
         'size': 'widget-large',
         'template': 'admin/widgets/w-review-requests.html',
         'actions': [
-            ['admin/db/reviews/reviewrequest/', _("View All"), 'btn-right']
+            ('admin/db/reviews/reviewrequest/', _("View All"), 'btn-right')
         ],
         'data': requests
     }
@@ -73,8 +75,8 @@ def getUserActivityWidget(request):
         'total': users.count()
     }
     widget_actions = [
-            ['admin/db/auth/user/add/',_("Add New")],
-            ['admin/db/auth/user/',_("Manage Users"),'btn-right']
+            ('admin/db/auth/user/add/',_("Add New")),
+            ('admin/db/auth/user/',_("Manage Users"),'btn-right')
     ]
 
     widget_data = {
@@ -108,13 +110,13 @@ def getRequestStatuses(request):
 
 def getRepositories(request):
     repositories = Repository.objects.accessible(request.user).order_by('-id')[:5]
-
+    
     widget_data = {
         'size': 'widget-large',
         'template': 'admin/widgets/w-repositories.html',
         'actions': [
-                ['db/scmtools/repository/add/', _("Add New")],
-                ['db/scmtools/repository/', _("View All"), 'btn-right']
+            ('db/scmtools/repository/add/',_("Add New")),
+            ('db/scmtools/repository/', _("View All"),'btn-right')
         ],
         'data': repositories
     }
@@ -131,8 +133,8 @@ def getGroups(request):
         'size': 'widget-small',
         'template': 'admin/widgets/w-groups.html',
         'actions': [
-            ['db/reviews/group/add/',_("Add")],
-            ['db/reviews/group/',_("View All")]
+            ('db/reviews/group/add/',_("Add")),
+            ('db/reviews/group/',_("View All"))
         ],
         'data': review_groups
     }
@@ -141,14 +143,30 @@ def getGroups(request):
 def getServerCache(request):
     """ Cache Statistic Widget
     A list of memcached statistic if available to the application """
-
     cache_stats = get_cache_stats()
+    uptime = {}
+
+    for hosts, stats in cache_stats:
+        if stats['uptime'] > 86400:
+            uptime['value'] = stats['uptime'] / 60 / 60 / 24
+            uptime['unit'] = _("days")
+        elif stats['uptime'] > 3600:
+            uptime['value'] = stats['uptime'] / 60 / 60
+            uptime['unit'] = _("hours")
+        else:
+            uptime['value'] = stats['uptime'] / 60
+            uptime['unit'] =  _("minutes")
+            
+    cache_data = {
+        "cache_stats": cache_stats,
+        "uptime": uptime
+    }
 
     widget_data = {
         'size': 'widget-small',
         'template': 'admin/widgets/w-server-cache.html',
         'actions': '',
-        'data': cache_stats
+        'data': cache_data
     }
     return widget_data
 
@@ -160,13 +178,12 @@ def getNews(request):
     'size': 'widget-small',
     'template': 'admin/widgets/w-news.html',
     'actions': [
-            ['http://www.reviewboard.org/news/',_('More')],
-            ['#',_('Reload'), 'reload-news']
-        ],
+            ('http://www.reviewboard.org/news/',_('More')),
+            ('#',_('Reload'), 'reload-news')
+    ],
         'data': ''
     }
     return widget_data
-
 
 def getStats(request):
     """ Stats """
@@ -215,7 +232,6 @@ def getLargeStats(request):
         comment['timestamp'] = datetime.\
         strptime(comment['timestamp'], "%Y-%m-%d")
 
-
     #Reviews
     reviews = Review.objects
     reviews_per_day = \
@@ -227,11 +243,7 @@ def getLargeStats(request):
     for review  in reviews_per_day:
         review['timestamp'] = datetime.\
         strptime(review['timestamp'], "%Y-%m-%d")
-
-
-
-
-
+ 
     # getting all widget_data together
     stat_data = {
         'change_descriptions': change_desc_unique,
