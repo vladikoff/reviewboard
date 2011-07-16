@@ -9,12 +9,6 @@ $(function () {
      {% endfor %}
     ];
 
-// Change Descriptions - chart data
-  var d2 = [
-     {% for description in  widget_data.change_descriptions %}
-           [{{description.timestamp|date:"U"}}000, {{description.created_count}}],
-     {% endfor %}
-    ];
 
     // first correct the timestamps - they are recorded as the daily
     // midnights in UTC+0100, but Flot always displays dates in UTC
@@ -52,8 +46,7 @@ $(function () {
     };
 
     var plot = $.plot($("#placeholder"),[
-        { label: "Review Requests",  data: d  },
-        { label: "Change Descriptions",  data: d2,  bars: { show: true }, lines: {show: false}}
+        { label: "Review Requests",  data: d  }
     ], options);
 
     var overview = $.plot($("#overview"), [d], {

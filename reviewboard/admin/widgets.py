@@ -23,40 +23,22 @@ def getReviewRequests(request):
     # Request By Creation
     oldest_request = request_objects.aggregate(lowest=Min('time_added'))
     start_date = oldest_request['lowest']
-    day_counter = 0
     day_total = (datetime.today() - start_date).days
     dates_in_days  = []
     req_array = []
-    while day_counter < day_total:
-        counter_date = start_date + timedelta(days=day_counter)
+    for i in range(day_total):
+        counter_date = start_date + timedelta(days=i)
         dates_in_days.append(counter_date)
-
-        req_array.append([])
-        req_array[day_counter]\
-            .append(request_objects.filter(time_added__lte=counter_date).count())
-        req_array[day_counter]\
-            .append(counter_date)
-        day_counter += 1
-
-    #Change Descriptions
-    change_desc = ChangeDescription.objects
-    change_desc_unique = \
-        change_desc.extra({'timestamp' : "date(timestamp)"})\
-        .values('timestamp').annotate(created_count=Count('id'))
-
-    # need a test for this strptime for Python < 2.5 more at
-    # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
-    for unique_desc  in change_desc_unique:
-        unique_desc['timestamp'] = datetime.\
-        strptime(unique_desc['timestamp'], "%Y-%m-%d")
+        req_array.append([
+                request_objects.filter(time_added__lte=counter_date).count()])
+        req_array[i].append(counter_date)
 
     # getting all widget_data together
     requests = {
         'all_requests': review_requests,
-        'requests_by_day': req_array,
-        'change_descriptions': change_desc_unique
+        'requests_by_day': req_array
     }
-    
+
     widget_data = {
         'size': 'widget-large',
         'template': 'admin/widgets/w-review-requests.html',
@@ -99,7 +81,7 @@ def getUserActivityWidget(request):
         'data': activity_list,
         'actions': widget_actions
     }
-    
+
     return widget_data
 
 def getRequestStatuses(request):
@@ -134,7 +116,7 @@ def getRepositories(request):
         ],
         'data': repositories
     }
-    
+
     return widget_data
 
 def getGroups(request):
@@ -188,32 +170,77 @@ def getStats(request):
     """ Stats """
 
     stats_data = {
-
+        'count_comments': Comment.objects.all().count(),
+        'count_reviews': Review.objects.all().count(),
+        'count_attachments': FileAttachment.objects.all().count(),
+        'count_reviewdrafts': ReviewRequestDraft.objects.all().count(),
+        'count_screenshots': Screenshot.objects.all().count(),
+        'count_diffsets': DiffSet.objects.all().count()
     }
 
     widget_data = {
         'size': 'widget-small',
         'template': 'admin/widgets/w-stats.html',
         'actions': '',
-        'count_comments': Comment.objects.all().count(),
-        'count_reviews': Review.objects.all().count(),
-        'count_attachments': FileAttachment.objects.all().count(),
-        'count_reviewdrafts': ReviewRequestDraft.objects.all().count(),
-        'count_screenshots': Screenshot.objects.all().count(),
-        'count_diffsets': DiffSet.objects.all().count(),
         'data': stats_data
     }
     return widget_data
 
 def getLargeStats(request):
     """ Stats Large """
-    
-    stats_data = {}
+
+    #Change Descriptions
+    change_desc = ChangeDescription.objects
+    change_desc_unique = \
+        change_desc.extra({'timestamp' : "date(timestamp)"})\
+        .values('timestamp').annotate(created_count=Count('id'))
+
+    # need a test for this strptime for Python < 2.5 more at
+    # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
+    for unique_desc  in change_desc_unique:
+        unique_desc['timestamp'] = datetime.\
+        strptime(unique_desc['timestamp'], "%Y-%m-%d")
+
+    #Comments
+    comments = Comment.objects
+    comments_per_day = \
+        comments.extra({'timestamp' : "date(timestamp)"})\
+        .values('timestamp').annotate(created_count=Count('id'))
+
+    # need a test for this strptime for Python < 2.5 more at
+    # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
+    for comment  in comments_per_day:
+        comment['timestamp'] = datetime.\
+        strptime(comment['timestamp'], "%Y-%m-%d")
+
+
+    #Reviews
+    reviews = Review.objects
+    reviews_per_day = \
+        reviews.extra({'timestamp' : "date(timestamp)"})\
+        .values('timestamp').annotate(created_count=Count('id'))
+
+    # need a test for this strptime for Python < 2.5 more at
+    # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
+    for review  in reviews_per_day:
+        review['timestamp'] = datetime.\
+        strptime(review['timestamp'], "%Y-%m-%d")
+
+
+
+
+
+    # getting all widget_data together
+    stat_data = {
+        'change_descriptions': change_desc_unique,
+        'comments': comments_per_day,
+        'reviews': reviews_per_day
+    }
 
     widget_data = {
         'size': 'widget-large',
         'template': 'admin/widgets/w-stats-large.html',
         'actions': '',
-        'data': stats_data
+        'data': stat_data
     }
     return widget_data

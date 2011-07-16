@@ -34,22 +34,20 @@ $(function () {
                 }
         );
     },
-
         // Debounce function
             debounce = function (func, threshold) {
                 var timeout;
                 return function () {
                     var obj = this,
-                            args = arguments,
-                            delayed = function () {
-                                func.apply(obj, args);
-                                timeout = null;
-                            };
+                    args = arguments,
+                    delayed = function () {
+                        func.apply(obj, args);
+                        timeout = null;
+                    };
                     if (timeout) clearTimeout(timeout);
                     timeout = setTimeout(delayed, 50);
                 };
             },
-
         // Sizes array
             viewportColumns = {
                 1673: 1673,
@@ -66,11 +64,11 @@ $(function () {
         // Viewport Change event
             viewportChange = function() {
                 var oldClassNames,
-                        classNames = oldClassNames = documentElement.className.replace(/(\s|\b)+vp(lt|gt)*\d+(\b|\s)+/g, ''),
-                        viewportWidth = documentElement.clientWidth,
-                        bucket = [],
-                        viewportMaxColumns = viewportMinColumns,
-                        col;
+                classNames = oldClassNames = documentElement.className.replace(/(\s|\b)+vp(lt|gt)*\d+(\b|\s)+/g, ''),
+                viewportWidth = documentElement.clientWidth,
+                bucket = [],
+                viewportMaxColumns = viewportMinColumns,
+                col;
 
                 for (col in viewportColumns) viewportMaxColumns = Math.max(viewportMaxColumns, viewportWidth >= viewportColumns[col] ? col : viewportMinColumns);
 
@@ -79,9 +77,7 @@ $(function () {
                 for (col in viewportColumns) {
                     bucket.push('vp' + (viewportWidth >= viewportColumns[col] ? 'gt' : 'lt') + col);
                 }
-
                 classNames += ' ' + bucket.join(' ');
-
                 if (oldClassNames != classNames) documentElement.className = classNames;
             };
 

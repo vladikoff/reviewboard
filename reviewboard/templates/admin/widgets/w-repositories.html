@@ -13,9 +13,9 @@
                 <td><a href="db/scmtools/repository/{{repository.id}}">{{ repository.name }}</a></td>
                 <td>{{ repository.tool }}</td>
                 <td class="td-center">{% if repository.visible %}
-                    <img src="{{media_url}}rb/images/shipit.png?{{media_serial}}" alt="Visible"
+                    <img src="{{MEDIA_URL}}rb/images/shipit.png?{{MEDIA_URL}}" alt="Visible"
                          title="Visible"/>{% else %}
-                    <img src="{{media_url}}rb/images/disabled.png?{{media_serial}}" alt="Invisible"
+                    <img src="{{MEDIA_URL}}rb/images/disabled.png?{{MEDIA_URL}}" alt="Invisible"
                          title="Invisible" />
                          {% endif %}
                 </td>

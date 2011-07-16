@@ -262,7 +262,7 @@
     margin-top: 0;
 }
 
-#server-cache th, #review-groups th, .td-count {
+.widget-content th, .widget-content th, .td-count {
     color: #4b4b4b;
 }
 
@@ -270,8 +270,12 @@
     font-size: 10px;
 }
 
-.widget-system-info li, #server-cache tr, .news-content-widget .entry, #review-groups tr, .widget-manage tr, #repositories tr {
-    border-bottom: 1px solid #F5F5F5;
+.widget-content  li,  .widget-content tr,  .news-content-widget .entry{
+ border-bottom: 1px solid #F5F5F5;
+}
+
+.widget-sys-settings li {
+ border: none;
 }
 
 .widget-system-info img {
@@ -324,4 +328,10 @@
 
 .widget-large-table, .vplt980 .admin-extras {
     width: 100%;
+}
+
+/* Temporary / TODO Remove */
+
+.admin-widget-4 {
+ clear: left;
 }

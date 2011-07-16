@@ -16,6 +16,22 @@ $(function () {
      {% endfor %}
     ];
 
+// Comments - chart data
+  var d3 = [
+     {% for comment in  widget_data.comments %}
+           [{{comment.timestamp|date:"U"}}000, {{comment.created_count}}],
+     {% endfor %}
+    ];
+
+// Reviews - chart data
+ var d4 = [
+    {% for review in  widget_data.reviews %}
+          [{{review.timestamp|date:"U"}}000, {{review.created_count}}],
+    {% endfor %}
+   ];
+
+
+
     // first correct the timestamps - they are recorded as the daily
     // midnights in UTC+0100, but Flot always displays dates in UTC
     // so we have to add one hour to hit the midnights in the plot
@@ -52,8 +68,9 @@ $(function () {
     };
 
     var plot = $.plot($("#placeholder-stats"),[
-        { label: "Review Requests",  data: d  },
-        { label: "Change Descriptions",  data: d2,  bars: { show: true }, lines: {show: false}}
+        { label: "Comments",  data: d3 ,  bars: { show: true }, lines: {show: false}},
+        { label: "Change Descriptions",  data: d2,  bars: { show: true }, lines: {show: false}},
+        { label: "Reviews",  data: d4,  bars: { show: true }, lines: {show: false}}
     ], options);
 
 
