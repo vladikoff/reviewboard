@@ -19,25 +19,27 @@ def getReviewRequests(request):
 
     request_objects = ReviewRequest.objects
     review_requests = request_objects.all()
+    requests = {}
+    
+    if review_requests:
+        # Request By Creation
+        oldest_request = request_objects.aggregate(lowest=Min('time_added'))
+        start_date = oldest_request['lowest']
+        day_total = (datetime.today() - start_date).days
+        dates_in_days  = []
+        req_array = []
+        for i in range(day_total):
+            counter_date = start_date + timedelta(days=i)
+            dates_in_days.append(counter_date)
+            req_array.append([
+                    request_objects.filter(time_added__lte=counter_date).count()])
+            req_array[i].append(counter_date)
 
-    # Request By Creation
-    oldest_request = request_objects.aggregate(lowest=Min('time_added'))
-    start_date = oldest_request['lowest']
-    day_total = (datetime.today() - start_date).days
-    dates_in_days  = []
-    req_array = []
-    for i in range(day_total):
-        counter_date = start_date + timedelta(days=i)
-        dates_in_days.append(counter_date)
-        req_array.append([
-                request_objects.filter(time_added__lte=counter_date).count()])
-        req_array[i].append(counter_date)
-
-    # getting all widget_data together
-    requests = {
-        'all_requests': review_requests,
-        'requests_by_day': req_array
-    }
+        # getting all widget_data together
+        requests = {
+            'all_requests': review_requests,
+            'requests_by_day': req_array
+        }
 
     widget_data = {
         'size': 'widget-large',

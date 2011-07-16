@@ -1,13 +1,9 @@
-           <div id="placeholder-stats" style="width: 450px; height: 150px;"></div>
+{% load i18n %}
+{% if widget_data.change_descriptions %}
+<div id="placeholder-stats" style="width: 450px; height: 150px;"></div>
 
-           <script>
+ <script>
 $(function () {
-// Review Request Chart Data
-  var d = [
-     {% for req in widget_data.requests_by_day %}
-           [{{req.1|date:"U"}}000, {{req.0}}],
-     {% endfor %}
-    ];
 
 // Change Descriptions - chart data
   var d2 = [
@@ -76,3 +72,7 @@ $(function () {
 
 });
 </script>
+{% else %}
+<p> {% trans "No Data available at this time..." %}</p>
+ <!-- TODO Style This Section -->
+{% endif %}

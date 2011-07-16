@@ -1,9 +1,13 @@
+{% load i18n %}
+{% if widget_data.requests_by_day %}
+
            <div id="placeholder" style="width: 450px; height: 200px;"></div>
            <div id="overview" style="margin-left:50px;margin-top:20px;width:400px;height:50px"></div>
            <script id="source">
 $(function () {
 // Review Request Chart Data
   var d = [
+
      {% for req in widget_data.requests_by_day %}
            [{{req.1|date:"U"}}000, {{req.0}}],
      {% endfor %}
@@ -76,3 +80,7 @@ $(function () {
     });
 });
 </script>
+{% else %}
+<p> {% trans "No Review Requests available at this time..." %}</p>
+ <!-- TODO Style This Section --> 
+{% endif %}

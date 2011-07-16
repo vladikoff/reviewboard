@@ -1,3 +1,5 @@
+{% load i18n %}
+{% if widget_data.pending %}
 <div id="requests-percentages" style="width: 190px; height: 165px;"></div>
 <script type="text/javascript">
     $(function () {
@@ -30,3 +32,7 @@
                 });
     });
 </script>
+{% else %}
+<p> {% trans "No Data Avaialble..." %}</p>
+ <!-- TODO Style This Section -->
+{% endif %}

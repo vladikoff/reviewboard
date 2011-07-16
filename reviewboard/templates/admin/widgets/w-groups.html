@@ -1,3 +1,5 @@
+{% load i18n %}
+{% if widget_data %}
 <table style="width: 100%;">
       {% for group in widget_data %}
         <tr>
@@ -6,3 +8,7 @@
         </tr>
        {% endfor %}
 </table>
+{% else %}
+<p> {% trans "No Groups Available. Add Some!" %}</p>
+ <!-- TODO Style This Section -->
+{% endif %}

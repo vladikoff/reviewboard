@@ -1,4 +1,5 @@
 {% load i18n %}
+{% if widget_data %}
 <table class="widget-large-table">
     <thead>
     <tr>
@@ -23,3 +24,7 @@
         {% endfor %}
     {% endif %}
 </table>
+{% else %}
+<p> {% trans "No Repositories available. Add Some!" %}</p>
+ <!-- TODO Style This Section -->
+{% endif %}
