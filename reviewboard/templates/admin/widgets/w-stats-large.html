@@ -6,7 +6,7 @@
 $(function () {
 
 // Change Descriptions - chart data
-  var d2 = [
+  var d = [
      {% for description in  widget_data.change_descriptions %}
            [{{description.timestamp|date:"U"}}000, {{description.created_count}}],
      {% endfor %}
@@ -65,7 +65,7 @@ $(function () {
 
     var plot = $.plot($("#placeholder-stats"),[
         { label: "Comments",  data: d3 ,  bars: { show: true }, lines: {show: false}},
-        { label: "Change Descriptions",  data: d2,  bars: { show: true }, lines: {show: false}},
+        { label: "Change Descriptions",  data: d,  bars: { show: true }, lines: {show: false}},
         { label: "Reviews",  data: d4,  bars: { show: true }, lines: {show: false}}
     ], options);
 
