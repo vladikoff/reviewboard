@@ -110,7 +110,7 @@ def getRequestStatuses(request):
 
 def getRepositories(request):
     repositories = Repository.objects.accessible(request.user).order_by('-id')[:5]
-    
+
     widget_data = {
         'size': 'widget-large',
         'template': 'admin/widgets/w-repositories.html',
@@ -156,7 +156,7 @@ def getServerCache(request):
         else:
             uptime['value'] = stats['uptime'] / 60
             uptime['unit'] =  _("minutes")
-            
+
     cache_data = {
         "cache_stats": cache_stats,
         "uptime": uptime
@@ -243,7 +243,7 @@ def getLargeStats(request):
     for review  in reviews_per_day:
         review['timestamp'] = datetime.\
         strptime(review['timestamp'], "%Y-%m-%d")
- 
+
     # getting all widget_data together
     stat_data = {
         'change_descriptions': change_desc_unique,
