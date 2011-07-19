@@ -233,22 +233,34 @@ def getLargeStats(request):
         strptime(comment['timestamp'], "%Y-%m-%d")
 
     #Reviews
-    reviews = Review.objects
+    reviews = Review.objects.all()
     reviews_per_day = \
         reviews.extra({'timestamp' : "date(timestamp)"})\
-        .values('timestamp').annotate(created_count=Count('id'))
+        .values('timestamp').annotate(created_count=Count('id')).order_by('timestamp')
 
-    # need a test for this strptime for Python < 2.5 more at
+     # need a test for this strptime for Python < 2.5 more at
     # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
     for review  in reviews_per_day:
         review['timestamp'] = datetime.\
         strptime(review['timestamp'], "%Y-%m-%d")
+    #Review Requests
+
+    rr_req_per_day = \
+        ReviewRequest.objects.all().extra({'time_added' : "date(time_added)"})\
+        .values('time_added').annotate(created_count=Count('id')).order_by('time_added')
+
+         # need a test for this strptime for Python < 2.5 more at
+    # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
+    for rr_req  in rr_req_per_day:
+        rr_req['time_added'] = datetime.\
+        strptime(rr_req['time_added'], "%Y-%m-%d")
 
     # getting all widget_data together
     stat_data = {
         'change_descriptions': change_desc_unique,
         'comments': comments_per_day,
-        'reviews': reviews_per_day
+        'reviews': reviews_per_day,
+        'review_requests': rr_req_per_day
     }
 
     widget_data = {
