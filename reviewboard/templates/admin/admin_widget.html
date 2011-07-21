@@ -10,7 +10,7 @@
     {% if widget_actions %}
         <div class="widget-actions">
          {%  for action in widget_actions %}
-             <a href="{{action.0}}" class="{{action.2}}">{{action.1}}</a>
+             <a href="{{action.0}}" class="{{action.2}}" id="{{action.3}}">{{action.1}}</a>
          {%  endfor %}
         </div>
     {% endif %}

@@ -1,6 +1,6 @@
 {% load i18n %}
 {% if widget_data.change_descriptions %}
-<div id="placeholder-stats" style="width: 450px; height: 150px;"></div>
+<div id="placeholder-stats" style="width: 450px; height: 250px;"></div>
 
  <script>
 $(function () {
@@ -34,6 +34,29 @@ $(function () {
    ];
 
 
+ var datasets = {
+  "set-descriptions": {
+   label: "Change Descriptions",  data: d,  bars: { show: true }, lines: {show: false}
+  },
+  "set-comments": {
+   label: "Comments",  data: d3 ,  bars: { show: true }, lines: {show: false}
+  },
+  "set-reviews": {
+   label: "Reviews",  data: d4,  bars: { show: true }, lines: {show: false}
+  },
+  "set-requests": {
+   label: "Review Requests",  data: d5,  bars: { show: true }, lines: {show: false}
+  }
+  }
+
+   // hard-code color indices to prevent them from shifting as
+   // datasets are turned on/off
+   var i = 0;
+   $.each(datasets, function(key, val) {
+       val.color = i;
+       ++i;
+   });
+
     // first correct the timestamps - they are recorded as the daily
     // midnights in UTC+0100, but Flot always displays dates in UTC
     // so we have to add one hour to hit the midnights in the plot
@@ -61,21 +84,72 @@ $(function () {
     }
 
     var options = {
-        xaxis: { mode: "time", tickLength: 5},
+        xaxis: { mode: "time", tickLength: 2},
         yaxis : { min: 0 , tickDecimals: 0},
-        selection: { mode: "x" },
-        grid: { markings: weekendAreas },
+        grid: { markings: weekendAreas, hoverable: true },
         series: { points: { show: true, radius: 3 },   lines: { show: true }},
-          legend: { position: 'nw' }
+        legend: { position: 'nw' }
     };
 
-    var plot = $.plot($("#placeholder-stats"),[
-        { label: "Comments",  data: d3 ,  bars: { show: true }, lines: {show: false}},
-        { label: "Change Descriptions",  data: d,  bars: { show: true }, lines: {show: false}},
-        { label: "Reviews",  data: d4,  bars: { show: true }, lines: {show: false}},
-        { label: "Review Requests",  data: d5,  bars: { show: true }, lines: {show: false}}
-    ], options);
+    var choiceContainer = $("#stats-large");
+    choiceContainer.find(".btn-s").click(plotAccordingToChoices);
 
+    function plotAccordingToChoices() {
+        var data = [];
+        if ($(this).hasClass('btn-s-checked')) {
+         $(this).removeClass('btn-s-checked');
+        } else {
+         $(this).addClass('btn-s-checked');
+        }
+        choiceContainer.find(".btn-s-checked").each(function () {
+              var key = $(this).attr("id");
+              if (key && datasets[key])
+                  data.push(datasets[key]);
+        });
+        if (data.length > 0)
+            $.plot($("#placeholder-stats"), data, options);
+      return false;
+    }
+
+     function showTooltip(x, y, contents) {
+           $('<div id="tooltip">' + contents + '</div>').css( {
+               position: 'absolute',
+               display: 'none',
+               top: y + 5,
+               left: x + 5,
+               border: '1px solid #fdd',
+               padding: '2px',
+               'background-color': '#fee',
+               opacity: 0.80
+           }).appendTo("body").fadeIn(200);
+       }
+
+    var previousPoint = null;
+        $("#placeholder-stats").bind("plothover", function (event, pos, item) {
+            $("#x").text(pos.x.toFixed(2));
+            $("#y").text(pos.y);
+
+            if (item) {
+                if (previousPoint != item.dataIndex) {
+                    previousPoint = item.dataIndex;
+
+                    $("#tooltip").remove();
+                    var itemDate = new Date(item.datapoint[0])
+                    var x = itemDate,
+                        y = item.datapoint[1];
+
+                    showTooltip(item.pageX, item.pageY,
+                                item.series.label + " on " + x + ": " + y);
+                }
+            }
+            else {
+                $("#tooltip").remove();
+                previousPoint = null;
+            }
+
+        });
+
+    plotAccordingToChoices();
 
 });
 </script>

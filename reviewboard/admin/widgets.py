@@ -266,7 +266,12 @@ def getLargeStats(request):
     widget_data = {
         'size': 'widget-large',
         'template': 'admin/widgets/w-stats-large.html',
-        'actions': '',
+        'actions':  [
+            ('#',_('Reviews'),'btn-s btn-s-checked','set-reviews'),
+            ('#',_('Comments'),'btn-s btn-s-checked','set-comments'),
+            ('#',_('Review Requests'),'btn-s btn-s-checked','set-requests'),
+            ('#',_('Descriptions'),'btn-s btn-s-checked','set-descriptions')
+        ],
         'data': stat_data
     }
     return widget_data
