@@ -187,6 +187,7 @@ thead th a:link, thead th a:visited {
   width: 100%;
   color: #000000;
   border-bottom: 1px solid #DDDDDD;
+  background: url("../images/yellow_bg_small.png") repeat-x;
   margin: 0;
   padding:  5px 15px 5px 0;
 }
@@ -264,33 +265,45 @@ thead th a:link, thead th a:visited {
 }
 
 #admin-subnav li a {
-  border-top: 3px solid #5988BB;
+  padding-top: 7px;
+  border-bottom: 3px solid #5988BB;
 }
 
 #admin-nav li a:hover,
 #admin-subnav li a:hover {
-  background-color: #2f5183;
-  text-decoration: none;
+border-bottom: 3px solid #2f5183;
+text-decoration: none;
 }
 
 #admin-nav li a.active,
 #admin-subnav li a.active {
-  color: black;
-  background: #FFF;
+  border-bottom: 3px solid #2f5183;
 }
 
 div.breadcrumbs {
   background: none;
   border: none;
-  padding-left: 20px;
+  padding: 5px 10px;
+  border-bottom: 1px solid #C6DCF3;
+  margin: 0px 10px;
+}
+
+#admin-subnav-outer {
+  border: 1px solid #E0E0E0;
+  border-top: none;
+  background-color: #5988BB;
+  margin: -2px 9px 0 9px;
+  overflow: hidden;
 }
 
 #admin-subnav {
-  background-color: #5988BB;
-  margin: -2px 10px 0 10px;
-  padding: 0 5px;
-  overflow: hidden;
+ border: 1px solid #3465A4;
+ border-top: none;
+ overflow: hidden;
+ margin: 0px;
+ padding: 0 5px;
 }
+
 
 #searchbar  {
   position: relative;
