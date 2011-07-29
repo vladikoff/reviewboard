@@ -98,3 +98,10 @@ def admin_actions(context):
         'site_configs': site_configs,
         'version': reviewboard.get_version_string()
     })
+
+@register.simple_tag
+def nav_active(request, pattern):
+    if pattern in request.path:
+        return 'nav-active'
+    
+    return ''

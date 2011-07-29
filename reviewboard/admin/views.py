@@ -23,7 +23,7 @@ def dashboard(request, template_name="admin/dashboard.html"):
     useful administration tasks.
     """
     return render_to_response(template_name, RequestContext(request, {
-        'title': _("Dashboard"),
+        'title': _("Admin Dashboard"),
         'has_cache_stats': get_has_cache_stats(),
         'root_path': settings.SITE_ROOT + "admin/db/"
     }))

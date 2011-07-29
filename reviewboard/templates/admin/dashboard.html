@@ -15,23 +15,10 @@
 <script type="text/javascript" src="{{MEDIA_URL}}rb/js/flot/jquery.flot.selection.min.js?{{MEDIA_SERIAL}}"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}rb/js/admin.js?{{MEDIA_SERIAL}}"></script>
 
-<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}rb/css/common.css?{{MEDIA_SERIAL}}" />
 <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}rb/css/admin-dashboard.css?{{MEDIA_SERIAL}}" />
 {% endblock %}
 
 {% block content %}
-<div id="dashboard-nav">
-  <ul class="admin-menu">
-      <li class="nav-first"><a href="{% url reviewboard.admin.views.dashboard %}">{% trans "Dashboard" %}</a></li>
-      <li><a href="{% url reviewboard.admin.views.dashboard %}db/">{% trans "Database" %}</a></li>
-      <li><a href="{% url site-settings %}">{% trans "Settings" %}</a></li>
-  </ul>
-  <div class="admin-title">Review Board Admin
-   <img src="{{MEDIA_URL}}rb/images/admin/gears.png?{{MEDIA_SERIAL}}"
-     alt="Review Board Admin" />
-  </div>
- </div>
-
 <div id="admin-dashboard" class="clear">
  <div class="dashboard-alert-wrap">
   <div class="dashboard-alert">
@@ -42,7 +29,6 @@
    <p>Enjoy Review Board!</p>
   </div>
  </div>
-
 
  <div id="dashboard-view">
 
