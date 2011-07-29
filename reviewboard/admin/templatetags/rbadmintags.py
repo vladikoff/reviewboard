@@ -41,7 +41,6 @@ def admin_widget(context, widget_name, widget_title, widget_icon=""):
     request = context.get('request')
 
     widget_list = {
-        'review-requests': widgets.getReviewRequests,
         'user-activity': widgets.getUserActivityWidget,
         'request-statuses': widgets.getRequestStatuses,
         'repositories': widgets.getRepositories,
@@ -49,7 +48,8 @@ def admin_widget(context, widget_name, widget_title, widget_icon=""):
         'server-cache': widgets.getServerCache,
         'news': widgets.getNews,
         'stats': widgets.getStats, # TODO Rename this one.
-        'stats-large': widgets.getLargeStats # TODO Rename this one.
+        'stats-large': widgets.getLargeStats, # TODO Rename this one.
+        'recent-actions': widgets.getRecentActions
     }
 
     widget_data = widget_list.get(widget_name)(request)

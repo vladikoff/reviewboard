@@ -13,47 +13,6 @@ from reviewboard.scmtools.models import Repository
 from reviewboard.reviews.models import ReviewRequest, Group, \
     Comment, Review, Screenshot, ReviewRequestDraft
 
-
-def getReviewRequests(request):
-    """ Review Requests Widget
-    Shows a date-based chart of review requests and change descriptions """
-
-    # TODO still need to clean this code below
-    request_objects = ReviewRequest.objects
-    review_requests = request_objects.all()
-    requests = {}
-
-    if review_requests:
-        # Request By Creation
-        oldest_req = request_objects.aggregate(lowest=Min('time_added'))
-        start_date = oldest_req['lowest']
-        day_total = (datetime.today() - start_date).days
-        req_data = {}
-        for i in range(day_total):
-            counter_date = start_date + timedelta(days=i)
-            req_data[i] = {}
-            req_data[i]['req_count'] =\
-                    request_objects.filter(time_added__lte=counter_date).count()
-            req_data[i]['req_date'] = counter_date
-
-
-        # getting all widget_data together
-        requests = {
-            'all_requests': review_requests,
-            'requests_by_day': req_data
-        }
-
-    widget_data = {
-        'size': 'widget-large',
-        'template': 'admin/widgets/w-review-requests.html',
-        'actions': [
-            ('admin/db/reviews/reviewrequest/', _("View All"), 'btn-right')
-        ],
-        'data': requests
-    }
-
-    return widget_data
-
 def getUserActivityWidget(request):
     """ User Activity Widget
     A pie chart of active application users based on their last login date
@@ -152,7 +111,7 @@ def getServerCache(request):
             uptime['unit'] = _("days")
         elif stats['uptime'] > 3600:
             uptime['value'] = stats['uptime'] / 60 / 60
-            uptime['unit'] = _("hours")
+            uptime['unit'] = _("hrequestours")
         else:
             uptime['value'] = stats['uptime'] / 60
             uptime['unit'] =  _("minutes")
@@ -203,6 +162,19 @@ def getStats(request):
         'actions': '',
         'data': stats_data
     }
+    return widget_data
+
+def getRecentActions(request):
+
+
+
+    widget_data = {
+        'size': 'widget-small',
+        'template': 'admin/widgets/w-recent-actions.html',
+        'actions': '',
+        'data': ''
+    }
+
     return widget_data
 
 def getLargeStats(request):
