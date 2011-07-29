@@ -152,7 +152,7 @@
     position: absolute;
 }
 
-#admin-dashboard .widget-heading {
+#admin-dashboard .widget-heading, #admin-actions .widget-heading {
     cursor: pointer;
     text-transform: uppercase;
     color: #000;
@@ -233,7 +233,7 @@
     border: none;
 }
 
-#admin-dashboard .admin-sidebar .widget-heading {
+#admin-dashboard .admin-sidebar .widget-heading, #admin-actions .widget-heading {
     background: none;
 }
 
