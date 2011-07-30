@@ -6,30 +6,30 @@
 $(function () {
 
 // Change Descriptions - chart data
-  var d = [
+  var d = [[]
      {% for description in  widget_data.change_descriptions %}
-           [{{description.timestamp|date:"U"}}000, {{description.created_count}}],
+           ,[{{description.timestamp|date:"U"}}000, {{description.created_count}}]
      {% endfor %}
     ];
 
 // Comments - chart data
-  var d3 = [
+  var d3 = [[]
      {% for comment in  widget_data.comments %}
-           [{{comment.timestamp|date:"U"}}000, {{comment.created_count}}],
+           ,[{{comment.timestamp|date:"U"}}000, {{comment.created_count}}]
      {% endfor %}
     ];
 
 // Reviews - chart data
- var d4 = [
+ var d4 = [[]
     {% for review in  widget_data.reviews %}
-          [{{review.timestamp|date:"U"}}000, {{review.created_count}}],
+          ,[{{review.timestamp|date:"U"}}000, {{review.created_count}}]
     {% endfor %}
    ];
 
 // Reviews - chart data
- var d5 = [
+ var d5 = [[]
     {% for review_req in  widget_data.review_requests %}
-          [{{review_req.time_added|date:"U"}}000, {{review_req.created_count}}],
+          ,[{{review_req.time_added|date:"U"}}000, {{review_req.created_count}}]
     {% endfor %}
    ];
 

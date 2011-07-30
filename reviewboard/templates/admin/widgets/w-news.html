@@ -5,13 +5,16 @@
     {% trans "Loading..." %}
 </div>
 <script type="text/javascript">
-    $(function () {
-        //RSS Feed Controls
-        $("a.reload-news").click(function(evt) {
-            $(".news-content-widget").load("feed/news/?reload=1");
-            evt.preventDefault();
-        });
+$(function () {
+ //RSS Feed Controls
+ $("a.reload-news").click(function(evt) {
+  $(".news-content-widget").load("feed/news/?reload=1");
+  evt.preventDefault();
+ });
 
-        $(".news-content-widget").load("feed/news/");
-    });
+$(".news-content-widget").load("feed/news/",  function() {
+ $('.admin-extras').masonry( 'reload' );
+});
+
+});
 </script>

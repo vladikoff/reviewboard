@@ -436,7 +436,6 @@ div.breadcrumbs {
 }
 
 .module h2, .module caption, #content-related .module h2{
-  background: #5988bb;
   color: #000;
   background: url("../images/title_box_top_bg.png") repeat-x scroll left top #A2BEDC;
   border-bottom: 1px solid #728EAC;
@@ -464,7 +463,6 @@ td, th {
 .object-tools {
   margin: 0 0 10px 0;
 }
-
 
 /* Override the way links and wrapping work in modules. */
 .module.news table td {
