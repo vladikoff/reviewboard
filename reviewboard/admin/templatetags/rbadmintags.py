@@ -103,5 +103,5 @@ def admin_actions(context):
 def nav_active(request, pattern):
     if pattern in request.path:
         return 'nav-active'
-    
+
     return ''

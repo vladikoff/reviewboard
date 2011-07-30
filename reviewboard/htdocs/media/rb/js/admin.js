@@ -10,7 +10,7 @@ function refreshWidgets() {
 
 $(function () {
      refreshWidgets();
-    
+
     $(window).resize(function() {
         refreshWidgets();
     });
