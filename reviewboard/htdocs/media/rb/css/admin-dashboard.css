@@ -75,6 +75,7 @@
 
 .widget-small {
     width: 200px;
+    margin-left: 20px;
 }
 
 .widget-manage table {
@@ -314,7 +315,6 @@
 }
 
 .vpgt1229 .admin-extras .widget-small {
-    margin-left: 20px;
     float: left;
 }
 

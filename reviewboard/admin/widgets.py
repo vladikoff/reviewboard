@@ -68,7 +68,7 @@ def getRequestStatuses(request):
     return widget_data
 
 def getRepositories(request):
-    repositories = Repository.objects.accessible(request.user).order_by('-id')[:5]
+    repositories = Repository.objects.accessible(request.user).order_by('-id')[:3]
 
     widget_data = {
         'size': 'widget-large',
