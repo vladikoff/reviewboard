@@ -17,10 +17,17 @@
 
 {% endblock %}
 
-{% block pretitle %}{% endblock %}
+{% block pretitle %}
+      <!-- Action Bar -->
+      <div id="admin-actions" class="clear">
+      {% admin_actions %}
+      </div>
+     <!-- Action Bar End -->
 
+{% endblock %}
+{% block content_title %}{% endblock %}
 {% block content %}
-<div id="admin-dashboard" class="clear">
+<div id="admin-dashboard">
  <div class="dashboard-alert-wrap">
   <div class="dashboard-alert">
    <a href="#" class="close-alert"><img src="{{MEDIA_URL}}rb/images/delete.png?{{MEDIA_SERIAL}}"
@@ -33,11 +40,7 @@
 
  <div id="dashboard-view">
 
-     <!-- Action Bar -->
-     <div id="admin-actions" class="clear">
-         {% admin_actions %}
-     </div>
-     <!-- Action Bar End -->
+
      <!-- Widgets -->
      <div id="admin-widgets">
 

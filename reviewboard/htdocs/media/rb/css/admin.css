@@ -331,8 +331,13 @@ div.breadcrumbs {
   color: #EEEEEE;
 }
 
+#content.colM, .flex {
+   margin-left: 250px !important;
+}
+
 .dashboard .colMS {
   margin-right: 25em !important;
+  margin-left: 250px !important;
 }
 
 .dashboard #content-related {
