@@ -138,6 +138,14 @@ ul.actionlist li {
   font-family: monospace;
 }
 
+form {
+ clear: both;
+}
+
+form th  {
+ text-align: inherit;
+}
+
 
 /***************************************************************************
  * Django Admin overrides
@@ -187,7 +195,6 @@ thead th a:link, thead th a:visited {
   width: 100%;
   color: #000000;
   border-bottom: 1px solid #DDDDDD;
-  background: url("../images/admin/yellow_bg_small.png") repeat-x;
   margin: 0;
   padding:  5px 15px 5px 0;
 }
@@ -200,6 +207,7 @@ thead th a:link, thead th a:visited {
 #navbar ul, #navbar {
   overflow: hidden;
   padding: 0;
+  background: url("../images/admin/yellow_bg_small.png") repeat-x #F9F2C9;
 }
 
 #navbar ul {
@@ -227,7 +235,7 @@ thead th a:link, thead th a:visited {
 
 #navbar a:link,
 #navbar a:visited {
-  color: #0000AA;
+  color: #3B3B3B;
 }
 
 #navbar a.nav-active:visited,
@@ -284,7 +292,7 @@ div.breadcrumbs {
   background: none;
   border: none;
   padding: 5px 10px;
-  border-bottom: 1px solid #C6DCF3;
+  border-bottom: 1px solid #F5F5F5;
   margin: 0px 10px;
 }
 
@@ -320,11 +328,14 @@ div.breadcrumbs {
 }
 
 #content h1 {
-  color: #3465A4;
-  font-size: 13pt;
-  text-transform: capitalize;
-  font-weight: normal;
-  padding: 10px 0 10px 7px;
+ border-bottom: 1px solid #728EAC;
+ color: #000000;
+ cursor: pointer;
+ font-size: 11px;
+ font-weight: 400;
+ padding: 5px 10px 5px 5px;
+ text-transform: uppercase;
+ margin: 0 0 10px 0;
 }
 
 #branding h1 {
@@ -341,7 +352,7 @@ div.breadcrumbs {
 }
 
 .dashboard #content-related {
-  margin-right: -24.5em;
+  margin-right: -24em;
   width: 23em;
 }
 
@@ -355,7 +366,7 @@ div.breadcrumbs {
   height: 22px;
   float: right;
   text-align: center;
-  background: #F9F2C9 url("../images/admin/yellow_bg_small.png") repeat-x;
+  background: #C6DCF3;
   border-left: 1px solid #89867F;
   padding: 10px 10px 0 10px;
 }
@@ -426,7 +437,12 @@ div.breadcrumbs {
 
 .module h2, .module caption, #content-related .module h2{
   background: #5988bb;
-  color: #FFF;
+  color: #000;
+  background: url("../images/title_box_top_bg.png") repeat-x scroll left top #A2BEDC;
+  border-bottom: 1px solid #728EAC;
+  font-size: 120%;
+  margin: 0;
+  padding: 5px 10px 5px 5px;
 }
 
 .module {
@@ -443,6 +459,10 @@ td, th {
 
 .login #container {
   width: 30em!important;
+}
+
+.object-tools {
+  margin: 0 0 10px 0;
 }
 
 

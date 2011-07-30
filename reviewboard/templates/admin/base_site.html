@@ -30,7 +30,6 @@
   <ul>
    <li><a href="{% url reviewboard.admin.views.dashboard %}" class="nav-first">{% trans "Dashboard" %}</a></li>
    <li><a href="{% url reviewboard.admin.views.dashboard %}db/">{% trans "Database" %}</a></li>
-   <li>{% url site-settings as settingsurl %}<a href="{{settingsurl}}" class="{% nav_active request settingsurl %}">{% trans "Settings" %}</a></li>
   </ul>
   <div id="back-to-rb">
    <a href="{% url root %}">{% trans "Back to Review Board" %}</a>

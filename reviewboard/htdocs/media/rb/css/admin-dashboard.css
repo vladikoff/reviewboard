@@ -10,14 +10,14 @@
 #admin-actions {
     width: 200px;
     float: left;
-    border-right: 2px solid #E8E7E4;
+    border-right: 2px solid #f5f5f5;
     margin: 0 10px 0 -240px;
     padding: 0 20px 0 0;
 }
 
 #admin-widgets {
     float: left;
-    margin: 0 20px 0 10px;
+    margin: 0px;
 }
 
 .admin-extras-level-2 {
@@ -46,6 +46,7 @@
 
 .widget-sys-settings li a img {
     margin: 0 4px -3px 0;
+    display: none; /* TODO */
 }
 
 #dashboard-view .widget-content ul{
