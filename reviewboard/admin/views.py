@@ -2,18 +2,22 @@ import logging
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.sites.models import Site
 from django.core.cache import cache
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
+from djblets.siteconfig.models import SiteConfiguration
 from djblets.siteconfig.views import site_settings as djblets_site_settings
+
 
 from reviewboard.admin.checks import check_updates_required
 from reviewboard.admin.cache_stats import get_cache_stats, get_has_cache_stats
 from reviewboard.admin.forms import SSHSettingsForm
 from reviewboard.scmtools import sshutils
+import reviewboard.admin.siteconfig
 
 
 @staff_member_required
@@ -83,6 +87,11 @@ def ssh_settings(request, template_name='admin/ssh_settings.html'):
         'form': form,
     }))
 
+def dashboard_settings(request,template_name='admin/dashboard_settings.html'):
+
+    return render_to_response(template_name, RequestContext(request, {
+       'title': _('Admin Dashboard Settings') 
+    }))
 
 def manual_updates_required(request,
                             template_name="admin/manual_updates_required.html"):
@@ -97,3 +106,16 @@ def manual_updates_required(request,
                                      RequestContext(request, extra_context))
                     for (template_name, extra_context) in updates],
     }))
+
+def widget_toggle(request):
+    if request.GET.get('widget'):
+        state =  request.GET.get('collapse', '')
+        widget = request.GET.get('widget', '')
+        siteconfig = SiteConfiguration.objects.get(site=Site.objects.get_current())
+
+        widgetSets = siteconfig.get("widget_settings");
+        widgetSets[widget] = state
+        siteconfig.set("widget_settings", widgetSets)
+        siteconfig.save()
+
+    return HttpResponse("")

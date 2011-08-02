@@ -1,5 +1,5 @@
 from django import template
-from django.conf import settings
+from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.template.context import RequestContext
@@ -54,8 +54,18 @@ def admin_widget(context, widget_name, widget_title, widget_icon=""):
 
     widget_data = widget_list.get(widget_name)(request)
 
+    siteconfig = SiteConfiguration.objects.get(site=Site.objects.get_current())
+    widget_states = siteconfig.get("widget_settings")
+    widget_state = ""
+    if widget_states:
+        if widget_name in widget_states:
+            widget_state = widget_states[widget_name]
+        else:
+            widget_state = "0"
+
     return RequestContext(context['request'], {
        'widget_title': widget_title,
+       'widget_state': widget_state,
        'widget_name': widget_name,
        'widget_icon': widget_icon,
        'widget_size': widget_data['size'],

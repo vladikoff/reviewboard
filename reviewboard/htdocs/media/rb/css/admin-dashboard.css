@@ -1,6 +1,9 @@
 .clear {
     clear: both;
 }
+#dashboard-view {
+ -moz-opacity:.0; filter:alpha(opacity=0); opacity:.0;
+}
 
 #admin-dashboard {
     width: 100%;
@@ -52,6 +55,10 @@
 .widget-sys-settings li a img {
     margin: 0 4px -3px 0;
     display: none; /* TODO */
+}
+
+.widget-sys-settings a.active {
+  font-weight: bold;
 }
 
 #dashboard-view .widget-content ul{
@@ -160,7 +167,6 @@
 }
 
 #admin-dashboard .widget-heading, #admin-actions .widget-heading {
-    cursor: pointer;
     text-transform: uppercase;
     color: #000;
     font-size: 11px;
@@ -169,13 +175,17 @@
     border-bottom: 1px solid #728EAC;
     background-image: url("../images/title_box_top_bg.png");
     margin: 0;
-    padding: 5px 10px 5px 5px;
+    padding: 5px;
+}
+
+#dashboard-view .widget-heading {
+     cursor: pointer;
 }
 
 .widget-heading img {
-    float: right;
+    float: left;
     overflow: hidden;
-    margin-top: 2px;
+    margin: 1px 4px 0px 0px;
 }
 
 .widget-actions {
@@ -317,7 +327,6 @@
     float: left;
 }
 
-
 .widget-large-table{
     width: 100%;
 }
@@ -330,7 +339,17 @@
 -moz-opacity:1; filter:alpha(opacity=100); opacity:1;
 }
 
+.btn-state {
+ float: right;
+ background: url("../images/admin/wid-min.png") 0px 3px no-repeat;
 
+ width: 20px;
+ height: 13px;
+}
+
+.widget-hidden .btn-state {
+ background: url("../images/admin/wid-max.png") 0px 3px no-repeat;
+}
 
 #recent-actions li{
  padding: 2px 0px 0px 25px;

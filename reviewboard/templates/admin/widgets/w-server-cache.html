@@ -1,5 +1,6 @@
 {% load i18n %}
-{%  for hostname,stats in widget_data.cache_stats %}
+{% if widget_data.cache_stats %}
+ {%  for hostname,stats in widget_data.cache_stats %}
          <table class="widget-rows">
           <colgroup>
            <col width="48%" />
@@ -35,4 +36,7 @@
            <td>{{widget_data.uptime.value}} {{widget_data.uptime.unit}}</td>
           </tr>
          </table>
-{% endfor %}
+ {% endfor %}
+{% else %}
+ <p>Cache Server Offline</p>
+{% endif %}
