@@ -18,9 +18,11 @@
 {% endblock %}
 
 {% block pretitle %}
- <div id="admin-actions" class="clear">
-      {% admin_actions %}
-  </div>
+ {% if user.is_authenticated %}
+    <div id="admin-actions" class="clear">
+        {% admin_actions %}
+    </div>
+ {% endif %}
 {% endblock %}
 
 {% block nav-global %}

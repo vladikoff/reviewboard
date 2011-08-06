@@ -463,6 +463,20 @@ td, th {
   margin: 0 0 10px 0;
 }
 
+ul.messagelist {
+    margin: 12px;
+    padding: 5px 0;
+}
+
+.popup #content.colM, .popup .flex, .login #content.colM {
+ margin-left: 20px!important;
+}
+
+.login #rbinfo {
+ text-align: center;
+ padding-left: 0px;
+}
+
 /* Override the way links and wrapping work in modules. */
 .module.news table td {
   white-space: normal !important;

@@ -112,7 +112,10 @@ def widget_toggle(request):
         widget = request.GET.get('widget', '')
         siteconfig = SiteConfiguration.objects.get(site=Site.objects.get_current())
 
-        widgetSets = siteconfig.get("widget_settings");
+        widgetSets = siteconfig.get("widget_settings")
+        if not widgetSets:
+            widgetSets = {}
+            
         widgetSets[widget] = state
         siteconfig.set("widget_settings", widgetSets)
         siteconfig.save()

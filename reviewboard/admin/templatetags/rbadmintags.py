@@ -80,34 +80,41 @@ def admin_actions(context):
     """ Admin Sidebar with configuration links and setting indicators """
     current_site_config = SiteConfiguration.objects.get_current()
     request = context.get('request')
-
-    site_configs = {
-    'read_only': \
-        current_site_config.get('auth_anonymous_access'),
-    'syntax_highlighting': \
-        current_site_config.get('diffviewer_syntax_highlighting'),
-    'logging_enabled': \
-        current_site_config.get('logging_enabled'),
-    'logging_directory': \
-        current_site_config.get('logging_directory'),
-    'logging_allow_profiling': \
-        current_site_config.get('logging_allow_profiling'),
-    'mail_use_tls': \
-        current_site_config.get('mail_use_tls'),
-    'mail_send_review_mail': \
-        current_site_config.get('mail_send_review_mail'),
-    'search_enable': current_site_config.get('search_enable')
-    }
-    return RequestContext(context['request'], {
-        'request': request,
-        'count_users': User.objects.count(),
-        'count_review_groups': Group.objects.count(),
-        'count_default_reviewers': DefaultReviewer.objects.count(),
-        'count_repository': Repository.objects.accessible(request.user).count(),
-        'has_cache_stats': get_has_cache_stats(),
-        'site_configs': site_configs,
-        'version': reviewboard.get_version_string()
-    })
+    print request
+    if not request.REQUEST.has_key('_popup') \
+    or not request.REQUEST.has_key('pop'):
+        site_configs = {
+        'read_only': \
+            current_site_config.get('auth_anonymous_access'),
+        'syntax_highlighting': \
+            current_site_config.get('diffviewer_syntax_highlighting'),
+        'logging_enabled': \
+            current_site_config.get('logging_enabled'),
+        'logging_directory': \
+            current_site_config.get('logging_directory'),
+        'logging_allow_profiling': \
+            current_site_config.get('logging_allow_profiling'),
+        'mail_use_tls': \
+            current_site_config.get('mail_use_tls'),
+        'mail_send_review_mail': \
+            current_site_config.get('mail_send_review_mail'),
+        'search_enable': current_site_config.get('search_enable')
+        }
+        return RequestContext(context['request'], {
+            'request': request,
+            'show_sidebar': True,
+            'count_users': User.objects.count(),
+            'count_review_groups': Group.objects.count(),
+            'count_default_reviewers': DefaultReviewer.objects.count(),
+            'count_repository': Repository.objects.accessible(request.user).count(),
+            'has_cache_stats': get_has_cache_stats(),
+            'site_configs': site_configs,
+            'version': reviewboard.get_version_string()
+        })
+    else:
+        return RequestContext(context['request'], {
+            'show_sidebar': False
+        })
 
 @register.simple_tag
 def nav_active(request, pattern):

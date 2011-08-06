@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load log %}
 
-
+{% if show_sidebar %}
 <div class="admin-widget admin-sidebar">
 <h1 class="widget-heading">{% trans "System Settings" %}</h1>
 <div class="widget-content widget-sys-settings">
@@ -88,3 +88,4 @@
     </ul>
     </div>
 </div>
+{% endif %}
