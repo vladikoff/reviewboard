@@ -28,10 +28,6 @@
  float: left;
 }
 
-.admin-extras-level-2 {
-    margin-left: 20px;
-}
-
 .admin-extras .widget-actions a {
     border-right: none;
     border-left: 1px solid #CCC;
@@ -45,6 +41,24 @@
 
 .widget-content p {
     padding: 10px;
+}
+
+.widget-content .no-result {
+ text-transform: capitalize;
+ border:4px dashed #CCC;
+ color: #CCC;
+ margin: 15px;
+ line-height: 1.9em;
+ padding: 15px;
+ text-align: center;
+ font-weight: bold;
+ font-size: 14px;
+}
+
+.admin-extras .widget-content .no-result {
+ font-size: 13px;
+ margin: 0px;
+ border: none;
 }
 
 .widget-content th {
@@ -355,6 +369,13 @@
  padding: 2px 0px 0px 25px;
 }
 
+#recent-actions li span {
+ display: block;
+ clear: both;
+}
+
 #recent-actions li {
  background-position: 7px 11px;
 }
+
+

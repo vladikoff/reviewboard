@@ -9,6 +9,5 @@
        {% endfor %}
 </table>
 {% else %}
-<p> {% trans "No Groups Available. Add Some!" %}</p>
- <!-- TODO Style This Section -->
+<p class="no-result"> {% trans "No Groups Available." %}<br/><a href="db/reviews/group/add/"> Add +</a></p>
 {% endif %}

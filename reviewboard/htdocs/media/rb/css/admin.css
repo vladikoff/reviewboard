@@ -138,7 +138,7 @@ ul.actionlist li {
   font-family: monospace;
 }
 
-form {
+#content-main form {
  clear: both;
 }
 
@@ -161,6 +161,10 @@ thead th, tfoot td {
   border-right: 1px solid #CCCCCC;
   border-top: 1px solid #999999;
   border-left: 0 !important;
+}
+
+.module table tr {
+ border-bottom: 1px solid #F5F5F5;
 }
 
 thead th a:link, thead th a:visited {

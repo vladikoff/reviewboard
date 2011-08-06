@@ -1,4 +1,5 @@
 {% load i18n %}
+{% if widget_data.total > 1 %}
 <script type="text/javascript">
 
     $(function () {
@@ -30,7 +31,10 @@
     });
 </script>
 
-<div id="user-chart" style="width: 450px; height: 160px;"></div>
- <div id="user-count">
-{% trans "Total Users" %}: <strong>{{widget_data.total}}</strong>
- </div>
+ <div id="user-chart" style="width: 450px; height: 160px;"></div>
+  <div id="user-count">
+ {% trans "Total Users" %}: <strong>{{widget_data.total}}</strong>
+  </div>
+{% else %}
+ <p class="no-result">{% trans "You're the only one who logged in so far..." %}<br/><a href="db/auth/user/add/">{% trans "Add Users +" %}</a></p>
+{% endif %}

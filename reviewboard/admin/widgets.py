@@ -39,8 +39,8 @@ def getUserActivityWidget(request):
         return activity_list
 
     widget_actions = [
-            ('admin/db/auth/user/add/',_("Add New")),
-            ('admin/db/auth/user/',_("Manage Users"),'btn-right')
+            ('db/auth/user/add/',_("Add New")),
+            ('db/auth/user/',_("Manage Users"),'btn-right')
     ]
 
     key = "widget-activity-list-"+ str(date.today())
@@ -91,7 +91,7 @@ def getRepositories(request):
         'size': 'widget-large',
         'template': 'admin/widgets/w-repositories.html',
         'actions': [
-            ('db/scmtools/repository/add/',_("Add New")),
+            ('db/scmtools/repository/add/',_("Add")),
             ('db/scmtools/repository/', _("View All"),'btn-right')
         ],
         'data': cache_memoize(key, repoData)
