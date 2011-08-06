@@ -4,37 +4,45 @@
 
  <script>
 $(function () {
+{% spaceless %}
+ var days = [[],
+ {% for day in widget_data.date_period %}
+  ,[{{day|date:"U"}}000, 1]
+ {% endfor %}
+ ];
 
-// Change Descriptions - chart data
-  var d = [[]
-     {% for description in  widget_data.change_descriptions %}
-           ,[{{description.timestamp|date:"U"}}000, {{description.created_count}}]
+ // Change Descriptions - chart data
+   var d = [[]
+      {% for description in widget_data.change_descriptions %}
+            ,[{{description.timestamp|date:"U"}}000, {{description.created_count}}]
+      {% endfor %}
+     ];
+
+ // Comments - chart data
+   var d3 = [[]
+      {% for comment in widget_data.comments %}
+            ,[{{comment.timestamp|date:"U"}}000, {{comment.created_count}}]
+      {% endfor %}
+     ];
+
+ // Reviews - chart data
+  var d4 = [[]
+     {% for review in widget_data.reviews %}
+           ,[{{review.timestamp|date:"U"}}000, {{review.created_count}}]
      {% endfor %}
     ];
 
-// Comments - chart data
-  var d3 = [[]
-     {% for comment in  widget_data.comments %}
-           ,[{{comment.timestamp|date:"U"}}000, {{comment.created_count}}]
+ // Reviews - chart data
+  var d5 = [[]
+     {% for review_req in widget_data.review_requests %}
+           ,[{{review_req.time_added|date:"U"}}000, {{review_req.created_count}}]
      {% endfor %}
     ];
-
-// Reviews - chart data
- var d4 = [[]
-    {% for review in  widget_data.reviews %}
-          ,[{{review.timestamp|date:"U"}}000, {{review.created_count}}]
-    {% endfor %}
-   ];
-
-// Reviews - chart data
- var d5 = [[]
-    {% for review_req in  widget_data.review_requests %}
-          ,[{{review_req.time_added|date:"U"}}000, {{review_req.created_count}}]
-    {% endfor %}
-   ];
-
-
+{% endspaceless %}
  var datasets = {
+  "date_period": {
+   label: "30 Days", data: days
+  },
   "set-descriptions": {
    label: "Change Descriptions",  data: d,  bars: { show: true }, lines: {show: false}
   },
@@ -84,7 +92,7 @@ $(function () {
     }
 
     var options = {
-        xaxis: { mode: "time", tickLength: 1},
+        xaxis: { mode: "time", tickLength: 1,  min: (new Date({{widget_data.end_date|date:"Y,n-1,d" }})).getTime(),   max: (new Date({{widget_data.start_date|date:"Y,n-1,d" }})).getTime()},
         yaxis : { min: 0 , tickDecimals: 0},
         grid: { markings: weekendAreas, hoverable: true },
         series: { points: { show: true, radius: 3 },   lines: { show: true }},

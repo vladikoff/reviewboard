@@ -204,8 +204,19 @@ def getLargeStats(request):
 
     def largeStatsData():
 
-        
 
+        # 30 days of activity
+
+        day_counter = 0
+        days_total = 30
+        date_today = date.today()
+        date_past = date_today - timedelta(days=days_total)
+        dates_in_days  = []
+
+        while day_counter < days_total:
+            counter_date = date_past + timedelta(days=day_counter)
+            dates_in_days.append(counter_date)
+            day_counter += 1
 
         #Change Descriptions
         change_desc = ChangeDescription.objects
@@ -259,7 +270,10 @@ def getLargeStats(request):
             'change_descriptions': change_desc_unique,
             'comments': comments_per_day,
             'reviews': reviews_per_day,
-            'review_requests': rr_req_per_day
+            'review_requests': rr_req_per_day,
+            'date_period': dates_in_days,
+            'start_date': date_today,
+            'end_date': date_past
         }
 
         return stat_data
