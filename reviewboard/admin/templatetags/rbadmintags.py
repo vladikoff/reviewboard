@@ -80,7 +80,7 @@ def admin_actions(context):
     """ Admin Sidebar with configuration links and setting indicators """
     current_site_config = SiteConfiguration.objects.get_current()
     request = context.get('request')
-    
+
     if not request.REQUEST.has_key('_popup') \
     or not request.REQUEST.has_key('pop'):
         site_configs = {

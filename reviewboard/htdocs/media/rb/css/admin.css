@@ -481,6 +481,16 @@ ul.messagelist {
  padding-left: 0px;
 }
 
+#recent-actions-module ul {
+ padding: 0px;
+}
+
+#recent-actions-module li {
+ padding: 5px 20px 5px 40px;
+ border-bottom: 1px solid #F5F5F5;
+ background-position: 15px 15px;
+}
+
 /* Override the way links and wrapping work in modules. */
 .module.news table td {
   white-space: normal !important;

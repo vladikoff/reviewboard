@@ -1,10 +1,20 @@
-from reviewboard.reviews.models import ReviewRequest, Group
-from django.db.models.signals import post_save
+from datetime import date
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+from django.core.cache import cache
 
+"""
+    These signals listen to database changes
+    and clear the cache to keep the admin dashboard up to date.
+"""
 
-@receiver(post_save, sender=Group)
-def my_handler(sender, **kwargs):
-    print "I'm alive!"
+def deleteWidgetCache():
+    cache.clear()
 
+@receiver(post_save)
+def my_handler(sender,**kwargs):
+    deleteWidgetCache()
 
+@receiver(post_delete)
+def my_handler(sender,**kwargs):
+    deleteWidgetCache()

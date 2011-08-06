@@ -89,7 +89,7 @@ def ssh_settings(request, template_name='admin/ssh_settings.html'):
 def dashboard_settings(request,template_name='admin/dashboard_settings.html'):
 
     return render_to_response(template_name, RequestContext(request, {
-       'title': _('Admin Dashboard Settings') 
+       'title': _('Admin Dashboard Settings')
     }))
 
 def manual_updates_required(request,
@@ -115,7 +115,7 @@ def widget_toggle(request):
         widgetSets = siteconfig.get("widget_settings")
         if not widgetSets:
             widgetSets = {}
-            
+
         widgetSets[widget] = state
         siteconfig.set("widget_settings", widgetSets)
         siteconfig.save()

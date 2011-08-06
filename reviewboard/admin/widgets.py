@@ -203,6 +203,10 @@ def getLargeStats(request):
     """ Stats Large """
 
     def largeStatsData():
+
+        
+
+
         #Change Descriptions
         change_desc = ChangeDescription.objects
         change_desc_unique = \
@@ -266,6 +270,8 @@ def getLargeStats(request):
         'size': 'widget-large',
         'template': 'admin/widgets/w-stats-large.html',
         'actions':  [
+            ('#',_('<'),'','set-prev'),
+            ('#',_('>'),'','set-next'),
             ('#',_('Reviews'),'btn-s btn-s-checked','set-reviews'),
             ('#',_('Comments'),'btn-s btn-s-checked','set-comments'),
             ('#',_('Review Requests'),'btn-s btn-s-checked','set-requests'),
