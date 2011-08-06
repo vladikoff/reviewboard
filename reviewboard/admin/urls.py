@@ -28,7 +28,7 @@
 from django.conf.urls.defaults import include, patterns, url
 from django.contrib import admin
 
-from reviewboard.admin import forms
+from reviewboard.admin import forms, signals
 
 
 NEWS_FEED = "http://www.reviewboard.org/news/feed/"
