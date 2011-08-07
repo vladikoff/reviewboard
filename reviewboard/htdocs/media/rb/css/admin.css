@@ -463,6 +463,10 @@ td, th {
   width: 30em!important;
 }
 
+.login #title span {
+ display: block;
+}
+
 .object-tools {
   margin: 0 0 10px 0;
 }

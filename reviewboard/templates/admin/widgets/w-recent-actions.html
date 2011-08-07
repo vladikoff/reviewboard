@@ -4,7 +4,7 @@
 
 {% get_admin_log 5 as admin_log for_user user %}
 {% if not admin_log %}
-  <p>{% trans "None available" %}</p>
+  <p class="no-result">{% trans "None available" %}</p>
 {% else %}
   <ul class="actionlist">
 {%  for entry in admin_log %}

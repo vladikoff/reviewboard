@@ -217,7 +217,9 @@ def dynamicActivityData(request):
     elif direction == "prev":
         new_range_start = range_start - datetime.timedelta(days=days_total)
         new_range_end = range_start
-
+    elif direction == "same":
+        new_range_start = range_start
+        new_range_end = range_end
     else:
         # 30 days of activity
         new_range_end = datetime.date.today()
@@ -230,11 +232,11 @@ def dynamicActivityData(request):
 
 
 
-    def largeStatsData(direction):
+    def largeStatsData(range_start, range_end):
 
         #Change Descriptions
         change_desc_unique = \
-            ChangeDescription.objects.extra({'timestamp' : "date(timestamp)"})\
+            ChangeDescription.objects.filter(timestamp__range=(range_start, range_end)).extra({'timestamp' : "date(timestamp)"})\
             .values('timestamp').annotate(created_count=Count('id')).order_by('timestamp')
         change_desc_array = []
         # need a test for this strptime for Python < 2.5 more at
@@ -246,10 +248,9 @@ def dynamicActivityData(request):
             change_desc_array[idx].append(unique_desc['created_count'])
             idx += 1
 
-
         #Comments
         comments_unique = \
-            Comment.objects.extra({'timestamp' : "date(timestamp)"})\
+            Comment.objects.filter(timestamp__range=(range_start, range_end)).extra({'timestamp' : "date(timestamp)"})\
             .values('timestamp').annotate(created_count=Count('id')).order_by('timestamp')
         comment_array = []
         idx = 0
@@ -260,10 +261,10 @@ def dynamicActivityData(request):
             comment_array[idx].append(time.mktime(time.strptime(unique_comment['timestamp'], "%Y-%m-%d")) * 1000)
             comment_array[idx].append(unique_comment['created_count'])
             idx += 1
-            
+
         #Reviews
         reviews_unique = \
-            Review.objects.extra({'timestamp' : "date(timestamp)"})\
+            Review.objects.filter(timestamp__range=(range_start, range_end)).extra({'timestamp' : "date(timestamp)"})\
             .values('timestamp').annotate(created_count=Count('id')).order_by('timestamp')
         review_array = []
         idx = 0
@@ -275,17 +276,30 @@ def dynamicActivityData(request):
             review_array[idx].append(unique_review['created_count'])
             idx += 1
 
+        #Review Requests
+        rr_unique = \
+            ReviewRequest.objects.filter(time_added__range=(range_start, range_end)).extra({'time_added' : "date(time_added)"})\
+            .values('time_added').annotate(created_count=Count('id')).order_by('time_added')
+        rr_array = []
+        idx = 0
+        for unique_rr  in rr_unique:
+            rr_array.append([])
+            rr_array[idx].append(time.mktime(time.strptime(unique_rr['time_added'], "%Y-%m-%d")) * 1000)
+            rr_array[idx].append(unique_rr['created_count'])
+            idx += 1
+
+
         # getting all widget_data together
         stat_data = {
-            'change_descriptions': (change_desc_array),
-            'comments': (comment_array),
-            'reviews': (review_array),
-            #'review_requests': list(review_request_array)
+            'change_descriptions': change_desc_array,
+            'comments': comment_array,
+            'reviews': review_array,
+            'review_requests': rr_array
         }
 
         return stat_data
 
-    activity_data = largeStatsData(direction)
+    activity_data = largeStatsData(new_range_start, new_range_end)
 
     activity_data = {
         "range":response_data,
