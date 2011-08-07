@@ -204,11 +204,11 @@ def dynamicActivityData(request):
     direction = request.GET.get('direction')
     range_end = request.GET.get('range_end')
     range_start = request.GET.get('range_start')
-    days_total = 60
-    
+    days_total = 30
+
     if range_end and range_start:
-            range_end = datetime.date.fromtimestamp(float(request.GET.get('range_end')))
-            range_start = datetime.date.fromtimestamp(float(request.GET.get('range_start')))
+        range_end = datetime.datetime.strptime(request.GET.get('range_end'), "%Y-%m-%d")
+        range_start = datetime.datetime.strptime(request.GET.get('range_start'), "%Y-%m-%d")
 
     if direction == "next":
         new_range_start = range_end
@@ -239,10 +239,12 @@ def dynamicActivityData(request):
         change_desc_array = []
         # need a test for this strptime for Python < 2.5 more at
         # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
+        idx = 0
         for unique_desc  in change_desc_unique:
             change_desc_array.append([])
-            change_desc_array[0].append( time.mktime(time.strptime(unique_desc['timestamp'], "%Y-%m-%d")) * 1000)
-            change_desc_array[0].append(unique_desc['created_count'])
+            change_desc_array[idx].append(time.mktime(time.strptime(unique_desc['timestamp'], "%Y-%m-%d")) * 1000)
+            change_desc_array[idx].append(unique_desc['created_count'])
+            idx += 1
 
 
         #Comments
@@ -250,30 +252,34 @@ def dynamicActivityData(request):
             Comment.objects.extra({'timestamp' : "date(timestamp)"})\
             .values('timestamp').annotate(created_count=Count('id')).order_by('timestamp')
         comment_array = []
+        idx = 0
         # need a test for this strptime for Python < 2.5 more at
         # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
         for unique_comment  in comments_unique:
             comment_array.append([])
-            comment_array[0].append(time.mktime(time.strptime(unique_comment['timestamp'], "%Y-%m-%d")) * 1000)
-            comment_array[0].append(unique_comment['created_count'])
-
+            comment_array[idx].append(time.mktime(time.strptime(unique_comment['timestamp'], "%Y-%m-%d")) * 1000)
+            comment_array[idx].append(unique_comment['created_count'])
+            idx += 1
+            
         #Reviews
         reviews_unique = \
             Review.objects.extra({'timestamp' : "date(timestamp)"})\
             .values('timestamp').annotate(created_count=Count('id')).order_by('timestamp')
         review_array = []
+        idx = 0
         # need a test for this strptime for Python < 2.5 more at
         # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
         for unique_review  in reviews_unique:
             review_array.append([])
-            review_array[0].append(time.mktime(time.strptime(unique_review['timestamp'], "%Y-%m-%d")) * 1000)
-            review_array[0].append(unique_review['created_count'])
+            review_array[idx].append(time.mktime(time.strptime(unique_review['timestamp'], "%Y-%m-%d")) * 1000)
+            review_array[idx].append(unique_review['created_count'])
+            idx += 1
 
         # getting all widget_data together
         stat_data = {
-            'change_descriptions': list(change_desc_array),
-            'comments': list(comment_array),
-            'reviews': list(review_array),
+            'change_descriptions': (change_desc_array),
+            'comments': (comment_array),
+            'reviews': (review_array),
             #'review_requests': list(review_request_array)
         }
 

@@ -129,6 +129,6 @@ def widget_toggle(request):
 def widget_activity(request):
 
     activity_data = dynamicActivityData(request)
-    
+
     return HttpResponse(
         simplejson.dumps(activity_data), mimetype="application/json")

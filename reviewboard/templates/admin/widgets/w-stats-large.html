@@ -1,8 +1,8 @@
 {% load i18n %}
 
 <div id="placeholder-stats" style="width: 450px; height: 250px;"></div>
- <input type="hidden" value="{{widget_data.end_date|date:"U" }}" id="data-activity-start" />
- <input type="hidden" value="{{widget_data.start_date|date:"U" }}" id="data-activity-end" />
+ <input type="hidden" value="" id="data-activity-start" />
+ <input type="hidden" value="" id="data-activity-end" />
 
  <script>
 $(function () {
@@ -33,6 +33,7 @@ $(function () {
 
 
     function plotAccordingToChoices(datasets,options) {
+     console.log(datasets);
         var data = [];
         if ($(this).hasClass('btn-s-checked')) {
          $(this).removeClass('btn-s-checked');
@@ -88,68 +89,69 @@ $(function () {
 
         });
 */
-    function getActivityData(direction) {
+ function getActivityData(direction) {
 
-      var input_range_start = $("#data-activity-start").val(),
-      input_range_end = $("#data-activity-end").val();
+  var input_range_start = $("#data-activity-start").val(),
+          input_range_end = $("#data-activity-end").val();
 
-      $.getJSON("widget-activity/?range_start=" + input_range_start + "&range_end=" + input_range_end + "&direction=" + direction, function(data) {
+  $.getJSON("widget-activity/?range_start=" + input_range_start + "&range_end=" + input_range_end + "&direction=" + direction, function(data) {
 
-           var start_array = new Array();
-           start_array = (data.range.range_start).split('-');
-           var end_array = new Array();
-           end_array = (data.range.range_end).split('-');
-           min_date = new Date(start_array[0], start_array[1]-1, start_array[2]).getTime();
-           max_date = new Date(end_array[0], end_array[1]-1, end_array[2]).getTime();
+   var start_array = new Array();
+   start_array = (data.range.range_start).split('-');
+   var end_array = new Array();
+   end_array = (data.range.range_end).split('-');
+   min_date = new Date(start_array[0], start_array[1] - 1, start_array[2]).getTime();
+   max_date = new Date(end_array[0], end_array[1] - 1, end_array[2]).getTime();
 
-           d = data.activity_data.change_descriptions;
-           d2 = data.activity_data.comments
-           d3 = data.activity_data.review_requests
-           d4 = data.activity_data.reviews
+   d = data.activity_data.change_descriptions;
+   d2 = data.activity_data.comments
+   d3 = data.activity_data.review_requests
+   d4 = data.activity_data.reviews
 
-             var options = {
-            xaxis: { mode: "time", tickLength: 1,  min: (new Date(min_date)).getTime(),   max: (new Date(max_date)).getTime()},
-            yaxis : { min: 0 , tickDecimals: 0},
-            grid: { markings: weekendAreas, hoverable: true },
-            series: { points: { show: true, radius: 3 },   lines: { show: true }},
-            legend: { position: 'nw' }
-           };
+    $("#data-activity-start").val(data.range.range_start),
+    $("#data-activity-end").val(data.range.range_end);
 
-             var datasets = {
-              "set-descriptions": {
-               label: "Change Descriptions",  data: d,  bars: { show: true }, lines: {show: false}
-              },
-              "set-comments": {
-               label: "Comments",  data: d2 ,  bars: { show: true }, lines: {show: false}
-              },
-              "set-reviews": {
-               label: "Reviews",  data: d3,  bars: { show: true }, lines: {show: false}
-              },
-              "set-requests": {
-               label: "Review Requests",  data: d4,  bars: { show: true }, lines: {show: false}
-              }
-              }
+   var options = {
+    xaxis: { mode: "time", tickLength: 1,  min: (new Date(min_date)).getTime(),   max: (new Date(max_date)).getTime()},
+    yaxis : { min: 0 , tickDecimals: 0},
+    grid: { markings: weekendAreas, hoverable: true },
+    series: { points: { show: true, radius: 3 },   lines: { show: true }},
+    legend: { position: 'nw' }
+   };
 
-               // hard-code color indices to prevent them from shifting as
-               // datasets are turned on/off
-               var i = 0;
-               $.each(datasets, function(key, val) {
-                   val.color = i;
-                   ++i;
-               });
-
-
-              choiceContainer.find(".btn-s").click(plotAccordingToChoices(datasets,options));
-              plotAccordingToChoices(datasets,options);
-
-
-
-
-          }
-      );
-
- 
+   var datasets = {
+    "set-descriptions": {
+     label: "Change Descriptions",  data: d,  bars: { show: true }, lines: {show: false}
+    },
+    "set-comments": {
+     label: "Comments",  data: d2 ,  bars: { show: true }, lines: {show: false}
+    },
+    "set-reviews": {
+     label: "Reviews",  data: d3,  bars: { show: true }, lines: {show: false}
+    },
+    "set-requests": {
+     label: "Review Requests",  data: d4,  bars: { show: true }, lines: {show: false}
     }
+   }
+
+   // hard-code color indices to prevent them from shifting as
+   // datasets are turned on/off
+   var i = 0;
+   $.each(datasets, function(key, val) {
+    val.color = i;
+    ++i;
+   });
+
+
+   choiceContainer.find(".btn-s").click(plotAccordingToChoices(datasets, options));
+   plotAccordingToChoices(datasets, options);
+
+
+  }
+  );
+
+
+ }
 
 
 
