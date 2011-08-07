@@ -1,5 +1,5 @@
 {% load i18n %}
-{% if widget_data.change_descriptions %}
+
 <div id="placeholder-stats" style="width: 450px; height: 250px;"></div>
  <input type="hidden" value="{{widget_data.end_date|date:"U" }}" id="data-activity-start" />
  <input type="hidden" value="{{widget_data.start_date|date:"U" }}" id="data-activity-end" />
@@ -7,62 +7,7 @@
  <script>
 $(function () {
 
- // Change Descriptions - chart data
-   var d = [[]
-      {% for description in widget_data.change_descriptions %}
-            ,[{{description.timestamp|date:"U"}}000, {{description.created_count}}]
-      {% endfor %}
-     ];
-
- // Comments - chart data
-   var d3 = [[]
-      {% for comment in widget_data.comments %}
-            ,[{{comment.timestamp|date:"U"}}000, {{comment.created_count}}]
-      {% endfor %}
-     ];
-
- // Reviews - chart data
-  var d4 = [[]
-     {% for review in widget_data.reviews %}
-           ,[{{review.timestamp|date:"U"}}000, {{review.created_count}}]
-     {% endfor %}
-    ];
-
- // Reviews - chart data
-  var d5 = [[]
-     {% for review_req in widget_data.review_requests %}
-           ,[{{review_req.time_added|date:"U"}}000, {{review_req.created_count}}]
-     {% endfor %}
-    ];
-
- var datasets = {
-  "set-descriptions": {
-   label: "Change Descriptions",  data: d,  bars: { show: true }, lines: {show: false}
-  },
-  "set-comments": {
-   label: "Comments",  data: d3 ,  bars: { show: true }, lines: {show: false}
-  },
-  "set-reviews": {
-   label: "Reviews",  data: d4,  bars: { show: true }, lines: {show: false}
-  },
-  "set-requests": {
-   label: "Review Requests",  data: d5,  bars: { show: true }, lines: {show: false}
-  }
-  }
-
-   // hard-code color indices to prevent them from shifting as
-   // datasets are turned on/off
-   var i = 0;
-   $.each(datasets, function(key, val) {
-       val.color = i;
-       ++i;
-   });
-
-    // first correct the timestamps - they are recorded as the daily
-    // midnights in UTC+0100, but Flot always displays dates in UTC
-    // so we have to add one hour to hit the midnights in the plot
-    for (var i = 0; i < d.length; ++i)
-      d[i][0] += 60 * 60 * 1000;
+    var choiceContainer = $("#stats-large");
 
     // helper for returning the weekends in a period
     function weekendAreas(axes) {
@@ -84,18 +29,10 @@ $(function () {
         return markings;
     }
 
-    var options = {
-        xaxis: { mode: "time", tickLength: 1,  min: (new Date({{widget_data.end_date|date:"Y,n-1,d" }})).getTime(),   max: (new Date({{widget_data.start_date|date:"Y,n-1,d" }})).getTime()},
-        yaxis : { min: 0 , tickDecimals: 0},
-        grid: { markings: weekendAreas, hoverable: true },
-        series: { points: { show: true, radius: 3 },   lines: { show: true }},
-        legend: { position: 'nw' }
-    };
 
-    var choiceContainer = $("#stats-large");
-    choiceContainer.find(".btn-s").click(plotAccordingToChoices);
 
-    function plotAccordingToChoices() {
+
+    function plotAccordingToChoices(datasets,options) {
         var data = [];
         if ($(this).hasClass('btn-s-checked')) {
          $(this).removeClass('btn-s-checked');
@@ -111,7 +48,7 @@ $(function () {
             $.plot($("#placeholder-stats"), data, options);
       return false;
     }
-
+/*
      function showTooltip(x, y, contents) {
            $('<div id="tooltip">' + contents + '</div>').css( {
                position: 'absolute',
@@ -124,7 +61,8 @@ $(function () {
                opacity: 0.80
            }).appendTo("body").fadeIn(200);
        }
-
+ */
+/*
     var previousPoint = null;
         $("#placeholder-stats").bind("plothover", function (event, pos, item) {
             $("#x").text(pos.x.toFixed(2));
@@ -149,32 +87,74 @@ $(function () {
             }
 
         });
-
+*/
     function getActivityData(direction) {
+
       var input_range_start = $("#data-activity-start").val(),
       input_range_end = $("#data-activity-end").val();
 
       $.getJSON("widget-activity/?range_start=" + input_range_start + "&range_end=" + input_range_end + "&direction=" + direction, function(data) {
 
            var start_array = new Array();
-           start_array = (data.range_start).split('-');
+           start_array = (data.range.range_start).split('-');
            var end_array = new Array();
-           end_array = (data.range_end).split('-');
-           min_date = new Date(start_array[0], start_array[1], start_array[2]).getTime();
-           max_date = new Date(end_array[0], end_array[1], end_array[2]).getTime();
-           $.plot($("#placeholder-stats"), [datasets], {
-                xaxis: {
-                    mode: "time",
-                    minTickSize: [1, "month"],
-                    min: (min_date),
-                    max: (max_date)
-                }
-            });
+           end_array = (data.range.range_end).split('-');
+           min_date = new Date(start_array[0], start_array[1]-1, start_array[2]).getTime();
+           max_date = new Date(end_array[0], end_array[1]-1, end_array[2]).getTime();
+
+           d = data.activity_data.change_descriptions;
+           d2 = data.activity_data.comments
+           d3 = data.activity_data.review_requests
+           d4 = data.activity_data.reviews
+
+             var options = {
+            xaxis: { mode: "time", tickLength: 1,  min: (new Date(min_date)).getTime(),   max: (new Date(max_date)).getTime()},
+            yaxis : { min: 0 , tickDecimals: 0},
+            grid: { markings: weekendAreas, hoverable: true },
+            series: { points: { show: true, radius: 3 },   lines: { show: true }},
+            legend: { position: 'nw' }
+           };
+
+             var datasets = {
+              "set-descriptions": {
+               label: "Change Descriptions",  data: d,  bars: { show: true }, lines: {show: false}
+              },
+              "set-comments": {
+               label: "Comments",  data: d2 ,  bars: { show: true }, lines: {show: false}
+              },
+              "set-reviews": {
+               label: "Reviews",  data: d3,  bars: { show: true }, lines: {show: false}
+              },
+              "set-requests": {
+               label: "Review Requests",  data: d4,  bars: { show: true }, lines: {show: false}
+              }
+              }
+
+               // hard-code color indices to prevent them from shifting as
+               // datasets are turned on/off
+               var i = 0;
+               $.each(datasets, function(key, val) {
+                   val.color = i;
+                   ++i;
+               });
+
+
+              choiceContainer.find(".btn-s").click(plotAccordingToChoices(datasets,options));
+              plotAccordingToChoices(datasets,options);
+
+
+
+
           }
       );
 
  
     }
+
+
+
+
+
 
     $("#set-next").click(function () {
       getActivityData("next");
@@ -186,13 +166,7 @@ $(function () {
       return false
     });
 
-
-    plotAccordingToChoices();
-
-
+     getActivityData("none");
 
 });
 </script>
-{% else %}
-<p class="no-result"> {% trans "No Data available at this time..." %}</p>
-{% endif %}

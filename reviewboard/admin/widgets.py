@@ -1,4 +1,5 @@
-from datetime import date, timedelta, datetime
+from array import array
+import time, datetime
 
 from django.contrib.auth.models import User
 from django.db.models.aggregates import Count
@@ -19,20 +20,20 @@ def getUserActivityWidget(request):
     """
 
     def activityData():
-        now = date.today()
+        now = datetime.date.today()
         users = User.objects
 
         activity_list = {
             'now': users.filter(last_login__range=\
-            (now - timedelta(days=7), now + timedelta(days=1))).count(),
+            (now - datetime.timedelta(days=7), now + datetime.timedelta(days=1))).count(),
             'seven_days': users.filter(last_login__range=\
-            (now - timedelta(days=30), now - timedelta(days=7))).count(),
+            (now - datetime.timedelta(days=30), now - datetime.timedelta(days=7))).count(),
             'thirty_days': users.filter(last_login__range=\
-            (now - timedelta(days=60), now - timedelta(days=30))).count(),
+            (now - datetime.timedelta(days=60), now - datetime.timedelta(days=30))).count(),
             'sixty_days': users.filter(last_login__range=\
-            (now - timedelta(days=90), now - timedelta(days=60))).count(),
+            (now - datetime.timedelta(days=90), now - datetime.timedelta(days=60))).count(),
             'ninety_days': users.filter(last_login__lte=\
-            now - timedelta(days=90)).count(),
+            now - datetime.timedelta(days=90)).count(),
             'total': users.count()
         }
 
@@ -43,7 +44,7 @@ def getUserActivityWidget(request):
             ('db/auth/user/',_("Manage Users"),'btn-right')
     ]
 
-    key = "widget-activity-list-"+ str(date.today())
+    key = "widget-activity-list-"+ str(datetime.date.today())
 
     widget_data = {
         'size': 'widget-large',
@@ -68,7 +69,7 @@ def getRequestStatuses(request):
         }
         return request_count
 
-    key = "widget-statuses-"+ str(date.today())
+    key = "widget-statuses-"+ str(datetime.date.today())
 
     widget_data = {
         'size': 'widget-small',
@@ -85,7 +86,7 @@ def getRepositories(request):
 
         return repositories
 
-    key = "widget-repo-list-"+ str(date.today())
+    key = "widget-repo-list-"+ str(datetime.date.today())
 
     widget_data = {
         'size': 'widget-large',
@@ -107,7 +108,7 @@ def getGroups(request):
 
         return review_groups
 
-    key = "widget-groups-"+ str(date.today())
+    key = "widget-groups-"+ str(datetime.date.today())
 
     widget_data = {
         'size': 'widget-small',
@@ -178,7 +179,7 @@ def getStats(request):
         }
         return stats_data
 
-    key = "stats-day-"+ str(date.today())
+    key = "stats-day-"+ str(datetime.date.today())
 
     widget_data = {
         'size': 'widget-small',
@@ -199,80 +200,96 @@ def getRecentActions(request):
 
     return widget_data
 
-def getLargeStats(request):
-    """ Stats Large """
+def dynamicActivityData(request):
+    direction = request.GET.get('direction')
+    range_end = request.GET.get('range_end')
+    range_start = request.GET.get('range_start')
+    days_total = 60
+    
+    if range_end and range_start:
+            range_end = datetime.date.fromtimestamp(float(request.GET.get('range_end')))
+            range_start = datetime.date.fromtimestamp(float(request.GET.get('range_start')))
 
-    def largeStatsData():
+    if direction == "next":
+        new_range_start = range_end
+        new_range_end = new_range_start + datetime.timedelta(days=days_total)
 
+    elif direction == "prev":
+        new_range_start = range_start - datetime.timedelta(days=days_total)
+        new_range_end = range_start
+
+    else:
         # 30 days of activity
-        days_total = 30
-        date_today = date.today()
-        date_past = date_today - timedelta(days=days_total)
+        new_range_end = datetime.date.today()
+        new_range_start = new_range_end - datetime.timedelta(days=days_total)
+
+    response_data = {
+        "range_start": new_range_start.strftime("%Y-%m-%d"),
+        "range_end": new_range_end.strftime("%Y-%m-%d")
+    }
+
+
+
+    def largeStatsData(direction):
 
         #Change Descriptions
-        change_desc = ChangeDescription.objects
         change_desc_unique = \
-            change_desc.extra({'timestamp' : "date(timestamp)"})\
-            .values('timestamp').annotate(created_count=Count('id'))
-
+            ChangeDescription.objects.extra({'timestamp' : "date(timestamp)"})\
+            .values('timestamp').annotate(created_count=Count('id')).order_by('timestamp')
+        change_desc_array = []
         # need a test for this strptime for Python < 2.5 more at
         # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
         for unique_desc  in change_desc_unique:
-            unique_desc['timestamp'] = datetime.\
-            strptime(unique_desc['timestamp'], "%Y-%m-%d")
+            change_desc_array.append([])
+            change_desc_array[0].append( time.mktime(time.strptime(unique_desc['timestamp'], "%Y-%m-%d")) * 1000)
+            change_desc_array[0].append(unique_desc['created_count'])
+
 
         #Comments
-        comments = Comment.objects
-        comments_per_day = \
-            comments.extra({'timestamp' : "date(timestamp)"})\
-            .values('timestamp').annotate(created_count=Count('id'))
-
+        comments_unique = \
+            Comment.objects.extra({'timestamp' : "date(timestamp)"})\
+            .values('timestamp').annotate(created_count=Count('id')).order_by('timestamp')
+        comment_array = []
         # need a test for this strptime for Python < 2.5 more at
         # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
-        for comment  in comments_per_day:
-            comment['timestamp'] = datetime.\
-            strptime(comment['timestamp'], "%Y-%m-%d")
+        for unique_comment  in comments_unique:
+            comment_array.append([])
+            comment_array[0].append(time.mktime(time.strptime(unique_comment['timestamp'], "%Y-%m-%d")) * 1000)
+            comment_array[0].append(unique_comment['created_count'])
 
         #Reviews
-        reviews = Review.objects.all()
-        reviews_per_day = \
-            reviews.extra({'timestamp' : "date(timestamp)"})\
+        reviews_unique = \
+            Review.objects.extra({'timestamp' : "date(timestamp)"})\
             .values('timestamp').annotate(created_count=Count('id')).order_by('timestamp')
-
-         # need a test for this strptime for Python < 2.5 more at
+        review_array = []
+        # need a test for this strptime for Python < 2.5 more at
         # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
-        for review  in reviews_per_day:
-            review['timestamp'] = datetime.\
-            strptime(review['timestamp'], "%Y-%m-%d")
-        #Review Requests
-
-        rr_req_per_day = \
-            ReviewRequest.objects.all().extra({'time_added' : "date(time_added)"})\
-            .values('time_added').annotate(created_count=Count('id')).order_by('time_added')
-
-             # need a test for this strptime for Python < 2.5 more at
-        # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
-        for rr_req  in rr_req_per_day:
-            rr_req['time_added'] = datetime.\
-            strptime(rr_req['time_added'], "%Y-%m-%d")
+        for unique_review  in reviews_unique:
+            review_array.append([])
+            review_array[0].append(time.mktime(time.strptime(unique_review['timestamp'], "%Y-%m-%d")) * 1000)
+            review_array[0].append(unique_review['created_count'])
 
         # getting all widget_data together
         stat_data = {
-            'change_descriptions': change_desc_unique,
-            'comments': comments_per_day,
-            'reviews': reviews_per_day,
-            'review_requests': rr_req_per_day,
-            'start_date': date_today,
-            'end_date': date_past
+            'change_descriptions': list(change_desc_array),
+            'comments': list(comment_array),
+            'reviews': list(review_array),
+            #'review_requests': list(review_request_array)
         }
 
         return stat_data
 
-    # 30 days of activity
-    days_total = 30
-    date_today = date.today()
-    date_past = date_today - timedelta(days=days_total)
-    key = "large-stats-day-"+ str(date.today()) + str(date_today) + str(date_past)
+    activity_data = largeStatsData(direction)
+
+    activity_data = {
+        "range":response_data,
+        "activity_data": activity_data
+    }
+
+    return activity_data
+
+def getLargeStats(request):
+    """ Data Activity Large """
 
     widget_data = {
         'size': 'widget-large',
@@ -285,6 +302,6 @@ def getLargeStats(request):
             ('#',_('Review Requests'),'btn-s btn-s-checked','set-requests'),
             ('#',_('Descriptions'),'btn-s btn-s-checked','set-descriptions')
         ],
-        'data':  cache_memoize(key, largeStatsData)
+        'data': ["Loading..."]
     }
     return widget_data

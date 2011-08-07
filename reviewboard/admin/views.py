@@ -20,6 +20,7 @@ from reviewboard.admin.checks import check_updates_required
 from reviewboard.admin.cache_stats import get_cache_stats, get_has_cache_stats
 from reviewboard.admin.forms import SSHSettingsForm
 from reviewboard.scmtools import sshutils
+from reviewboard.admin.widgets import dynamicActivityData
 
 
 @staff_member_required
@@ -126,26 +127,8 @@ def widget_toggle(request):
     return HttpResponse("")
 
 def widget_activity(request):
-    if request.GET.get('direction') and request.GET.get('range_end') \
-    and request.GET.get('range_start'):
-        range_end = date.fromtimestamp(float(request.GET.get('range_end')))
-        range_start = date.fromtimestamp(float(request.GET.get('range_start')))
 
-        direction = request.GET.get('direction')
-        if direction == "next":
-            new_range_start = range_end
-            new_range_end = new_range_start + timedelta(days=30)
-            print "next"
-        elif direction == "prev":
-            new_range_start = range_start - timedelta(days=30)
-            new_range_end = range_start
-            print "prev"
-
-        response_data = {
-            "range_start": new_range_start.strftime("%Y-%m-%d"),
-            "range_end": new_range_end.strftime("%Y-%m-%d")
-        }
-        return HttpResponse(
-            simplejson.dumps(response_data), mimetype="application/json")
-    else:
-        return HttpResponse("")
+    activity_data = dynamicActivityData(request)
+    
+    return HttpResponse(
+        simplejson.dumps(activity_data), mimetype="application/json")
