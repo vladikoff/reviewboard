@@ -369,7 +369,7 @@ div.breadcrumbs {
   height: 22px;
   float: right;
   text-align: center;
-  background: #C6DCF3;
+  background: url("../images/title_box_top_bg.png") repeat #C6DCF3;
   border-left: 1px solid #89867F;
   padding: 10px 10px 0 10px;
 }

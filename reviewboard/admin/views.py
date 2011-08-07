@@ -1,3 +1,5 @@
+from datetime import timedelta, date
+import datetime
 import logging
 
 from django.conf import settings
@@ -8,6 +10,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.template.loader import render_to_string
+from django.utils import simplejson
 from django.utils.translation import ugettext as _
 from djblets.siteconfig.models import SiteConfiguration
 from djblets.siteconfig.views import site_settings as djblets_site_settings
@@ -107,7 +110,7 @@ def manual_updates_required(request,
     }))
 
 def widget_toggle(request):
-    if request.GET.get('widget'):
+    if request.GET.get('widget') and request.GET.get('collapse'):
         state =  request.GET.get('collapse', '')
         widget = request.GET.get('widget', '')
         siteconfig = SiteConfiguration.objects.get(site=Site.objects.get_current())
@@ -121,3 +124,28 @@ def widget_toggle(request):
         siteconfig.save()
 
     return HttpResponse("")
+
+def widget_activity(request):
+    if request.GET.get('direction') and request.GET.get('range_end') \
+    and request.GET.get('range_start'):
+        range_end = date.fromtimestamp(float(request.GET.get('range_end')))
+        range_start = date.fromtimestamp(float(request.GET.get('range_start')))
+
+        direction = request.GET.get('direction')
+        if direction == "next":
+            new_range_start = range_end
+            new_range_end = new_range_start + timedelta(days=30)
+            print "next"
+        elif direction == "prev":
+            new_range_start = range_start - timedelta(days=30)
+            new_range_end = range_start
+            print "prev"
+
+        response_data = {
+            "range_start": new_range_start.strftime("%Y-%m-%d"),
+            "range_end": new_range_end.strftime("%Y-%m-%d")
+        }
+        return HttpResponse(
+            simplejson.dumps(response_data), mimetype="application/json")
+    else:
+        return HttpResponse("")

@@ -1,15 +1,11 @@
 {% load i18n %}
 {% if widget_data.change_descriptions %}
 <div id="placeholder-stats" style="width: 450px; height: 250px;"></div>
+ <input type="hidden" value="{{widget_data.end_date|date:"U" }}" id="data-activity-start" />
+ <input type="hidden" value="{{widget_data.start_date|date:"U" }}" id="data-activity-end" />
 
  <script>
 $(function () {
-{% spaceless %}
- var days = [[],
- {% for day in widget_data.date_period %}
-  ,[{{day|date:"U"}}000, 1]
- {% endfor %}
- ];
 
  // Change Descriptions - chart data
    var d = [[]
@@ -38,11 +34,8 @@ $(function () {
            ,[{{review_req.time_added|date:"U"}}000, {{review_req.created_count}}]
      {% endfor %}
     ];
-{% endspaceless %}
+
  var datasets = {
-  "date_period": {
-   label: "30 Days", data: days
-  },
   "set-descriptions": {
    label: "Change Descriptions",  data: d,  bars: { show: true }, lines: {show: false}
   },
@@ -157,7 +150,46 @@ $(function () {
 
         });
 
+    function getActivityData(direction) {
+      var input_range_start = $("#data-activity-start").val(),
+      input_range_end = $("#data-activity-end").val();
+
+      $.getJSON("widget-activity/?range_start=" + input_range_start + "&range_end=" + input_range_end + "&direction=" + direction, function(data) {
+
+           var start_array = new Array();
+           start_array = (data.range_start).split('-');
+           var end_array = new Array();
+           end_array = (data.range_end).split('-');
+           min_date = new Date(start_array[0], start_array[1], start_array[2]).getTime();
+           max_date = new Date(end_array[0], end_array[1], end_array[2]).getTime();
+           $.plot($("#placeholder-stats"), [datasets], {
+                xaxis: {
+                    mode: "time",
+                    minTickSize: [1, "month"],
+                    min: (min_date),
+                    max: (max_date)
+                }
+            });
+          }
+      );
+
+ 
+    }
+
+    $("#set-next").click(function () {
+      getActivityData("next");
+      return false
+    });
+
+    $("#set-prev").click(function () {
+      getActivityData("prev");
+      return false
+    });
+
+
     plotAccordingToChoices();
+
+
 
 });
 </script>
