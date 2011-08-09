@@ -1,7 +1,7 @@
 from django import template
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.template.context import RequestContext
 from djblets.siteconfig.models import SiteConfiguration
 
@@ -82,7 +82,7 @@ def admin_actions(context):
     request = context.get('request')
 
     if not request.REQUEST.has_key('_popup') \
-    or not request.REQUEST.has_key('pop'):
+        or not request.REQUEST.has_key('pop'):
         site_configs = {
         'read_only': \
             current_site_config.get('auth_anonymous_access'),

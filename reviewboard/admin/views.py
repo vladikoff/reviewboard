@@ -1,5 +1,3 @@
-from datetime import timedelta, date
-import datetime
 import logging
 
 from django.conf import settings
@@ -112,11 +110,11 @@ def manual_updates_required(request,
 
 def widget_toggle(request):
     if request.GET.get('widget') and request.GET.get('collapse'):
-        state =  request.GET.get('collapse', '')
+        state = request.GET.get('collapse', '')
         widget = request.GET.get('widget', '')
         siteconfig = SiteConfiguration.objects.get(site=Site.objects.get_current())
-
         widgetSets = siteconfig.get("widget_settings")
+        
         if not widgetSets:
             widgetSets = {}
 
@@ -130,5 +128,5 @@ def widget_activity(request):
 
     activity_data = dynamicActivityData(request)
 
-    return HttpResponse(
-        simplejson.dumps(activity_data), mimetype="application/json")
+    return HttpResponse(simplejson.dumps(
+        activity_data), mimetype="application/json")

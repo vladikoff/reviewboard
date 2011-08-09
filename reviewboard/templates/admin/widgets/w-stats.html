@@ -1,26 +1,27 @@
+{% load i18n %}
 <table class="widget-rows" style="width: 100%;">
     <tr>
-        <th>Comments</th>
+        <th>{% trans "Comments" %}</th>
         <td>{{widget_data.count_comments}}</td>
     </tr>
      <tr>
-        <th>Reviews</th>
+        <th>{% trans "Reviews" %}</th>
         <td>{{widget_data.count_reviews}}</td>
     </tr>
      <tr>
-        <th>Request Drafts</th>
+        <th>{% trans "Request Drafts" %}</th>
         <td>{{widget_data.count_reviewdrafts}}</td>
     </tr>
      <tr>
-        <th>Screenshots</th>
+        <th>{% trans "Screenshots" %}</th>
         <td>{{widget_data.count_screenshots}}</td>
     </tr>
      <tr>
-        <th>Attachments</th>
+        <th>{% trans "Attachments" %}</th>
         <td>{{widget_data.count_attachments}}</td>
     </tr>
      <tr>
-        <th>DiffSets</th>
+        <th>{% trans "DiffSets" %}</th>
         <td>{{widget_data.count_diffsets}}</td>
     </tr>
 </table>

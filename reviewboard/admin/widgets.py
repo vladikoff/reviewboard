@@ -14,6 +14,7 @@ from reviewboard.scmtools.models import Repository
 from reviewboard.reviews.models import ReviewRequest, Group, \
     Comment, Review, Screenshot, ReviewRequestDraft
 
+
 def getUserActivityWidget(request):
     """ User Activity Widget
     A pie chart of active application users based on their last login date
@@ -44,7 +45,7 @@ def getUserActivityWidget(request):
             ('db/auth/user/',_("Manage Users"),'btn-right')
     ]
 
-    key = "widget-activity-list-"+ str(datetime.date.today())
+    key = "widget-activity-list-" + str(datetime.date.today())
 
     widget_data = {
         'size': 'widget-large',
@@ -54,6 +55,7 @@ def getUserActivityWidget(request):
     }
 
     return widget_data
+
 
 def getRequestStatuses(request):
     """ Request Statuses by Percentage Widget
@@ -69,7 +71,7 @@ def getRequestStatuses(request):
         }
         return request_count
 
-    key = "widget-statuses-"+ str(datetime.date.today())
+    key = "widget-statuses-" + str(datetime.date.today())
 
     widget_data = {
         'size': 'widget-small',
@@ -79,6 +81,7 @@ def getRequestStatuses(request):
     }
     return widget_data
 
+
 def getRepositories(request):
 
     def repoData():
@@ -86,7 +89,7 @@ def getRepositories(request):
 
         return repositories
 
-    key = "widget-repo-list-"+ str(datetime.date.today())
+    key = "widget-repo-list-" + str(datetime.date.today())
 
     widget_data = {
         'size': 'widget-large',
@@ -99,6 +102,7 @@ def getRepositories(request):
     }
 
     return widget_data
+
 
 def getGroups(request):
     """ Review Group Listing
@@ -120,6 +124,7 @@ def getGroups(request):
         'data': cache_memoize(key, groupData)
     }
     return widget_data
+
 
 def getServerCache(request):
     """ Cache Statistic Widget
@@ -151,6 +156,7 @@ def getServerCache(request):
     }
     return widget_data
 
+
 def getNews(request):
     """ News
     Latest Review Board news via RSS """
@@ -159,12 +165,13 @@ def getNews(request):
     'size': 'widget-small',
     'template': 'admin/widgets/w-news.html',
     'actions': [
-            ('http://www.reviewboard.org/news/',_('More')),
-            ('#',_('Reload'), 'reload-news')
+            ('http://www.reviewboard.org/news/', _('More')),
+            ('#', _('Reload'), 'reload-news')
     ],
         'data': ''
     }
     return widget_data
+
 
 def getStats(request):
     """ Stats """
@@ -179,7 +186,7 @@ def getStats(request):
         }
         return stats_data
 
-    key = "stats-day-"+ str(datetime.date.today())
+    key = "stats-day-" + str(datetime.date.today())
 
     widget_data = {
         'size': 'widget-small',
@@ -188,6 +195,7 @@ def getStats(request):
         'data': cache_memoize(key, statsData)
     }
     return widget_data
+
 
 def getRecentActions(request):
 
@@ -238,7 +246,7 @@ def dynamicActivityData(request):
 
     def largeStatsData(range_start, range_end):
 
-        #Change Descriptions
+        # Change Descriptions
         change_desc_unique = \
             ChangeDescription.objects.filter(timestamp__range=(range_start, range_end)).extra({'timestamp' : "date(timestamp)"})\
             .values('timestamp').annotate(created_count=Count('id')).order_by('timestamp')
@@ -252,7 +260,7 @@ def dynamicActivityData(request):
             change_desc_array[idx].append(unique_desc['created_count'])
             idx += 1
 
-        #Comments
+        # Comments
         comments_unique = \
             Comment.objects.filter(timestamp__range=(range_start, range_end)).extra({'timestamp' : "date(timestamp)"})\
             .values('timestamp').annotate(created_count=Count('id')).order_by('timestamp')
@@ -266,7 +274,7 @@ def dynamicActivityData(request):
             comment_array[idx].append(unique_comment['created_count'])
             idx += 1
 
-        #Reviews
+        # Reviews
         reviews_unique = \
             Review.objects.filter(timestamp__range=(range_start, range_end)).extra({'timestamp' : "date(timestamp)"})\
             .values('timestamp').annotate(created_count=Count('id')).order_by('timestamp')
@@ -280,7 +288,7 @@ def dynamicActivityData(request):
             review_array[idx].append(unique_review['created_count'])
             idx += 1
 
-        #Review Requests
+        # Review Requests
         rr_unique = \
             ReviewRequest.objects.filter(time_added__range=(range_start, range_end)).extra({'time_added' : "date(time_added)"})\
             .values('time_added').annotate(created_count=Count('id')).order_by('time_added')

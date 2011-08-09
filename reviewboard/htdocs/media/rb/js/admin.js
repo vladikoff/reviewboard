@@ -4,7 +4,7 @@ function refreshWidgets() {
         docWidth = $(window).width();
         var widSpace = docWidth - (sideWidth + centerWidth) - 50;
 
-        $(".admin-extras").css('width',widSpace);
+        $(".admin-extras").css('width', widSpace);
         $('.admin-extras').masonry('reload');
 }
 
