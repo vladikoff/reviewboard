@@ -230,7 +230,11 @@ def dynamicActivityData(request):
         "range_end": new_range_end.strftime("%Y-%m-%d")
     }
 
+    def getObjects(modelName):
+        objects = modelName.objects.all()
+        print objects
 
+    getObjects(Review)
 
     def largeStatsData(range_start, range_end):
 
