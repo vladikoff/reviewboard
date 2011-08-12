@@ -1,8 +1,9 @@
 <div class="admin-widget {{widget_size}} {% if widget_state == "1" %}widget-hidden{% endif %}" id="{{widget_name}}">
-    <h1 class="widget-heading">{% if widget_icon %}
+    <h1 class="widget-heading">
+        {% if widget_icon %}
         <img src="{{MEDIA_URL}}{{ widget_icon}}?{{MEDIA_SERIAL}}" alt="{{widget_title}}" width="14" height="14"/>
-        {% endif %}{{widget_title}}<span class="btn-state"></span>
-    </h1>
+        {% endif %}
+     {{widget_title}}<span class="btn-state"></span></h1>
     <div class="widget-content">
          {% include widget_content %}
     </div>

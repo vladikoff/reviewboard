@@ -1,19 +1,22 @@
-from array import array
-import time, datetime
+from attachments.models import FileAttachment
+
+import datetime
+
+from diffviewer.models import DiffSet
 
 from django.contrib.auth.models import User
 from django.db.models.aggregates import Count
 from django.utils.translation import ugettext as _
 from djblets.util.misc import cache_memoize
-from attachments.models import FileAttachment
-from diffviewer.models import DiffSet
 
 from reviewboard.admin.cache_stats import get_cache_stats
 from reviewboard.changedescs.models import ChangeDescription
 from reviewboard.scmtools.models import Repository
 from reviewboard.reviews.models import ReviewRequest, Group, \
-    Comment, Review, Screenshot, ReviewRequestDraft
+                                                                   Comment, Review, Screenshot, \
+                                                                   ReviewRequestDraft
 
+import time
 
 def getUserActivityWidget(request):
     """ User Activity Widget
@@ -26,23 +29,23 @@ def getUserActivityWidget(request):
 
         activity_list = {
             'now': users.filter(last_login__range=\
-            (now - datetime.timedelta(days=7), now + datetime.timedelta(days=1))).count(),
+                (now - datetime.timedelta(days=7), now + datetime.timedelta(days=1))).count(),
             'seven_days': users.filter(last_login__range=\
-            (now - datetime.timedelta(days=30), now - datetime.timedelta(days=7))).count(),
+                (now - datetime.timedelta(days=30), now - datetime.timedelta(days=7))).count(),
             'thirty_days': users.filter(last_login__range=\
-            (now - datetime.timedelta(days=60), now - datetime.timedelta(days=30))).count(),
+                (now - datetime.timedelta(days=60), now - datetime.timedelta(days=30))).count(),
             'sixty_days': users.filter(last_login__range=\
-            (now - datetime.timedelta(days=90), now - datetime.timedelta(days=60))).count(),
+                (now - datetime.timedelta(days=90), now - datetime.timedelta(days=60))).count(),
             'ninety_days': users.filter(last_login__lte=\
-            now - datetime.timedelta(days=90)).count(),
+                now - datetime.timedelta(days=90)).count(),
             'total': users.count()
         }
 
         return activity_list
 
     widget_actions = [
-            ('db/auth/user/add/',_("Add New")),
-            ('db/auth/user/',_("Manage Users"),'btn-right')
+        ('db/auth/user/add/', _("Add New")),
+        ('db/auth/user/', _("Manage Users"), 'btn-right')
     ]
 
     key = "widget-activity-list-" + str(datetime.date.today())
@@ -50,7 +53,7 @@ def getUserActivityWidget(request):
     widget_data = {
         'size': 'widget-large',
         'template': 'admin/widgets/w-user-activity.html',
-        'data': cache_memoize(key, activityData),
+        'data': cache_memoize(key,activityData),
         'actions': widget_actions
     }
 
@@ -83,10 +86,8 @@ def getRequestStatuses(request):
 
 
 def getRepositories(request):
-
     def repoData():
         repositories = Repository.objects.accessible(request.user).order_by('-id')[:3]
-
         return repositories
 
     key = "widget-repo-list-" + str(datetime.date.today())
@@ -95,8 +96,8 @@ def getRepositories(request):
         'size': 'widget-large',
         'template': 'admin/widgets/w-repositories.html',
         'actions': [
-            ('db/scmtools/repository/add/',_("Add")),
-            ('db/scmtools/repository/', _("View All"),'btn-right')
+            ('db/scmtools/repository/add/', _("Add")),
+            ('db/scmtools/repository/',  _("View All"), 'btn-right')
         ],
         'data': cache_memoize(key, repoData)
     }
@@ -109,7 +110,6 @@ def getGroups(request):
     Shows a list of recently created groups """
     def groupData():
         review_groups = Group.objects.all().order_by('-id')[:5]
-
         return review_groups
 
     key = "widget-groups-"+ str(datetime.date.today())
@@ -118,8 +118,8 @@ def getGroups(request):
         'size': 'widget-small',
         'template': 'admin/widgets/w-groups.html',
         'actions': [
-            ('db/reviews/group/add/',_("Add")),
-            ('db/reviews/group/',_("View All"))
+            ('db/reviews/group/add/', _("Add")),
+            ('db/reviews/group/', _("View All"))
         ],
         'data': cache_memoize(key, groupData)
     }
@@ -198,7 +198,6 @@ def getStats(request):
 
 
 def getRecentActions(request):
-
     widget_data = {
         'size': 'widget-small',
         'template': 'admin/widgets/w-recent-actions.html',
@@ -207,6 +206,7 @@ def getRecentActions(request):
     }
 
     return widget_data
+
 
 def dynamicActivityData(request):
     direction = request.GET.get('direction')
@@ -238,23 +238,27 @@ def dynamicActivityData(request):
         "range_end": new_range_end.strftime("%Y-%m-%d")
     }
 
+
     def getObjects(modelName):
         objects = modelName.objects.all()
-        print objects
+
 
     getObjects(Review)
+
 
     def largeStatsData(range_start, range_end):
 
         # Change Descriptions
         change_desc_unique = \
-            ChangeDescription.objects.filter(timestamp__range=(range_start, range_end)).extra({'timestamp' : "date(timestamp)"})\
-            .values('timestamp').annotate(created_count=Count('id')).order_by('timestamp')
+            ChangeDescription.objects.filter(timestamp__range=\
+                (range_start, range_end)).extra({'timestamp' : "date(timestamp)"})\
+                .values('timestamp').annotate(created_count=Count('id'))\
+                .order_by('timestamp')
         change_desc_array = []
         # need a test for this strptime for Python < 2.5 more at
         # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
         idx = 0
-        for unique_desc  in change_desc_unique:
+        for unique_desc in change_desc_unique:
             change_desc_array.append([])
             change_desc_array[idx].append(time.mktime(time.strptime(unique_desc['timestamp'], "%Y-%m-%d")) * 1000)
             change_desc_array[idx].append(unique_desc['created_count'])
@@ -268,7 +272,7 @@ def dynamicActivityData(request):
         idx = 0
         # need a test for this strptime for Python < 2.5 more at
         # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
-        for unique_comment  in comments_unique:
+        for unique_comment in comments_unique:
             comment_array.append([])
             comment_array[idx].append(time.mktime(time.strptime(unique_comment['timestamp'], "%Y-%m-%d")) * 1000)
             comment_array[idx].append(unique_comment['created_count'])
@@ -282,7 +286,7 @@ def dynamicActivityData(request):
         idx = 0
         # need a test for this strptime for Python < 2.5 more at
         # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
-        for unique_review  in reviews_unique:
+        for unique_review in reviews_unique:
             review_array.append([])
             review_array[idx].append(time.mktime(time.strptime(unique_review['timestamp'], "%Y-%m-%d")) * 1000)
             review_array[idx].append(unique_review['created_count'])
@@ -294,7 +298,7 @@ def dynamicActivityData(request):
             .values('time_added').annotate(created_count=Count('id')).order_by('time_added')
         rr_array = []
         idx = 0
-        for unique_rr  in rr_unique:
+        for unique_rr in rr_unique:
             rr_array.append([])
             rr_array[idx].append(time.mktime(time.strptime(unique_rr['time_added'], "%Y-%m-%d")) * 1000)
             rr_array[idx].append(unique_rr['created_count'])
@@ -320,6 +324,7 @@ def dynamicActivityData(request):
 
     return activity_data
 
+
 def getLargeStats(request):
     """ Data Activity Large """
 
@@ -327,12 +332,12 @@ def getLargeStats(request):
         'size': 'widget-large',
         'template': 'admin/widgets/w-stats-large.html',
         'actions':  [
-            ('#',_('<'),'','set-prev'),
-            ('#',_('>'),'','set-next'),
-            ('#',_('Reviews'),'btn-s btn-s-checked','set-reviews'),
-            ('#',_('Comments'),'btn-s btn-s-checked','set-comments'),
-            ('#',_('Review Requests'),'btn-s btn-s-checked','set-requests'),
-            ('#',_('Descriptions'),'btn-s btn-s-checked','set-descriptions')
+            ('#', _('<'), '', 'set-prev'),
+            ('#', _('>'), '', 'set-next'),
+            ('#', _('Reviews'), 'btn-s btn-s-checked', 'set-reviews'),
+            ('#', _('Comments'), 'btn-s btn-s-checked', 'set-comments'),
+            ('#', _('Review Requests'), 'btn-s btn-s-checked', 'set-requests'),
+            ('#', _('Descriptions'), 'btn-s btn-s-checked', 'set-descriptions')
         ],
         'data': ["Loading..."]
     }

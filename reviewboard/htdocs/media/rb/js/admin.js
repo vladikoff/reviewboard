@@ -1,7 +1,7 @@
 function refreshWidgets() {
         var sideWidth = $("#admin-actions").outerWidth(),
-        centerWidth = $("#admin-widgets").outerWidth(),
-        docWidth = $(window).width();
+            centerWidth = $("#admin-widgets").outerWidth(),
+            docWidth = $(window).width();
         var widSpace = docWidth - (sideWidth + centerWidth) - 50;
 
         $(".admin-extras").css('width', widSpace);

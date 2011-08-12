@@ -1,8 +1,8 @@
 {% extends "admin/base_site.html" %}
 {% load adminmedia %}
-{% load rbadmintags %}
 {% load i18n %}
 {% load log %}
+{% load rbadmintags %}
 
 {% block coltype %}colM{% endblock %}
 {% block bodyclass %}dashboard{% endblock %}
@@ -31,7 +31,6 @@
  <div id="dashboard-view">
      <!-- Widgets -->
      <div id="admin-widgets">
-
         {% admin_widget "stats-large" _("Review Board Activity") %}
         {% admin_widget "repositories" _("Repositories") %}
         {% admin_widget "user-activity" _("User Activity") %}

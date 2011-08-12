@@ -1,10 +1,10 @@
 {% load i18n %}
 
 <div id="placeholder-stats" style="width: 450px; height: 250px;"></div>
- <input type="hidden" value="" id="data-activity-start" />
- <input type="hidden" value="" id="data-activity-end" />
+  <input type="hidden" value="" id="data-activity-start" />
+  <input type="hidden" value="" id="data-activity-end" />
 
- <script>
+<script>
 $(function () {
     var datasets, options;
     var choiceContainer = $("#stats-large");
@@ -31,7 +31,7 @@ $(function () {
 
 
      function showTooltip(x, y, contents) {
-           $('<div id="tooltip">' + contents + '</div>').css( {
+           $('<div id="tooltip">' + contents + '</div>').css({
                position: 'absolute',
                display: 'none',
                top: y + 5,

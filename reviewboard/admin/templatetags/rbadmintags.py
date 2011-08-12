@@ -1,3 +1,5 @@
+from admin.cache_stats import get_has_cache_stats
+
 from django import template
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
@@ -5,12 +7,10 @@ from django.core.urlresolvers import reverse
 from django.template.context import RequestContext
 from djblets.siteconfig.models import SiteConfiguration
 
-from admin.cache_stats import get_has_cache_stats
-
 from reviewboard.reviews.models import DefaultReviewer, Group
 
 from reviewboard.admin import widgets
-import reviewboard
+from reviewboard import get_version_string
 
 from scmtools.models import Repository
 
@@ -109,7 +109,7 @@ def admin_actions(context):
             'count_repository': Repository.objects.accessible(request.user).count(),
             'has_cache_stats': get_has_cache_stats(),
             'site_configs': site_configs,
-            'version': reviewboard.get_version_string()
+            'version': get_version_string()
         })
     else:
         return RequestContext(context['request'], {
