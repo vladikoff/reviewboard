@@ -13,8 +13,8 @@ from reviewboard.admin.cache_stats import get_cache_stats
 from reviewboard.changedescs.models import ChangeDescription
 from reviewboard.scmtools.models import Repository
 from reviewboard.reviews.models import ReviewRequest, Group, \
-                                                        Comment, Review, Screenshot, \
-                                                        ReviewRequestDraft
+                                                                   Comment, Review, Screenshot, \
+                                                                   ReviewRequestDraft
 
 import time
 
@@ -51,8 +51,7 @@ def getUserActivityWidget(request):
         ('db/auth/user/', _("Manage Users"), 'btn-right')
     ]
 
-    key = "widget-activity-list-" + str(datetime.date.today())
-
+    key = "w-user-activity-" + str(datetime.date.today())
     widget_data = {
         'size': 'widget-large',
         'template': 'admin/widgets/w-user-activity.html',
@@ -77,8 +76,7 @@ def getRequestStatuses(request):
         }
         return request_count
 
-    key = "widget-statuses-" + str(datetime.date.today())
-
+    key = "w-request-statuses-" + str(datetime.date.today())
     widget_data = {
         'size': 'widget-small',
         'template': 'admin/widgets/w-request-statuses.html',
@@ -93,8 +91,7 @@ def getRepositories(request):
         repositories = Repository.objects.accessible(request.user).order_by('-id')[:3]
         return repositories
 
-    key = "widget-repo-list-" + str(datetime.date.today())
-
+    key = "w-repositories-" + str(datetime.date.today())
     widget_data = {
         'size': 'widget-large',
         'template': 'admin/widgets/w-repositories.html',
@@ -115,8 +112,7 @@ def getGroups(request):
         review_groups = Group.objects.all().order_by('-id')[:5]
         return review_groups
 
-    key = "widget-groups-"+ str(datetime.date.today())
-
+    key = "w-groups-"+ str(datetime.date.today())
     widget_data = {
         'size': 'widget-small',
         'template': 'admin/widgets/w-groups.html',
@@ -189,8 +185,7 @@ def getStats(request):
         }
         return stats_data
 
-    key = "stats-day-" + str(datetime.date.today())
-
+    key = "w-stats-" + str(datetime.date.today())
     widget_data = {
         'size': 'widget-small',
         'template': 'admin/widgets/w-stats.html',
@@ -276,11 +271,11 @@ def dynamicActivityData(request):
 
         return stat_data
 
-    activity_data = largeStatsData(new_range_start, new_range_end)
+    stats_data  = largeStatsData(new_range_start, new_range_end)
 
     activity_data = {
         "range":response_data,
-        "activity_data": activity_data
+        "activity_data": stats_data
     }
 
     return activity_data

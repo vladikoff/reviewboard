@@ -5,25 +5,24 @@ from django.dispatch import receiver
 from django.core.cache import cache
 from djblets.util import misc
 
+
 """
     These signals listen to database changes
     and clear the cache to keep the admin dashboard up to date.
 """
-
 def deleteWidgetCache():
+    cached_widgets = ("w-user-activity-", "w-request-statuses-",
+                                   "w-repositories-", "w-groups-", "w-stats-")
 
-    key = "widget-activity-list-"+ str(datetime.date.today())
-    key = misc.make_cache_key(key);
+    for widget in cached_widgets:
+        key = widget + str(datetime.date.today())
+        cache.delete(misc.make_cache_key(key))
 
-    cache.delete(key)
-    key = "widget-groups-"+ str(datetime.date.today())
-    key = misc.make_cache_key(key);
-    print "Key : " + key
-    cache.delete(key)
 
 @receiver(post_save)
 def my_handler(sender,**kwargs):
     deleteWidgetCache()
+
 
 @receiver(post_delete)
 def my_handler(sender,**kwargs):
