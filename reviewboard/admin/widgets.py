@@ -32,13 +32,17 @@ def getUserActivityWidget(request):
 
         activity_list = {
             'now': users.filter(last_login__range=\
-                (now - datetime.timedelta(days=7), now + datetime.timedelta(days=1))).count(),
+                (now - datetime.timedelta(days=7),
+                 now + datetime.timedelta(days=1))).count(),
             'seven_days': users.filter(last_login__range=\
-                (now - datetime.timedelta(days=30), now - datetime.timedelta(days=7))).count(),
+                (now - datetime.timedelta(days=30),
+                 now - datetime.timedelta(days=7))).count(),
             'thirty_days': users.filter(last_login__range=\
-                (now - datetime.timedelta(days=60), now - datetime.timedelta(days=30))).count(),
+                (now - datetime.timedelta(days=60),
+                 now - datetime.timedelta(days=30))).count(),
             'sixty_days': users.filter(last_login__range=\
-                (now - datetime.timedelta(days=90), now - datetime.timedelta(days=60))).count(),
+                (now - datetime.timedelta(days=90),
+                 now - datetime.timedelta(days=60))).count(),
             'ninety_days': users.filter(last_login__lte=\
                 now - datetime.timedelta(days=90)).count(),
             'total': users.count()
@@ -88,7 +92,8 @@ def getRequestStatuses(request):
 
 def getRepositories(request):
     def repoData():
-        repositories = Repository.objects.accessible(request.user).order_by('-id')[:3]
+        repositories = Repository.objects.accessible(request.user)\
+            .order_by('-id')[:3]
         return repositories
 
     key = "w-repositories-" + str(datetime.date.today())
@@ -213,12 +218,15 @@ def dynamicActivityData(request):
     days_total = DAYS_TOTAL
 
     if range_end and range_start:
-        range_end = datetime.datetime.strptime(request.GET.get('range_end'), "%Y-%m-%d")
-        range_start = datetime.datetime.strptime(request.GET.get('range_start'), "%Y-%m-%d")
+        range_end = datetime.datetime\
+            .strptime(request.GET.get('range_end'), "%Y-%m-%d")
+        range_start = datetime.datetime\
+            .strptime(request.GET.get('range_start'), "%Y-%m-%d")
 
     if direction == "next":
         new_range_start = range_end
-        new_range_end = new_range_start + datetime.timedelta(days=days_total)
+        new_range_end = \
+            new_range_start + datetime.timedelta(days=days_total)
     elif direction == "prev":
         new_range_start = range_start - datetime.timedelta(days=days_total)
         new_range_end = range_start
@@ -247,7 +255,8 @@ def dynamicActivityData(request):
             change_desc_array = []
             for unique_desc in change_desc_unique:
                 inner_array = []
-                inner_array.append(time.mktime(time.strptime(unique_desc[timestampField], "%Y-%m-%d")) * 1000)
+                inner_array.append(time.mktime(time\
+                    .strptime(unique_desc[timestampField], "%Y-%m-%d")) * 1000)
                 inner_array.append(unique_desc['created_count'])
                 change_desc_array.append(inner_array)
 
@@ -272,7 +281,6 @@ def dynamicActivityData(request):
         return stat_data
 
     stats_data  = largeStatsData(new_range_start, new_range_end)
-
     activity_data = {
         "range":response_data,
         "activity_data": stats_data

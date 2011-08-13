@@ -39,7 +39,6 @@ def admin_widget(context, widget_name, widget_title, widget_icon=""):
     Returns a widget
     """
     request = context.get('request')
-
     widget_list = {
         'user-activity': widgets.getUserActivityWidget,
         'request-statuses': widgets.getRequestStatuses,
@@ -47,13 +46,12 @@ def admin_widget(context, widget_name, widget_title, widget_icon=""):
         'review-groups': widgets.getGroups,
         'server-cache': widgets.getServerCache,
         'news': widgets.getNews,
-        'stats': widgets.getStats, # TODO Rename this one.
-        'stats-large': widgets.getLargeStats, # TODO Rename this one.
+        'stats': widgets.getStats,
+        'stats-large': widgets.getLargeStats,
         'recent-actions': widgets.getRecentActions
     }
 
     widget_data = widget_list.get(widget_name)(request)
-
     siteconfig = SiteConfiguration.objects.get(site=Site.objects.get_current())
     widget_states = siteconfig.get("widget_settings")
     widget_state = ""
@@ -106,7 +104,8 @@ def admin_actions(context):
             'count_users': User.objects.count(),
             'count_review_groups': Group.objects.count(),
             'count_default_reviewers': DefaultReviewer.objects.count(),
-            'count_repository': Repository.objects.accessible(request.user).count(),
+            'count_repository': Repository.objects.accessible(request.user)\
+                .count(),
             'has_cache_stats': get_has_cache_stats(),
             'site_configs': site_configs,
             'version': get_version_string()
