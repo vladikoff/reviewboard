@@ -1,3 +1,4 @@
+import sys
 from attachments.models import FileAttachment
 
 import datetime
@@ -201,6 +202,8 @@ def getStats(request):
 
 
 def getRecentActions(request):
+
+    print sys.version_info
     widget_data = {
         'size': 'widget-small',
         'template': 'admin/widgets/w-recent-actions.html',
@@ -218,10 +221,11 @@ def dynamicActivityData(request):
     days_total = DAYS_TOTAL
 
     if range_end and range_start:
-        range_end = datetime.datetime\
-            .strptime(request.GET.get('range_end'), "%Y-%m-%d")
-        range_start = datetime.datetime\
-            .strptime(request.GET.get('range_start'), "%Y-%m-%d")
+       range_end = datetime.datetime.fromtimestamp(time.mktime(time\
+            .strptime(request.GET.get('range_end'), "%Y-%m-%d")))
+       range_start = datetime.datetime.fromtimestamp(time.mktime(time\
+            .strptime(request.GET.get('range_start'), "%Y-%m-%d")))
+
 
     if direction == "next":
         new_range_start = range_end
@@ -246,23 +250,21 @@ def dynamicActivityData(request):
 
         def getObjects(modelName, timestampField, dateField):
             args = '%s__%s' % (timestampField, 'range')
-            change_desc_unique = \
+            unique_objects = \
                 modelName.objects.filter(**{args: (range_start, range_end)})\
                     .extra({timestampField: dateField})\
                     .values(timestampField).annotate(created_count=Count('id'))\
                     .order_by(timestampField)
 
-            change_desc_array = []
-            for unique_desc in change_desc_unique:
+            data_array = []
+            for object in unique_objects:
                 inner_array = []
-                inner_array.append(time.mktime(time\
-                    .strptime(unique_desc[timestampField], "%Y-%m-%d")) * 1000)
-                inner_array.append(unique_desc['created_count'])
-                change_desc_array.append(inner_array)
-
-            # need a test for this strptime for Python < 2.5 more at
-            # TODO http://stackoverflow.com/questions/1286619/django-string-to-date-date-to-unix-timestamp
-            return change_desc_array
+                made_time = time.mktime(time.strptime(\
+                    object[timestampField], "%Y-%m-%d")) * 1000
+                inner_array.append(made_time)
+                inner_array.append(object['created_count'])
+                data_array.append(inner_array)
+            return data_array
 
         comment_array = getObjects(Comment, "timestamp", "date(timestamp)")
         change_desc_array = \
