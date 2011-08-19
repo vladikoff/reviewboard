@@ -87,11 +87,6 @@ def ssh_settings(request, template_name='admin/ssh_settings.html'):
         'form': form,
     }))
 
-def dashboard_settings(request,template_name='admin/dashboard_settings.html'):
-
-    return render_to_response(template_name, RequestContext(request, {
-       'title': _('Admin Dashboard Settings')
-    }))
 
 def manual_updates_required(request,
                             template_name="admin/manual_updates_required.html"):
@@ -108,6 +103,10 @@ def manual_updates_required(request,
     }))
 
 def widget_toggle(request):
+    """
+    Controls the state of widgets - collapsed or expanded.
+    Saves the state into site settings
+    """
     if request.GET.get('widget') and request.GET.get('collapse'):
         state = request.GET.get('collapse', '')
         widget = request.GET.get('widget', '')
@@ -124,7 +123,10 @@ def widget_toggle(request):
     return HttpResponse("")
 
 def widget_activity(request):
-
+    """
+    Receives an AJAX request, sends the data to the widget controller and
+    returns JSON data
+    """
     activity_data = dynamicActivityData(request)
 
     return HttpResponse(simplejson.dumps(

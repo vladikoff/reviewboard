@@ -92,6 +92,10 @@ def getRequestStatuses(request):
 
 
 def getRepositories(request):
+    """ Shows a list of repositories in the system
+
+    This widget displays a table with the most recent repositories.
+     """
     def repoData():
         repositories = Repository.objects.accessible(request.user)\
             .order_by('-id')[:3]
@@ -113,6 +117,7 @@ def getRepositories(request):
 
 def getGroups(request):
     """ Review Group Listing
+
     Shows a list of recently created groups """
     def groupData():
         review_groups = Group.objects.all().order_by('-id')[:5]
@@ -133,6 +138,7 @@ def getGroups(request):
 
 def getServerCache(request):
     """ Cache Statistic Widget
+
     A list of memcached statistic if available to the application """
     cache_stats = get_cache_stats()
     uptime = {}
@@ -164,6 +170,7 @@ def getServerCache(request):
 
 def getNews(request):
     """ News
+
     Latest Review Board news via RSS """
 
     widget_data = {
@@ -179,7 +186,10 @@ def getNews(request):
 
 
 def getStats(request):
-    """ Stats """
+    """ Shows a list of totals for multiple database objects.
+
+    Passes a count for Comments, Reviews and more to render a widget table
+     """
     def statsData():
         stats_data = {
             'count_comments': Comment.objects.all().count(),
@@ -202,8 +212,11 @@ def getStats(request):
 
 
 def getRecentActions(request):
+    """ Shows a list of recent admin actions to the user.
 
-    print sys.version_info
+    Based on the default Django admin widget.
+     """
+
     widget_data = {
         'size': 'widget-small',
         'template': 'admin/widgets/w-recent-actions.html',
@@ -215,17 +228,26 @@ def getRecentActions(request):
 
 
 def dynamicActivityData(request):
+    """ Large Database Acitivity Widget Helper
+
+     This method serves as a helper for the activity widget, it's used with for
+     AJAX requests based on date ranges passed to it.
+     """
     direction = request.GET.get('direction')
     range_end = request.GET.get('range_end')
     range_start = request.GET.get('range_start')
     days_total = DAYS_TOTAL
 
+    """ Converting the date from the request
+
+    This takes the date from the request in YYYY-MM-DD format and
+    converts into a format suitable for QuerySet later on.
+    """
     if range_end and range_start:
        range_end = datetime.datetime.fromtimestamp(time.mktime(time\
             .strptime(request.GET.get('range_end'), "%Y-%m-%d")))
        range_start = datetime.datetime.fromtimestamp(time.mktime(time\
             .strptime(request.GET.get('range_start'), "%Y-%m-%d")))
-
 
     if direction == "next":
         new_range_start = range_end
@@ -247,8 +269,13 @@ def dynamicActivityData(request):
     }
 
     def largeStatsData(range_start, range_end):
-
         def getObjects(modelName, timestampField, dateField):
+            """ Perform timestamp based queries
+
+            This method receives a dynamic model name and performs a filter
+            query. Later the results are grouped by day and prepared for the
+            charting library.
+            """
             args = '%s__%s' % (timestampField, 'range')
             unique_objects = \
                 modelName.objects.filter(**{args: (range_start, range_end)})\
@@ -292,7 +319,12 @@ def dynamicActivityData(request):
 
 
 def getLargeStats(request):
-    """ Data Activity Large """
+    """ Shows latest database activity for multiple models
+
+     This ajax powered widget shows a daily view of creation activity for a list of
+     models. This construct doesn't send any widget data, all data comes from
+     the ajax request on page load.
+     """
 
     widget_data = {
         'size': 'widget-large',

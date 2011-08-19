@@ -36,7 +36,8 @@ def admin_subnav(context, url_name, name, icon=""):
 @register.inclusion_tag('admin/admin_widget.html', takes_context=True)
 def admin_widget(context, widget_name, widget_title, widget_icon=""):
     """
-    Returns a widget
+    Chooses a widget based on the custom tag. Loads the widget states.
+    Returns a widget with available data and other information
     """
     request = context.get('request')
     widget_list = {

@@ -315,7 +315,7 @@
 
 .request-percentage-label {
   color: #FFF;
-  font-size: 8pt;
+  font-size: 10px;
   padding: 2px;
   text-align: center;
 }
@@ -371,4 +371,36 @@
 
 #recent-actions li {
   background-position: 7px 11px;
+}
+
+#requests-percentages {
+  margin-top: 5px;
+}
+
+#requests-labels table {
+  width: 100%;
+}
+
+#requests-labels .legendColorBox {
+  width: 18px;
+}
+
+.legend-btn {
+  position: absolute;
+  left: 30px;
+  top: 10px;
+  display: none;
+  cursor: pointer;
+}
+
+#requests-labels td {
+  font-size: 10px;
+}
+
+#placeholder-stats {
+  margin: 10px 0px 10px 10px;
+}
+
+#placeholder-stats .legendLabel {
+  font-size: 10px;
 }

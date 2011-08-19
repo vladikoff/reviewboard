@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<div id="placeholder-stats" style="width: 450px; height: 250px;"></div>
+<div id="placeholder-stats" style="width: 420px; height: 250px;"></div>
   <input type="hidden" value="" id="data-activity-start" />
   <input type="hidden" value="" id="data-activity-end" />
 
@@ -54,7 +54,7 @@ $(function () {
                     previousPoint = item.dataIndex;
 
                     $("#tooltip").remove();
-                    var itemDate = new Date(item.datapoint[0])
+                    var itemDate = new Date(item.datapoint[0]).toLocaleDateString()
                     var x = itemDate,
                         y = item.datapoint[1];
 
@@ -133,14 +133,28 @@ $(function () {
 
   });
  }
-
+     $("#placeholder-stats").parent().append('<span class="legend-btn">Legend</span>');
     $("#set-next").click(function () {
       getActivityData("next");
+      $(".legend-btn").hide();
       return false
     });
 
     $("#set-prev").click(function () {
       getActivityData("prev");
+      $(".legend-btn").hide();
+      return false
+    });
+
+    $("#placeholder-stats .legend").live("click",function() {
+      $(this).hide();
+      $(this).parent().parent().find(".legend-btn").show();
+      return false
+    });
+
+     $(".legend-btn").live("click",function() {
+      $(this).hide();
+      $(this).parent().find(".legend").show();
       return false
     });
 
@@ -155,10 +169,6 @@ $(function () {
       getActivityData("same");
       return false;
      });
-
-
-
-
 
 });
 </script>
