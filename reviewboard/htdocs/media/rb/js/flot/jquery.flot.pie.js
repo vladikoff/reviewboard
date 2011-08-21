@@ -1,9 +1,9 @@
 /*
-Flot plugin for rendering pie charts. The plugin assumes the data is 
-coming is as a single data value for each series, and each of those 
-values is a positive value or zero (negative numbers don't make 
-any sense and will cause strange effects). The data values do 
-NOT need to be passed in as percentage values because it 
+Flot plugin for rendering pie charts. The plugin assumes the data is
+coming is as a single data value for each series, and each of those
+values is a positive value or zero (negative numbers don't make
+any sense and will cause strange effects). The data values do
+NOT need to be passed in as percentage values because it
 internally calculates the total and percentages.
 
 * Created by Brian Medendorp, June 2009
