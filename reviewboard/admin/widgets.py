@@ -14,8 +14,8 @@ from reviewboard.admin.cache_stats import get_cache_stats
 from reviewboard.changedescs.models import ChangeDescription
 from reviewboard.scmtools.models import Repository
 from reviewboard.reviews.models import ReviewRequest, Group, \
-                                        Comment, Review, Screenshot, \
-                                        ReviewRequestDraft
+                                       Comment, Review, Screenshot, \
+                                       ReviewRequestDraft
 
 import time
 

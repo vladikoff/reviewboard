@@ -12,7 +12,7 @@ from djblets.util import misc
 """
 def deleteWidgetCache():
     cached_widgets = ("w-user-activity-", "w-request-statuses-",
-                                   "w-repositories-", "w-groups-", "w-stats-")
+                      "w-repositories-", "w-groups-", "w-stats-")
 
     for widget in cached_widgets:
         key = widget + str(datetime.date.today())
